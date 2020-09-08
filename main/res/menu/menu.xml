@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:title="Name">
+        <menu>
+            <item
+                android:id="@+id/menu_search"
+                android:title="Search Name" />
+            <item
+                android:id="@+id/menu_del"
+                android:title="Delete Name" />
+            <item
+                android:id="@+id/menu_export"
+                android:title="Export" />
+            <item
+                android:id="@+id/menu_import"
+                android:title="Import" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/menu_all"
+        android:title="View All Names" />
+</menu>
