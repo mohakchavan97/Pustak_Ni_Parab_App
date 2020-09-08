@@ -1,10 +1,12 @@
 package com.mohakchavan.pustakniparab;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,21 +15,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-
 public class MainActivity extends AppCompatActivity {
 
     //    EditText ma_ed_serial;
     EditText ma_ed_fname, ma_ed_lname, ma_ed_blk, ma_ed_strt, ma_ed_area, ma_ed_call;
     TextView ma_tv_error;
-    Button ma_btn_sub, ma_btn_all;
+    Button ma_btn_sub, ma_btn_all, ma_btn_reset;
     private DBHelper helper;
+    public static Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        activity = MainActivity.this;
         ma_ed_area = findViewById(R.id.ac_main_ed_area);
         ma_ed_blk = findViewById(R.id.ac_main_ed_blk);
         ma_ed_call = findViewById(R.id.ac_main_ed_call);
@@ -36,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
 //        ma_ed_serial = findViewById(R.id.ac_main_ed_serial);
         ma_ed_strt = findViewById(R.id.ac_main_ed_street);
         ma_btn_sub = findViewById(R.id.ac_main_btn_sub);
-        ma_btn_all = findViewById(R.id.ac_main_btn_all);
+        ma_btn_reset = findViewById(R.id.ac_main_btn_reset);
+//        ma_btn_all = findViewById(R.id.ac_main_btn_all);
         ma_tv_error = findViewById(R.id.ac_main_tv_error);
 
         helper = new DBHelper(MainActivity.this);
@@ -59,76 +62,90 @@ public class MainActivity extends AppCompatActivity {
 //            disableall();
 //        }
 
-        if (ma_btn_sub.isClickable()) {
-            ma_btn_sub.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    boolean state = true;
-                    String area = ma_ed_area.getText().toString(), fname = ma_ed_fname.getText().toString(), lname = ma_ed_lname.getText().toString(),
+
+        ma_btn_sub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean state = true;
+                String area = ma_ed_area.getText().toString(),
+                        fname = ma_ed_fname.getText().toString(),
+                        lname = ma_ed_lname.getText().toString(),
 //                            ser = ma_ed_serial.getText().toString(),
-                            blk = ma_ed_blk.getText().toString(), call = ma_ed_call.getText().toString(),
-                            strt = ma_ed_strt.getText().toString();
-                    if (area.isEmpty()) {
-                        Toast.makeText(MainActivity.this, "Locality/Area Empty", Toast.LENGTH_SHORT).show();
-                        ma_ed_area.requestFocus();
-                        state = false;
-                    } else if (fname.isEmpty()) {
-                        Toast.makeText(MainActivity.this, "First Name Empty", Toast.LENGTH_SHORT).show();
-                        ma_ed_fname.requestFocus();
-                        state = false;
-                    } /*else if (ser.isEmpty()) {
+                        blk = ma_ed_blk.getText().toString(),
+                        call = ma_ed_call.getText().toString(),
+                        strt = ma_ed_strt.getText().toString();
+                if (area.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Locality/Area Empty", Toast.LENGTH_SHORT).show();
+                    ma_ed_area.requestFocus();
+                    state = false;
+                } else if (fname.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "First Name Empty", Toast.LENGTH_SHORT).show();
+                    ma_ed_fname.requestFocus();
+                    state = false;
+                } /*else if (ser.isEmpty()) {
                         Toast.makeText(MainActivity.this, "Serial No Empty", Toast.LENGTH_SHORT).show();
                         ma_ed_serial.requestFocus();
                         state = false;
                     }*/ else if (strt.isEmpty()) {
-                        Toast.makeText(MainActivity.this, "Street Name Empty", Toast.LENGTH_SHORT).show();
-                        ma_ed_strt.requestFocus();
-                        state = false;
-                    }
-                    if (lname.isEmpty())
-                        lname = "NULL";
-                    if (blk.isEmpty())
-                        blk = "NULL";
-                    if (call.isEmpty())
-                        call = "NULL";
-                    else if (!(call.length() == 10) || !(call.matches("^[6-9][0-9]{9}$"))) {
-                        Toast.makeText(MainActivity.this, "Enter Proper 10 digit Contact No", Toast.LENGTH_SHORT).show();
-                        ma_ed_call.requestFocus();
-                        state = false;
-                    }
+                    Toast.makeText(MainActivity.this, "Street Name Empty", Toast.LENGTH_SHORT).show();
+                    ma_ed_strt.requestFocus();
+                    state = false;
+                }
+                if (lname.isEmpty())
+                    lname = "NULL";
+                if (blk.isEmpty())
+                    blk = "NULL";
+                if (call.isEmpty())
+                    call = "NULL";
+                else if (!(call.length() == 10) || !(call.matches("^[6-9][0-9]{9}$"))) {
+                    Toast.makeText(MainActivity.this, "Enter Proper 10 digit Contact No", Toast.LENGTH_SHORT).show();
+                    ma_ed_call.requestFocus();
+                    state = false;
+                }
 
 
-                    if (state) {
-                        if (helper.addName(fname.toUpperCase(), lname.toUpperCase(), blk.toUpperCase(), strt.toUpperCase(), area.toUpperCase(), call.toUpperCase())) {
-                            Toast.makeText(MainActivity.this, "Record Inserted", Toast.LENGTH_SHORT).show();
-                            ma_ed_area.setText("Isanpur");
-                            ma_ed_fname.setText("");
-                            ma_ed_fname.requestFocus();
-                            ma_ed_lname.setText("");
-//                            ma_ed_serial.setText("");
-                            ma_ed_blk.setText("");
-                            ma_ed_call.setText("");
-                            ma_ed_strt.setText("");
+                if (state) {
+                    if (helper.addName(fname.toUpperCase(), lname.toUpperCase(), blk.toUpperCase(), strt.toUpperCase(), area.toUpperCase(), call.toUpperCase())) {
+                        Toast.makeText(MainActivity.this, "Record Inserted", Toast.LENGTH_SHORT).show();
+                        resetAllFields();
 //                            ma_ed_serial.setText(String.valueOf(helper.getinsertedser()));
-                            new AlertDialog.Builder(MainActivity.this).setTitle("Serial No :\t" + String.valueOf(helper.getinsertedser())
-                                    + "\nFull Name :\t" + helper.getinsertedname()).setPositiveButton("OK", null).show();
-                        } else
-                            Toast.makeText(MainActivity.this, "Some Error Occured", Toast.LENGTH_SHORT).show();
-                    }
+                        new AlertDialog.Builder(MainActivity.this).setTitle("Serial No :\t" + String.valueOf(helper.getinsertedser())
+                                + "\nFull Name :\t" + helper.getinsertedname()).setPositiveButton("OK", null).show();
+                    } else
+                        Toast.makeText(MainActivity.this, "Some Error Occured", Toast.LENGTH_SHORT).show();
                 }
-            });
-        }
+            }
+        });
 
-        if (ma_btn_all.isClickable()) {
-            ma_btn_all.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(MainActivity.this, View_All.class);
-                    startActivity(intent);
-                }
-            });
-        }
 
+        ma_btn_reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resetAllFields();
+            }
+        });
+
+
+//        ma_btn_all.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(MainActivity.this, View_All.class);
+//                startActivity(intent);
+//            }
+//        });
+
+
+    }
+
+    private void resetAllFields() {
+        ma_ed_area.setText(getString(R.string.defaultArea));
+        ma_ed_fname.setText("");
+        ma_ed_fname.requestFocus();
+        ma_ed_lname.setText("");
+//                            ma_ed_serial.setText("");
+        ma_ed_blk.setText("");
+        ma_ed_call.setText("");
+        ma_ed_strt.setText("");
     }
 
     @Override

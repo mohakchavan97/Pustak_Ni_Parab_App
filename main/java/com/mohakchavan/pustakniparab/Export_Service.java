@@ -1,11 +1,15 @@
 package com.mohakchavan.pustakniparab;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -37,7 +41,8 @@ public class Export_Service extends Service {
 
         try {
 //            String rootPath = Environment.getRootDirectory().getAbsolutePath().concat("/Pustak_Ni_Parab/");
-            String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath().concat("/Pustak_Ni_Parab/");
+//            String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath().concat("/Pustak_Ni_Parab/");
+            String rootPath = getApplicationContext().getExternalFilesDir(null).getAbsolutePath().concat("/Pustak_Ni_Parab/");
             File f = new File(rootPath);
             if (!f.exists())
                 f.mkdirs();
@@ -48,11 +53,13 @@ public class Export_Service extends Service {
             f.createNewFile();
             OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(f));
 
+
+            // writing data to the file
 //            OutputStreamWriter writer = new OutputStreamWriter(getApplicationContext().openFileOutput("names.csv", getApplicationContext().MODE_PRIVATE));
 //            writer.write("SER_NO,FNAME,LNAME,BLK,STRT,AREA,CALL");
 //            Toast.makeText(getApplicationContext(), "Exporting Started", Toast.LENGTH_SHORT).show();
-            SimpleDateFormat format=new SimpleDateFormat("ddMMyyyyHHmmss");
-            writer.write(String.valueOf(namesList.size())+","+format.format(new Date()).toString()+"\n");
+            SimpleDateFormat format = new SimpleDateFormat("ddMMyyyyHHmmss");
+            writer.write(String.valueOf(namesList.size()) + "," + format.format(new Date()).toString() + "\n");
             for (int i = 0; i < namesList.size(); i++) {
                 StringBuilder builder = new StringBuilder();
                 Names names = new Names();
@@ -67,6 +74,18 @@ public class Export_Service extends Service {
                 writer.write(builder.toString());
             }
             writer.close();
+
+            //sending the file
+            Uri path = FileProvider.getUriForFile(getApplicationContext(), "com.mohakchavan.pustakniparab.exportFile", f);
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, path);
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            shareIntent.setType("text/csv");
+//            shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Activity activity = MainActivity.activity;
+            activity.startActivity(Intent.createChooser(shareIntent, "Export..."));
+
             status = true;
 
         } catch (IOException e) {

@@ -21,7 +21,16 @@
             android:gravity="center"
             android:textColor="@android:color/holo_red_dark"
             android:textSize="15sp"
-            android:visibility="invisible" />
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/ac_main_tv_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Enter Person Details"
+            android:textSize="18sp" />
 
         <!--<TextView-->
         <!--android:id="@+id/ac_main_tv_serial"-->
@@ -55,7 +64,7 @@
             android:layout_weight="1"
             android:text="Full Name"
             android:textAllCaps="true"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
@@ -65,7 +74,7 @@
             android:layout_marginStart="5dp"
             android:layout_weight="1"
             android:text="First Name:"
-            android:textSize="20sp" />
+            android:textSize="17sp" />
 
         <EditText
             android:id="@+id/ac_main_ed_fname"
@@ -75,7 +84,8 @@
             android:layout_marginTop="3dp"
             android:layout_weight="1"
             android:hint="First Name"
-            android:inputType="textCapWords" />
+            android:inputType="textCapWords"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/ac_main_tv_lname"
@@ -84,7 +94,7 @@
             android:layout_marginStart="5dp"
             android:layout_weight="1"
             android:text="Last Name:"
-            android:textSize="20sp" />
+            android:textSize="17sp" />
 
         <EditText
             android:id="@+id/ac_main_ed_lname"
@@ -94,7 +104,8 @@
             android:layout_marginTop="3dp"
             android:layout_weight="1"
             android:hint="Last Name"
-            android:inputType="textCapWords" />
+            android:inputType="textCapWords"
+            android:textSize="16sp" />
 
         <View
             android:layout_width="match_parent"
@@ -111,7 +122,7 @@
             android:layout_weight="1"
             android:text="Address"
             android:textAllCaps="true"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
@@ -121,7 +132,7 @@
             android:layout_marginStart="5dp"
             android:layout_weight="1"
             android:text="Block/Flat No:"
-            android:textSize="20sp" />
+            android:textSize="17sp" />
 
         <EditText
             android:id="@+id/ac_main_ed_blk"
@@ -131,7 +142,8 @@
             android:layout_marginTop="3dp"
             android:layout_weight="1"
             android:hint="Block/Flat No"
-            android:inputType="textCapWords" />
+            android:inputType="textCapWords"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/ac_main_tv_street"
@@ -140,7 +152,7 @@
             android:layout_marginStart="5dp"
             android:layout_weight="1"
             android:text="Street Name:"
-            android:textSize="20sp" />
+            android:textSize="17sp" />
 
         <EditText
             android:id="@+id/ac_main_ed_street"
@@ -150,7 +162,8 @@
             android:layout_marginTop="3dp"
             android:layout_weight="1"
             android:hint="Street Name"
-            android:inputType="textCapWords" />
+            android:inputType="textCapWords"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/ac_main_tv_area"
@@ -159,7 +172,7 @@
             android:layout_marginStart="5dp"
             android:layout_weight="1"
             android:text="Locality/Area:"
-            android:textSize="20sp" />
+            android:textSize="17sp" />
 
         <EditText
             android:id="@+id/ac_main_ed_area"
@@ -170,7 +183,8 @@
             android:layout_weight="1"
             android:hint="Locality/Area"
             android:inputType="textCapWords"
-            android:text="Isanpur" />
+            android:text="@string/defaultArea"
+            android:textSize="16sp" />
 
         <View
             android:layout_width="match_parent"
@@ -182,10 +196,10 @@
             android:id="@+id/ac_main_tv_call"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
             android:layout_weight="1"
             android:text="Contact No:"
-            android:textSize="20sp" />
+            android:textSize="17sp" />
 
         <EditText
             android:id="@+id/ac_main_ed_call"
@@ -196,7 +210,8 @@
             android:layout_weight="1"
             android:hint="Contact No"
             android:inputType="phone"
-            android:maxLength="10" />
+            android:maxLength="10"
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -223,15 +238,27 @@
                 android:layout_height="match_parent"
                 android:layout_margin="20dp" />
 
+<!--            <Button-->
+<!--                android:id="@+id/ac_main_btn_all"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_margin="10dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:background="@color/colorPrimary"-->
+<!--                android:text="view all"-->
+<!--                android:textColor="@android:color/white"-->
+<!--                android:textSize="15sp" />-->
+
             <Button
-                android:id="@+id/ac_main_btn_all"
+                android:id="@+id/ac_main_btn_reset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
-                android:text="view all"
+                android:text="reset"
                 android:textColor="@android:color/white"
                 android:textSize="15sp" />
 
