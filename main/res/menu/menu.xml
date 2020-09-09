@@ -22,4 +22,7 @@
     <item
         android:id="@+id/menu_all"
         android:title="View All Names" />
+    <item
+        android:id="@+id/menu_net"
+        android:title="Test Internet" />
 </menu>

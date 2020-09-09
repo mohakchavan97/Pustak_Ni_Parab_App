@@ -1,10 +1,14 @@
 package com.mohakchavan.pustakniparab;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,9 +21,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.mohakchavan.pustakniparab.Services.Export_Service;
 import com.mohakchavan.pustakniparab.Services.ImportFile_Service;
 import com.mohakchavan.pustakniparab.Services.Import_Service;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -165,34 +178,108 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int item_id = item.getItemId();
+        switch (item.getItemId()) {
 
-        if (item_id == R.id.menu_all) {
+            case R.id.menu_all:
 //            Toast.makeText(MainActivity.this, "Selected View All", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(MainActivity.this, View_All.class));
-        }
+                startActivity(new Intent(MainActivity.this, View_All.class));
+                break;
 
-        if (item_id == R.id.menu_del) {
+            case R.id.menu_del:
 //            Toast.makeText(MainActivity.this, "Selected Delete", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(MainActivity.this, Delete_Name.class));
-        }
+                startActivity(new Intent(MainActivity.this, Delete_Name.class));
+                break;
 
-        if (item_id == R.id.menu_search) {
+            case R.id.menu_search:
 //            Toast.makeText(MainActivity.this, "Selected " + item.getTitle(), Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(MainActivity.this, Search_Name.class));
-        }
+                startActivity(new Intent(MainActivity.this, Search_Name.class));
+                break;
 
-        if (item_id == R.id.menu_export) {
-            isExportOrImport = true;
-            startService(new Intent(getApplicationContext(), Export_Service.class));
-        }
+            case R.id.menu_export:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, getResources().getInteger(R.integer.WritePermissionRequestCode));
+                } else {
+                    startExporting();
+                }
+                break;
 
-        if (item_id == R.id.menu_import) {
-            isExportOrImport = true;
-//            startService(new Intent(getApplicationContext(), Import_Service.class));
-            startService(new Intent(getApplicationContext(), ImportFile_Service.class));
-        }
+            case R.id.menu_import:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, getResources().getInteger(R.integer.ReadPermissionRequestCode));
+                } else {
+                    startImporting();
+                }
+                break;
 
+            case R.id.menu_net:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, getResources().getInteger(R.integer.InternetRequestCode));
+                } else {
+                    testInternet();
+                }
+                break;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void testInternet() {
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                "https://jsonplaceholder.typicode.com/todos/1",
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(MainActivity.this, "Got Response", Toast.LENGTH_SHORT).show();
+                        try {
+                            Toast.makeText(MainActivity.this, "Response is: " + response.getString("title"), Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainActivity.this, "Some Error Occured.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    private void startExporting() {
+        isExportOrImport = true;
+        startService(new Intent(getApplicationContext(), Export_Service.class));
+    }
+
+    private void startImporting() {
+        isExportOrImport = true;
+//            startService(new Intent(getApplicationContext(), Import_Service.class));
+        startService(new Intent(getApplicationContext(), ImportFile_Service.class));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == getResources().getInteger(R.integer.WritePermissionRequestCode)) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startExporting();
+            } else {
+                Toast.makeText(activity, "Please grant the permission to access the storage.", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == getResources().getInteger(R.integer.ReadPermissionRequestCode)) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startImporting();
+            } else {
+                Toast.makeText(activity, "Please grant the permission to access the storage.", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == getResources().getInteger(R.integer.InternetRequestCode)) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                testInternet();
+            } else {
+                Toast.makeText(activity, "Please grant the permission to access the storage.", Toast.LENGTH_SHORT).show();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
@@ -202,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == getResources().getInteger(R.integer.ImportRequestCode) && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 Uri uri = data.getData();
-                Toast.makeText(activity, "Uri: " + uri, Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Uri: " + uri, Toast.LENGTH_LONG).show();
             }
         }
     }

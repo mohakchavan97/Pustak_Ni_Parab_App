@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="ImportRequestCode">50</integer>
+    <integer name="ReadPermissionRequestCode">100</integer>
+    <integer name="WritePermissionRequestCode">101</integer>
+    <integer name="InternetRequestCode">102</integer>
+</resources>
