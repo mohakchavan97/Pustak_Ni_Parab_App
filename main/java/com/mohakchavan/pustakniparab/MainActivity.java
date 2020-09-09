@@ -27,9 +27,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mohakchavan.pustakniparab.Services.Export_Service;
 import com.mohakchavan.pustakniparab.Services.ImportFile_Service;
-import com.mohakchavan.pustakniparab.Services.Import_Service;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private DBHelper helper;
     public static Activity activity;
     private boolean isExportOrImport;
+    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference childRef = rootRef.child("number");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,11 +221,32 @@ public class MainActivity extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, getResources().getInteger(R.integer.InternetRequestCode));
                 } else {
-                    testInternet();
+//                    testInternet();
+//                    readDatabase();
+                    writeDatabase();
                 }
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void writeDatabase() {
+        childRef.setValue(5555);
+    }
+
+    private void readDatabase() {
+        childRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int val = snapshot.getValue(Integer.class);
+                Toast.makeText(MainActivity.this, "Value: "+val, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(MainActivity.this, "Some Error Occurred", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void testInternet() {
