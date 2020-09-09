@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.mohakchavan.pustakniparab.Models.Names;
+
 import java.util.List;
 
 public class View_All_Adapter extends RecyclerView.Adapter<View_All_Adapter.View_All_ViewHolder> {

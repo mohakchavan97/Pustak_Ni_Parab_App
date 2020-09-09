@@ -18,6 +18,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mohakchavan.pustakniparab.Models.Names;
+
 import java.util.List;
 
 public class Delete_Name extends AppCompatActivity {

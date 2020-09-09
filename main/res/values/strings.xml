@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Pustak Ni Parab</string>
     <string name="defaultArea">Isanpur</string>
+    <string name="exportFileName">PustakParabExportedNames.csv</string>
     <string-array name="serials">
         <item>No Item</item>
     </string-array>

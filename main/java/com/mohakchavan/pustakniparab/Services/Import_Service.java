@@ -1,4 +1,4 @@
-package com.mohakchavan.pustakniparab;
+package com.mohakchavan.pustakniparab.Services;
 
 import android.app.Service;
 import android.content.Intent;
@@ -6,10 +6,11 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.widget.Toast;
 
+import com.mohakchavan.pustakniparab.DBHelper;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -67,10 +68,9 @@ public class Import_Service extends Service {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             Toast.makeText(Import_Service.this, "No Backup Found.\nExport Not Done.", Toast.LENGTH_SHORT).show();
-            status=false;
+            status = false;
         }
         stopSelf();
 

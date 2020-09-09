@@ -2,8 +2,10 @@ package com.mohakchavan.pustakniparab;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +17,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mohakchavan.pustakniparab.Services.Export_Service;
+import com.mohakchavan.pustakniparab.Services.ImportFile_Service;
+import com.mohakchavan.pustakniparab.Services.Import_Service;
+
 public class MainActivity extends AppCompatActivity {
 
     //    EditText ma_ed_serial;
@@ -23,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     Button ma_btn_sub, ma_btn_all, ma_btn_reset;
     private DBHelper helper;
     public static Activity activity;
+    private boolean isExportOrImport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,17 +182,32 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (item_id == R.id.menu_export) {
+            isExportOrImport = true;
             startService(new Intent(getApplicationContext(), Export_Service.class));
         }
 
         if (item_id == R.id.menu_import) {
-            startService(new Intent(getApplicationContext(), Import_Service.class));
+            isExportOrImport = true;
+//            startService(new Intent(getApplicationContext(), Import_Service.class));
+            startService(new Intent(getApplicationContext(), ImportFile_Service.class));
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void enableall() {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == getResources().getInteger(R.integer.ImportRequestCode) && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                Uri uri = data.getData();
+                Toast.makeText(activity, "Uri: " + uri, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void enableAll() {
 //        ma_ed_serial.setFocusable(true);
         ma_ed_strt.setFocusable(true);
         ma_ed_lname.setFocusable(true);
@@ -197,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         ma_btn_all.setClickable(true);
     }
 
-    private void disableall() {
+    private void disableAll() {
 //        ma_ed_serial.setFocusable(false);
         ma_ed_strt.setFocusable(false);
         ma_ed_lname.setFocusable(false);
@@ -212,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        finish();
+        if (!isExportOrImport)
+            finish();
     }
 }
