@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.mohakchavan.pustakniparab.MainActivity;
+import com.mohakchavan.pustakniparab.AddPerson;
 import com.mohakchavan.pustakniparab.R;
 
 public class ImportFile_Service extends Service {
@@ -32,7 +32,7 @@ public class ImportFile_Service extends Service {
 //        getFile.addCategory(Intent.CATEGORY_DEFAULT);
 
 
-        Activity activity = MainActivity.activity;
+        Activity activity = AddPerson.activity;
         activity.startActivityForResult(getFile, getApplicationContext().getResources().getInteger(R.integer.ImportRequestCode));
         stopSelf();
 

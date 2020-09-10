@@ -3,27 +3,27 @@ package com.mohakchavan.pustakniparab.Models;
 public class Names {
 
     private int ser_no;
-    private String fname, lname, blk, strt, area;
+    private String firstName, lastName, blockOrHouseNum, streetName, area;
     private long call;
 
     public void setSer_no(int ser_no) {
         this.ser_no = ser_no;
     }
 
-    public void setFname(String fname) {
-        this.fname = fname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setLname(String lname) {
-        this.lname = lname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public void setBlk(String blk) {
-        this.blk = blk;
+    public void setBlockOrHouseNum(String blockOrHouseNum) {
+        this.blockOrHouseNum = blockOrHouseNum;
     }
 
-    public void setStrt(String strt) {
-        this.strt = strt;
+    public void setStreetName(String streetName) {
+        this.streetName = streetName;
     }
 
     public void setArea(String area) {
@@ -37,12 +37,12 @@ public class Names {
     public Names() {
     }
 
-    public Names(int ser_no, String fname, String lname, String blk, String strt, String area, long call) {
+    public Names(int ser_no, String firstName, String lastName, String blockOrHouseNum, String streetName, String area, long call) {
         this.ser_no = ser_no;
-        this.fname = fname;
-        this.lname = lname;
-        this.blk = blk;
-        this.strt = strt;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.blockOrHouseNum = blockOrHouseNum;
+        this.streetName = streetName;
         this.area = area;
         this.call = call;
     }
@@ -51,20 +51,20 @@ public class Names {
         return ser_no;
     }
 
-    public String getFname() {
-        return fname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getLname() {
-        return lname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public String getBlk() {
-        return blk;
+    public String getBlockOrHouseNum() {
+        return blockOrHouseNum;
     }
 
-    public String getStrt() {
-        return strt;
+    public String getStreetName() {
+        return streetName;
     }
 
     public String getArea() {

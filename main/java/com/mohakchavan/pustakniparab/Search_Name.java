@@ -92,6 +92,6 @@ public class Search_Name extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(Search_Name.this, MainActivity.class));
+        startActivity(new Intent(Search_Name.this, AddPerson.class));
     }
 }

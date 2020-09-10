@@ -11,7 +11,7 @@ import android.widget.Toast;
 import androidx.core.content.FileProvider;
 
 import com.mohakchavan.pustakniparab.DBHelper;
-import com.mohakchavan.pustakniparab.MainActivity;
+import com.mohakchavan.pustakniparab.AddPerson;
 import com.mohakchavan.pustakniparab.Models.Names;
 
 import java.io.File;
@@ -67,10 +67,10 @@ public class Export_Service extends Service {
                 Names names = new Names();
                 names = namesList.get(i);
                 builder.append(names.getSer_no()).append(",")
-                        .append(names.getFname()).append(",")
-                        .append(names.getLname()).append(",")
-                        .append(names.getBlk()).append(",")
-                        .append(names.getStrt()).append(",")
+                        .append(names.getFirstName()).append(",")
+                        .append(names.getLastName()).append(",")
+                        .append(names.getBlockOrHouseNum()).append(",")
+                        .append(names.getStreetName()).append(",")
                         .append(names.getArea()).append(",")
                         .append(names.getCall()).append("\n");
                 writer.write(builder.toString());
@@ -85,7 +85,7 @@ public class Export_Service extends Service {
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             shareIntent.setType("text/csv");
 //            shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            Activity activity = MainActivity.activity;
+            Activity activity = AddPerson.activity;
             activity.startActivity(Intent.createChooser(shareIntent, "Export..."));
 
             status = true;

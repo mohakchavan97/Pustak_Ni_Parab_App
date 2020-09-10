@@ -179,7 +179,7 @@ public class Delete_Name extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(Delete_Name.this, MainActivity.class));
+        startActivity(new Intent(Delete_Name.this, AddPerson.class));
     }
 
 

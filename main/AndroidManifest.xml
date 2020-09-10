@@ -9,11 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".NavigationDrawer"></activity>
         <activity android:name=".Search_Name" />
-
         <activity android:name=".Delete_Name" />
         <activity android:name=".View_All" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".AddPerson" />
         <activity android:name=".Welcome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,6 +22,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.mohakchavan.pustakniparab.exportFile"
@@ -36,9 +37,9 @@
         <service android:name=".Services.ImportFile_Service" />
         <service android:name=".Services.Export_Service" />
     </application>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
 
 </manifest>

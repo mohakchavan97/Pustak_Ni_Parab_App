@@ -38,7 +38,7 @@ import com.mohakchavan.pustakniparab.Services.ImportFile_Service;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity {
+public class AddPerson extends AppCompatActivity {
 
     //    EditText ma_ed_serial;
     EditText ma_ed_fname, ma_ed_lname, ma_ed_blk, ma_ed_strt, ma_ed_area, ma_ed_call;
@@ -53,9 +53,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_add_person);
 
-        activity = MainActivity.this;
+        activity = AddPerson.this;
+        getSupportActionBar().setTitle(R.string.addPerson);
         ma_ed_area = findViewById(R.id.ac_main_ed_area);
         ma_ed_blk = findViewById(R.id.ac_main_ed_blk);
         ma_ed_call = findViewById(R.id.ac_main_ed_call);
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 //        ma_btn_all = findViewById(R.id.ac_main_btn_all);
         ma_tv_error = findViewById(R.id.ac_main_tv_error);
 
-        helper = new DBHelper(MainActivity.this);
+        helper = new DBHelper(AddPerson.this);
         ma_ed_fname.requestFocus();
 
 //        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath().concat("/Pustak_Ni_Parab/");
@@ -101,11 +102,11 @@ public class MainActivity extends AppCompatActivity {
                         call = ma_ed_call.getText().toString(),
                         strt = ma_ed_strt.getText().toString();
                 if (area.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "Locality/Area Empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPerson.this, "Locality/Area Empty", Toast.LENGTH_SHORT).show();
                     ma_ed_area.requestFocus();
                     state = false;
                 } else if (fname.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "First Name Empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPerson.this, "First Name Empty", Toast.LENGTH_SHORT).show();
                     ma_ed_fname.requestFocus();
                     state = false;
                 } /*else if (ser.isEmpty()) {
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                         ma_ed_serial.requestFocus();
                         state = false;
                     }*/ else if (strt.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "Street Name Empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPerson.this, "Street Name Empty", Toast.LENGTH_SHORT).show();
                     ma_ed_strt.requestFocus();
                     state = false;
                 }
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 if (call.isEmpty())
                     call = "NULL";
                 else if (!(call.length() == 10) || !(call.matches("^[6-9][0-9]{9}$"))) {
-                    Toast.makeText(MainActivity.this, "Enter Proper 10 digit Contact No", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPerson.this, "Enter Proper 10 digit Contact No", Toast.LENGTH_SHORT).show();
                     ma_ed_call.requestFocus();
                     state = false;
                 }
@@ -132,13 +133,13 @@ public class MainActivity extends AppCompatActivity {
 
                 if (state) {
                     if (helper.addName(fname.toUpperCase(), lname.toUpperCase(), blk.toUpperCase(), strt.toUpperCase(), area.toUpperCase(), call.toUpperCase())) {
-                        Toast.makeText(MainActivity.this, "Record Inserted", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddPerson.this, "Record Inserted", Toast.LENGTH_SHORT).show();
                         resetAllFields();
 //                            ma_ed_serial.setText(String.valueOf(helper.getinsertedser()));
-                        new AlertDialog.Builder(MainActivity.this).setTitle("Serial No :\t" + String.valueOf(helper.getinsertedser())
+                        new AlertDialog.Builder(AddPerson.this).setTitle("Serial No :\t" + String.valueOf(helper.getinsertedser())
                                 + "\nFull Name :\t" + helper.getinsertedname()).setPositiveButton("OK", null).show();
                     } else
-                        Toast.makeText(MainActivity.this, "Some Error Occured", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddPerson.this, "Some Error Occured", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -188,17 +189,17 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.menu_all:
 //            Toast.makeText(MainActivity.this, "Selected View All", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(MainActivity.this, View_All.class));
+                startActivity(new Intent(AddPerson.this, View_All.class));
                 break;
 
             case R.id.menu_del:
 //            Toast.makeText(MainActivity.this, "Selected Delete", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(MainActivity.this, Delete_Name.class));
+                startActivity(new Intent(AddPerson.this, Delete_Name.class));
                 break;
 
             case R.id.menu_search:
 //            Toast.makeText(MainActivity.this, "Selected " + item.getTitle(), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(MainActivity.this, Search_Name.class));
+                startActivity(new Intent(AddPerson.this, Search_Name.class));
                 break;
 
             case R.id.menu_export:
@@ -239,12 +240,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int val = snapshot.getValue(Integer.class);
-                Toast.makeText(MainActivity.this, "Value: "+val, Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddPerson.this, "Value: "+val, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(MainActivity.this, "Some Error Occurred", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddPerson.this, "Some Error Occurred", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -257,9 +258,9 @@ public class MainActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast.makeText(MainActivity.this, "Got Response", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddPerson.this, "Got Response", Toast.LENGTH_SHORT).show();
                         try {
-                            Toast.makeText(MainActivity.this, "Response is: " + response.getString("title"), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddPerson.this, "Response is: " + response.getString("title"), Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -268,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MainActivity.this, "Some Error Occured.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddPerson.this, "Some Error Occured.", Toast.LENGTH_SHORT).show();
                     }
                 });
         requestQueue.add(jsonObjectRequest);

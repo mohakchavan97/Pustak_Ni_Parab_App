@@ -59,6 +59,6 @@ public class View_All extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(View_All.this, MainActivity.class));
+        startActivity(new Intent(View_All.this, AddPerson.class));
     }
 }
