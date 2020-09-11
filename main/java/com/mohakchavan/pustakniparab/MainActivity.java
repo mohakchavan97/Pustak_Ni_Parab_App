@@ -42,10 +42,15 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 switch (id) {
+                    case R.id.nav_issues:
+                        startActivity(new Intent(MainActivity.this, Issues.class));
+                        break;
+
                     case R.id.nav_addPerson:
                         Intent intent = new Intent(MainActivity.this, AddPerson.class);
                         startActivity(intent);
                         break;
+
                     case R.id.nav_return_issue:
                         break;
                 }
