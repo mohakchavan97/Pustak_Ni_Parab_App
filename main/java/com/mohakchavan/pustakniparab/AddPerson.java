@@ -46,7 +46,7 @@ public class AddPerson extends AppCompatActivity {
     TextView ma_tv_error;
     Button ma_btn_sub, ma_btn_all, ma_btn_reset;
     private DBHelper helper;
-    private NamesHelper fbHelper;
+    private NamesHelper namesHelper;
     public static Activity activity;
     private boolean isExportOrImport;
     DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
@@ -78,7 +78,7 @@ public class AddPerson extends AppCompatActivity {
         ma_tv_error = findViewById(R.id.ac_main_tv_error);
 
         helper = new DBHelper(activity);
-        fbHelper = new NamesHelper(activity);
+        namesHelper = new NamesHelper(activity);
         ma_ed_fname.requestFocus();
 
         enableAll();
@@ -131,11 +131,14 @@ public class AddPerson extends AppCompatActivity {
                     state = false;
                 }
                 if (lname.isEmpty())
-                    lname = "NULL";
+//                    lname = "NULL";
+                    lname = "";
                 if (blk.isEmpty())
-                    blk = "NULL";
+//                    blk = "NULL";
+                    blk = "";
                 if (call.isEmpty())
-                    call = "NULL";
+//                    call = "NULL";
+                    call = "";
                 else if (!(call.length() == 10) || !(call.matches("^[6-9][0-9]{9}$"))) {
                     Toast.makeText(AddPerson.this, "Enter Proper 10 digit Contact No", Toast.LENGTH_SHORT).show();
                     ma_ed_call.requestFocus();
@@ -157,7 +160,7 @@ public class AddPerson extends AppCompatActivity {
                     }*/
                     //endregion
 
-                    fbHelper.addNewPerson(new Names(fname.toUpperCase(), lname.toUpperCase(), blk.toUpperCase(), strt.toUpperCase(), area.toUpperCase(), call.toUpperCase()), new onCompleteTransaction() {
+                    namesHelper.addNewPerson(new Names(fname.toUpperCase(), lname.toUpperCase(), blk.toUpperCase(), strt.toUpperCase(), area.toUpperCase(), call.toUpperCase()), new onCompleteTransaction() {
                         @Override
                         public void onComplete(boolean committed, Object data) {
                             if (committed) {
@@ -365,7 +368,7 @@ public class AddPerson extends AppCompatActivity {
         ma_ed_blk.setFocusable(true);
         ma_ed_area.setFocusable(true);
         ma_btn_sub.setClickable(true);
-        ma_btn_all.setClickable(true);
+        ma_btn_reset.setClickable(true);
     }
 
     private void disableAll() {
@@ -377,7 +380,7 @@ public class AddPerson extends AppCompatActivity {
         ma_ed_blk.setFocusable(false);
         ma_ed_area.setFocusable(false);
         ma_btn_sub.setClickable(false);
-        ma_btn_all.setClickable(false);
+        ma_btn_reset.setClickable(false);
     }
 
     @Override

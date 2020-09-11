@@ -13,6 +13,7 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.mohakchavan.pustakniparab.Models.Names;
 import com.mohakchavan.pustakniparab.R;
+import com.mohakchavan.pustakniparab.Services.Network_Service;
 
 public class NamesHelper {
 
@@ -29,6 +30,7 @@ public class NamesHelper {
     }
 
     public void addNewPerson(final Names newPersonDetails, final BaseHelper.onCompleteTransaction onCompleteTransaction) {
+        Network_Service.checkInternetToProceed(context);
         namesRef.runTransaction(new Transaction.Handler() {
             @NonNull
             @Override
