@@ -2,17 +2,12 @@ package com.mohakchavan.pustakniparab;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +15,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -32,8 +32,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mohakchavan.pustakniparab.FireBaseHelper.FireBaseHelper;
+import com.mohakchavan.pustakniparab.Models.Names;
 import com.mohakchavan.pustakniparab.Services.Export_Service;
 import com.mohakchavan.pustakniparab.Services.ImportFile_Service;
+import com.mohakchavan.pustakniparab.Services.Network_Service;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,10 +48,17 @@ public class AddPerson extends AppCompatActivity {
     TextView ma_tv_error;
     Button ma_btn_sub, ma_btn_all, ma_btn_reset;
     private DBHelper helper;
+    private FireBaseHelper fbHelper;
     public static Activity activity;
     private boolean isExportOrImport;
     DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference childRef = rootRef.child("number");
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Network_Service.checkInternetToProceed(AddPerson.this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +79,8 @@ public class AddPerson extends AppCompatActivity {
 //        ma_btn_all = findViewById(R.id.ac_main_btn_all);
         ma_tv_error = findViewById(R.id.ac_main_tv_error);
 
-        helper = new DBHelper(AddPerson.this);
+        helper = new DBHelper(activity);
+        fbHelper = new FireBaseHelper(activity);
         ma_ed_fname.requestFocus();
 
 //        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath().concat("/Pustak_Ni_Parab/");
@@ -133,13 +144,15 @@ public class AddPerson extends AppCompatActivity {
 
                 if (state) {
                     if (helper.addName(fname.toUpperCase(), lname.toUpperCase(), blk.toUpperCase(), strt.toUpperCase(), area.toUpperCase(), call.toUpperCase())) {
-                        Toast.makeText(AddPerson.this, "Record Inserted", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddPerson.this, "Record Inserted in DB", Toast.LENGTH_SHORT).show();
                         resetAllFields();
 //                            ma_ed_serial.setText(String.valueOf(helper.getinsertedser()));
                         new AlertDialog.Builder(AddPerson.this).setTitle("Serial No :\t" + String.valueOf(helper.getinsertedser())
                                 + "\nFull Name :\t" + helper.getinsertedname()).setPositiveButton("OK", null).show();
-                    } else
-                        Toast.makeText(AddPerson.this, "Some Error Occured", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(AddPerson.this, "Some Error Occured in DB", Toast.LENGTH_SHORT).show();
+                    }
+                    fbHelper.addNewPerson(new Names(fname.toUpperCase(), lname.toUpperCase(), blk.toUpperCase(), strt.toUpperCase(), area.toUpperCase(), call.toUpperCase()));
                 }
             }
         });
@@ -240,7 +253,7 @@ public class AddPerson extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int val = snapshot.getValue(Integer.class);
-                Toast.makeText(AddPerson.this, "Value: "+val, Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddPerson.this, "Value: " + val, Toast.LENGTH_SHORT).show();
             }
 
             @Override

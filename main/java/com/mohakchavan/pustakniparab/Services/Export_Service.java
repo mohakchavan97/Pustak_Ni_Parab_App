@@ -67,12 +67,12 @@ public class Export_Service extends Service {
                 Names names = new Names();
                 names = namesList.get(i);
                 builder.append(names.getSer_no()).append(",")
-                        .append(names.getFirstName()).append(",")
-                        .append(names.getLastName()).append(",")
-                        .append(names.getBlockOrHouseNum()).append(",")
-                        .append(names.getStreetName()).append(",")
-                        .append(names.getArea()).append(",")
-                        .append(names.getCall()).append("\n");
+                        .append(names.getFIRST_NAME()).append(",")
+                        .append(names.getLAST_NAME()).append(",")
+                        .append(names.getBLK_OR_FLT_NO()).append(",")
+                        .append(names.getSTREET_NAME()).append(",")
+                        .append(names.getLOCALITY_OR_AREA()).append(",")
+                        .append(names.getCONTACT()).append("\n");
                 writer.write(builder.toString());
             }
             writer.close();

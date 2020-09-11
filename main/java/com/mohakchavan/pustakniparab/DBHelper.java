@@ -24,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String AREA = "LOCALITY_OR_AREA";
     public static final String CALL = "CONTACT";
 
-    private final String CREATE_TABLE = new StringBuilder().append("CREATE TABLE ").append(TABLE_NAME).append(" (").append(SER_NO).append(" INTEGER PRIMARY KEY AUTOINCREMENT, ").append(FNAME).append(" TEXT(50), ").append(LNAME).append(" TEXT(50), ").append(BLK).append(" VARCHAR(10), ").append(STRT).append(" TEXT(50), ").append(AREA).append(" TEXT(50), ").append(CALL).append(" BIGINT(10) ").append(" ); ").toString();
+    private final String CREATE_TABLE = new StringBuilder().append("CREATE TABLE ").append(TABLE_NAME).append(" (").append(SER_NO).append(" INTEGER PRIMARY KEY AUTOINCREMENT, ").append(FNAME).append(" TEXT(50), ").append(LNAME).append(" TEXT(50), ").append(BLK).append(" VARCHAR(10), ").append(STRT).append(" TEXT(50), ").append(AREA).append(" TEXT(50), ").append(CALL).append(" VARCHAR(10) ").append(" ); ").toString();
 
 
     public DBHelper(Context context) {
@@ -112,7 +112,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             do {
-                names = new Names(cursor.getInt(cursor.getColumnIndex(SER_NO)), cursor.getString(cursor.getColumnIndex(FNAME)), cursor.getString(cursor.getColumnIndex(LNAME)).contentEquals("NULL") ? "" : cursor.getString(cursor.getColumnIndex(LNAME)), cursor.getString(cursor.getColumnIndex(BLK)).contentEquals("NULL") ? "" : cursor.getString(cursor.getColumnIndex(BLK)), cursor.getString(cursor.getColumnIndex(STRT)), cursor.getString(cursor.getColumnIndex(AREA)), cursor.getLong(cursor.getColumnIndex(CALL)));
+                names = new Names(cursor.getInt(cursor.getColumnIndex(SER_NO)), cursor.getString(cursor.getColumnIndex(FNAME)), cursor.getString(cursor.getColumnIndex(LNAME)).contentEquals("NULL") ? "" : cursor.getString(cursor.getColumnIndex(LNAME)), cursor.getString(cursor.getColumnIndex(BLK)).contentEquals("NULL") ? "" : cursor.getString(cursor.getColumnIndex(BLK)), cursor.getString(cursor.getColumnIndex(STRT)), cursor.getString(cursor.getColumnIndex(AREA)), cursor.getString(cursor.getColumnIndex(CALL)));
                 namesList.add(names);
             } while (cursor.moveToNext());
 
@@ -160,7 +160,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             do {
-                namesList.add(new Names(cursor.getInt(cursor.getColumnIndex(SER_NO)), cursor.getString(cursor.getColumnIndex(FNAME)), cursor.getString(cursor.getColumnIndex(LNAME)).contentEquals("NULL") ? "" : cursor.getString(cursor.getColumnIndex(LNAME)), cursor.getString(cursor.getColumnIndex(BLK)).contentEquals("NULL") ? "" : cursor.getString(cursor.getColumnIndex(BLK)), cursor.getString(cursor.getColumnIndex(STRT)), cursor.getString(cursor.getColumnIndex(AREA)), cursor.getLong(cursor.getColumnIndex(CALL))));
+                namesList.add(new Names(cursor.getInt(cursor.getColumnIndex(SER_NO)), cursor.getString(cursor.getColumnIndex(FNAME)), cursor.getString(cursor.getColumnIndex(LNAME)).contentEquals("NULL") ? "" : cursor.getString(cursor.getColumnIndex(LNAME)), cursor.getString(cursor.getColumnIndex(BLK)).contentEquals("NULL") ? "" : cursor.getString(cursor.getColumnIndex(BLK)), cursor.getString(cursor.getColumnIndex(STRT)), cursor.getString(cursor.getColumnIndex(AREA)), cursor.getString(cursor.getColumnIndex(CALL))));
 //                namesList.add(names);
             } while (cursor.moveToNext());
 
@@ -189,7 +189,7 @@ public class DBHelper extends SQLiteOpenHelper {
 //                names.setArea(cursor.getString(cursor.getColumnIndex(AREA)));
 //                names.setCall(cursor.getLong(cursor.getColumnIndex(CALL)));
 
-                namesList.add(new Names(cursor.getInt(cursor.getColumnIndex(SER_NO)), cursor.getString(cursor.getColumnIndex(FNAME)), cursor.getString(cursor.getColumnIndex(LNAME)).contentEquals("NULL") ? "" : cursor.getString(cursor.getColumnIndex(LNAME)), cursor.getString(cursor.getColumnIndex(BLK)).contentEquals("NULL") ? "" : cursor.getString(cursor.getColumnIndex(BLK)), cursor.getString(cursor.getColumnIndex(STRT)), cursor.getString(cursor.getColumnIndex(AREA)), cursor.getLong(cursor.getColumnIndex(CALL))));
+                namesList.add(new Names(cursor.getInt(cursor.getColumnIndex(SER_NO)), cursor.getString(cursor.getColumnIndex(FNAME)), cursor.getString(cursor.getColumnIndex(LNAME)).contentEquals("NULL") ? "" : cursor.getString(cursor.getColumnIndex(LNAME)), cursor.getString(cursor.getColumnIndex(BLK)).contentEquals("NULL") ? "" : cursor.getString(cursor.getColumnIndex(BLK)), cursor.getString(cursor.getColumnIndex(STRT)), cursor.getString(cursor.getColumnIndex(AREA)), cursor.getString(cursor.getColumnIndex(CALL))));
 
             } while (cursor.moveToNext());
         }

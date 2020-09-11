@@ -34,11 +34,11 @@ public class View_All_Adapter extends RecyclerView.Adapter<View_All_Adapter.View
     public void onBindViewHolder(@NonNull View_All_ViewHolder view_all_viewHolder, int i) {
         Names names = namesList.get(i);
         view_all_viewHolder.va_ser.setText(String.valueOf(names.getSer_no()));
-        view_all_viewHolder.va_name.setText(new StringBuilder().append(names.getFirstName()).append(" ").append(names.getLastName()).toString());
-        view_all_viewHolder.va_blk.setText(names.getBlockOrHouseNum());
-        view_all_viewHolder.va_strt.setText(names.getStreetName());
-        view_all_viewHolder.va_area.setText(names.getArea());
-        view_all_viewHolder.va_call.setText(String.valueOf(names.getCall()));
+        view_all_viewHolder.va_name.setText(new StringBuilder().append(names.getFIRST_NAME()).append(" ").append(names.getLAST_NAME()).toString());
+        view_all_viewHolder.va_blk.setText(names.getBLK_OR_FLT_NO());
+        view_all_viewHolder.va_strt.setText(names.getSTREET_NAME());
+        view_all_viewHolder.va_area.setText(names.getLOCALITY_OR_AREA());
+        view_all_viewHolder.va_call.setText(String.valueOf(names.getCONTACT()));
     }
 
     @Override
