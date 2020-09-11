@@ -18,4 +18,8 @@ public class BaseHelper {
     public interface onCompleteTransaction {
         void onComplete(boolean committed, Object data);
     }
+
+    public interface onCompleteRetrieval {
+        void onComplete(Object data);
+    }
 }

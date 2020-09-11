@@ -3,83 +3,83 @@ package com.mohakchavan.pustakniparab.Models;
 public class Names {
 
     private long ser_no;
-    private String FIRST_NAME, LAST_NAME, BLK_OR_FLT_NO, STREET_NAME, LOCALITY_OR_AREA, CONTACT;
+    private String firstName, lastName, blkOrFltNo, streetName, localityOrArea, contact;
 
     public Names() {
     }
 
-    public Names(String FIRST_NAME, String LAST_NAME, String BLK_OR_FLT_NO, String STREET_NAME, String LOCALITY_OR_AREA, String CONTACT) {
-        this.FIRST_NAME = FIRST_NAME;
-        this.LAST_NAME = LAST_NAME;
-        this.BLK_OR_FLT_NO = BLK_OR_FLT_NO;
-        this.STREET_NAME = STREET_NAME;
-        this.LOCALITY_OR_AREA = LOCALITY_OR_AREA;
-        this.CONTACT = CONTACT;
+    public Names(String firstName, String lastName, String blkOrFltNo, String streetName, String localityOrArea, String contact) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.blkOrFltNo = blkOrFltNo;
+        this.streetName = streetName;
+        this.localityOrArea = localityOrArea;
+        this.contact = contact;
     }
 
-    public Names(int ser_no, String FIRST_NAME, String LAST_NAME, String BLK_OR_FLT_NO, String STREET_NAME, String LOCALITY_OR_AREA, String CONTACT) {
+    public Names(int ser_no, String firstName, String lastName, String blkOrFltNo, String streetName, String localityOrArea, String contact) {
         this.ser_no = ser_no;
-        this.FIRST_NAME = FIRST_NAME;
-        this.LAST_NAME = LAST_NAME;
-        this.BLK_OR_FLT_NO = BLK_OR_FLT_NO;
-        this.STREET_NAME = STREET_NAME;
-        this.LOCALITY_OR_AREA = LOCALITY_OR_AREA;
-        this.CONTACT = CONTACT;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.blkOrFltNo = blkOrFltNo;
+        this.streetName = streetName;
+        this.localityOrArea = localityOrArea;
+        this.contact = contact;
     }
 
     public void setSer_no(long ser_no) {
         this.ser_no = ser_no;
     }
 
-    public void setFIRST_NAME(String FIRST_NAME) {
-        this.FIRST_NAME = FIRST_NAME;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setLAST_NAME(String LAST_NAME) {
-        this.LAST_NAME = LAST_NAME;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public void setBLK_OR_FLT_NO(String BLK_OR_FLT_NO) {
-        this.BLK_OR_FLT_NO = BLK_OR_FLT_NO;
+    public void setBlkOrFltNo(String blkOrFltNo) {
+        this.blkOrFltNo = blkOrFltNo;
     }
 
-    public void setSTREET_NAME(String STREET_NAME) {
-        this.STREET_NAME = STREET_NAME;
+    public void setStreetName(String streetName) {
+        this.streetName = streetName;
     }
 
-    public void setLOCALITY_OR_AREA(String LOCALITY_OR_AREA) {
-        this.LOCALITY_OR_AREA = LOCALITY_OR_AREA;
+    public void setLocalityOrArea(String localityOrArea) {
+        this.localityOrArea = localityOrArea;
     }
 
-    public void setCONTACT(String CONTACT) {
-        this.CONTACT = CONTACT;
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     public long getSer_no() {
         return ser_no;
     }
 
-    public String getFIRST_NAME() {
-        return FIRST_NAME;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getLAST_NAME() {
-        return LAST_NAME;
+    public String getLastName() {
+        return lastName;
     }
 
-    public String getBLK_OR_FLT_NO() {
-        return BLK_OR_FLT_NO;
+    public String getBlkOrFltNo() {
+        return blkOrFltNo;
     }
 
-    public String getSTREET_NAME() {
-        return STREET_NAME;
+    public String getStreetName() {
+        return streetName;
     }
 
-    public String getLOCALITY_OR_AREA() {
-        return LOCALITY_OR_AREA;
+    public String getLocalityOrArea() {
+        return localityOrArea;
     }
 
-    public String getCONTACT() {
-        return CONTACT;
+    public String getContact() {
+        return contact;
     }
 }

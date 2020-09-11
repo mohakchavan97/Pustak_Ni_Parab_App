@@ -160,13 +160,14 @@ public class AddPerson extends AppCompatActivity {
                     }*/
                     //endregion
 
+                    Toast.makeText(activity, "Inserting Data...", Toast.LENGTH_SHORT).show();
                     namesHelper.addNewPerson(new Names(fname.toUpperCase(), lname.toUpperCase(), blk.toUpperCase(), strt.toUpperCase(), area.toUpperCase(), call.toUpperCase()), new onCompleteTransaction() {
                         @Override
                         public void onComplete(boolean committed, Object data) {
                             if (committed) {
                                 resetAllFields();
                                 new AlertDialog.Builder(activity)
-                                        .setTitle("Serial No :\t" + ((Names) data).getSer_no() + "\nFull Name :\t" + ((Names) data).getFIRST_NAME() + " " + ((Names) data).getLAST_NAME())
+                                        .setTitle("Serial No :\t" + ((Names) data).getSer_no() + "\nFull Name :\t" + ((Names) data).getFirstName() + " " + ((Names) data).getLastName())
                                         .setPositiveButton("OK", null).show();
                                 Toast.makeText(activity, "Person Added Successfully", Toast.LENGTH_SHORT).show();
                             } else {
@@ -175,6 +176,7 @@ public class AddPerson extends AppCompatActivity {
                         }
                     });
                 }
+                enableAll();
             }
         });
 
@@ -361,26 +363,26 @@ public class AddPerson extends AppCompatActivity {
 
     private void enableAll() {
 //        ma_ed_serial.setFocusable(true);
-        ma_ed_strt.setFocusable(true);
-        ma_ed_lname.setFocusable(true);
-        ma_ed_fname.setFocusable(true);
-        ma_ed_call.setFocusable(true);
-        ma_ed_blk.setFocusable(true);
-        ma_ed_area.setFocusable(true);
-        ma_btn_sub.setClickable(true);
-        ma_btn_reset.setClickable(true);
+        ma_ed_strt.setEnabled(true);
+        ma_ed_lname.setEnabled(true);
+        ma_ed_fname.setEnabled(true);
+        ma_ed_call.setEnabled(true);
+        ma_ed_blk.setEnabled(true);
+        ma_ed_area.setEnabled(true);
+        ma_btn_sub.setEnabled(true);
+        ma_btn_reset.setEnabled(true);
     }
 
     private void disableAll() {
 //        ma_ed_serial.setFocusable(false);
-        ma_ed_strt.setFocusable(false);
-        ma_ed_lname.setFocusable(false);
-        ma_ed_fname.setFocusable(false);
-        ma_ed_call.setFocusable(false);
-        ma_ed_blk.setFocusable(false);
-        ma_ed_area.setFocusable(false);
-        ma_btn_sub.setClickable(false);
-        ma_btn_reset.setClickable(false);
+        ma_ed_strt.setEnabled(false);
+        ma_ed_lname.setEnabled(false);
+        ma_ed_fname.setEnabled(false);
+        ma_ed_call.setEnabled(false);
+        ma_ed_blk.setEnabled(false);
+        ma_ed_area.setEnabled(false);
+        ma_btn_sub.setEnabled(false);
+        ma_btn_reset.setEnabled(false);
     }
 
     @Override

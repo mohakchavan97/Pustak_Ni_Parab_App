@@ -11,9 +11,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 import com.mohakchavan.pustakniparab.Models.Names;
 import com.mohakchavan.pustakniparab.R;
 import com.mohakchavan.pustakniparab.Services.Network_Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NamesHelper {
 
@@ -49,6 +53,27 @@ public class NamesHelper {
             @Override
             public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
                 onCompleteTransaction.onComplete(committed, newPersonDetails);
+            }
+        });
+    }
+
+    public void getAllNames(final BaseHelper.onCompleteRetrieval onCompleteRetrieval) {
+        Network_Service.checkInternetToProceed(context);
+        namesRef.orderByChild("ser_no").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                Toast.makeText(context, "" + snapshot.toString(), Toast.LENGTH_LONG).show();
+                List<Names> namesList = new ArrayList<>();
+                for (DataSnapshot snap : snapshot.getChildren()) {
+                    Names name = snap.getValue(Names.class);
+                    namesList.add(name);
+                }
+                onCompleteRetrieval.onComplete(namesList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, "Some Error Occurred while retrieving data.", Toast.LENGTH_SHORT).show();
             }
         });
     }

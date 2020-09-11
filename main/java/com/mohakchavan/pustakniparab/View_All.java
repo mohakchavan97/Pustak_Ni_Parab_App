@@ -1,13 +1,16 @@
 package com.mohakchavan.pustakniparab;
 
+import android.app.Activity;
 import android.content.Intent;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.widget.TextView;
-
+import com.mohakchavan.pustakniparab.FireBaseHelper.BaseHelper;
+import com.mohakchavan.pustakniparab.FireBaseHelper.NamesHelper;
 import com.mohakchavan.pustakniparab.Models.Names;
 
 import java.util.List;
@@ -18,7 +21,9 @@ public class View_All extends AppCompatActivity {
     View_All_Adapter adapter;
     TextView tv_state;
     List<Names> namesList;
+    private Activity context;
     private DBHelper helper;
+    private NamesHelper namesHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +31,14 @@ public class View_All extends AppCompatActivity {
         setContentView(R.layout.activity_view_all);
 
 //        namesList=new ArrayList<>();
-        helper = new DBHelper(View_All.this);
+        context = View_All.this;
+        helper = new DBHelper(context);
+        namesHelper = new NamesHelper(context);
         tv_state = findViewById(R.id.ac_va_tv_state);
 
         va_viewall = findViewById(R.id.ac_va_rv_viewall);
         va_viewall.setHasFixedSize(true);
-        va_viewall.setLayoutManager(new LinearLayoutManager(View_All.this));
+        va_viewall.setLayoutManager(new LinearLayoutManager(context));
 //        va_viewall.setOnLongClickListener(new View.OnLongClickListener() {
 //            @Override
 //            public boolean onLongClick(View view) {
@@ -40,13 +47,20 @@ public class View_All extends AppCompatActivity {
 //            }
 //        });
 
-        namesList = helper.getAllNames();
-        if (namesList.isEmpty()) {
-            tv_state.setText("No Records Inserted");
-        } else {
-            adapter = new View_All_Adapter(View_All.this, namesList);
-            va_viewall.setAdapter(adapter);
-        }
+//        namesList = helper.getAllNames();
+        namesHelper.getAllNames(new BaseHelper.onCompleteRetrieval() {
+            @Override
+            public void onComplete(Object data) {
+                namesList = (List<Names>) data;
+                if (namesList.isEmpty()) {
+                    tv_state.setText("No Records Found.");
+                } else {
+                    adapter = new View_All_Adapter(context, namesList);
+                    va_viewall.setAdapter(adapter);
+                }
+            }
+        });
+
 
     }
 
