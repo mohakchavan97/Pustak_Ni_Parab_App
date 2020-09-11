@@ -23,6 +23,7 @@ public class NamesHelper {
 
     private DatabaseReference namesRef;
     private Activity context;
+    private ValueEventListener allNamesListener;
 
     public NamesHelper(Activity context) {
         this.context = context;
@@ -59,23 +60,28 @@ public class NamesHelper {
 
     public void getAllNames(final BaseHelper.onCompleteRetrieval onCompleteRetrieval) {
         Network_Service.checkInternetToProceed(context);
-        namesRef.orderByChild("ser_no").addListenerForSingleValueEvent(new ValueEventListener() {
+        allNamesListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                Toast.makeText(context, "" + snapshot.toString(), Toast.LENGTH_LONG).show();
                 List<Names> namesList = new ArrayList<>();
                 for (DataSnapshot snap : snapshot.getChildren()) {
                     Names name = snap.getValue(Names.class);
                     namesList.add(name);
                 }
                 onCompleteRetrieval.onComplete(namesList);
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(context, "Some Error Occurred while retrieving data.", Toast.LENGTH_SHORT).show();
             }
-        });
+        };
+        namesRef.orderByChild("ser_no").addValueEventListener(allNamesListener);
+    }
+
+    public void removeAllNamesListener() {
+        namesRef.removeEventListener(allNamesListener);
     }
 }
 

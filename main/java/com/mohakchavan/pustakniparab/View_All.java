@@ -67,6 +67,7 @@ public class View_All extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        namesHelper.removeAllNamesListener();
         finish();
     }
 

@@ -32,7 +32,7 @@ public class Network_Service {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            context.finish();
+//                            context.finish();
                             System.exit(0);
                         }
                     }).setNegativeButton("Try Again", new DialogInterface.OnClickListener() {
