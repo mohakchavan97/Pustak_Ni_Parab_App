@@ -13,7 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.mohakchavan.pustakniparab.Services.Network_Service;
 
-public class IssuesActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerToggle;
@@ -21,20 +21,20 @@ public class IssuesActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Network_Service.checkInternetToProceed(IssuesActivity.this);
+        Network_Service.checkInternetToProceed(MainActivity.this);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_issues);
+        setContentView(R.layout.activity_main);
 
         drawerLayout = findViewById(R.id.drawer);
-        drawerToggle = new ActionBarDrawerToggle(IssuesActivity.this, drawerLayout, R.string.drawerOpen, R.string.drawerClose);
+        drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, R.string.drawerOpen, R.string.drawerClose);
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.issues);
+        getSupportActionBar().setTitle(R.string.app_name);
 
         NavigationView navigationView = findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -43,7 +43,7 @@ public class IssuesActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.nav_addPerson:
-                        Intent intent = new Intent(IssuesActivity.this, AddPerson.class);
+                        Intent intent = new Intent(MainActivity.this, AddPerson.class);
                         startActivity(intent);
                         break;
                     case R.id.nav_return_issue:

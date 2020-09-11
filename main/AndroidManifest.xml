@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".IssuesActivity" />
+        <activity android:name=".MainActivity" />
         <activity android:name=".Search_Name" />
         <activity android:name=".Delete_Name" />
         <activity android:name=".View_All" />

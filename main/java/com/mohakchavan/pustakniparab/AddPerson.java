@@ -1,12 +1,9 @@
 package com.mohakchavan.pustakniparab;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +29,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.mohakchavan.pustakniparab.FireBaseHelper.FireBaseHelper;
+import com.mohakchavan.pustakniparab.FireBaseHelper.BaseHelper.onCompleteTransaction;
+import com.mohakchavan.pustakniparab.FireBaseHelper.NamesHelper;
 import com.mohakchavan.pustakniparab.Models.Names;
 import com.mohakchavan.pustakniparab.Services.Export_Service;
 import com.mohakchavan.pustakniparab.Services.ImportFile_Service;
@@ -48,7 +46,7 @@ public class AddPerson extends AppCompatActivity {
     TextView ma_tv_error;
     Button ma_btn_sub, ma_btn_all, ma_btn_reset;
     private DBHelper helper;
-    private FireBaseHelper fbHelper;
+    private NamesHelper fbHelper;
     public static Activity activity;
     private boolean isExportOrImport;
     DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
@@ -80,8 +78,10 @@ public class AddPerson extends AppCompatActivity {
         ma_tv_error = findViewById(R.id.ac_main_tv_error);
 
         helper = new DBHelper(activity);
-        fbHelper = new FireBaseHelper(activity);
+        fbHelper = new NamesHelper(activity);
         ma_ed_fname.requestFocus();
+
+        enableAll();
 
 //        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath().concat("/Pustak_Ni_Parab/");
 //        File f = new File(rootPath + "names.csv");
@@ -105,6 +105,7 @@ public class AddPerson extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 boolean state = true;
+                disableAll();
                 String area = ma_ed_area.getText().toString(),
                         fname = ma_ed_fname.getText().toString(),
                         lname = ma_ed_lname.getText().toString(),
@@ -143,7 +144,9 @@ public class AddPerson extends AppCompatActivity {
 
 
                 if (state) {
-                    if (helper.addName(fname.toUpperCase(), lname.toUpperCase(), blk.toUpperCase(), strt.toUpperCase(), area.toUpperCase(), call.toUpperCase())) {
+
+                    //region Code to add data to Local DB (currently commented)
+                    /*if (helper.addName(fname.toUpperCase(), lname.toUpperCase(), blk.toUpperCase(), strt.toUpperCase(), area.toUpperCase(), call.toUpperCase())) {
                         Toast.makeText(AddPerson.this, "Record Inserted in DB", Toast.LENGTH_SHORT).show();
                         resetAllFields();
 //                            ma_ed_serial.setText(String.valueOf(helper.getinsertedser()));
@@ -151,8 +154,23 @@ public class AddPerson extends AppCompatActivity {
                                 + "\nFull Name :\t" + helper.getinsertedname()).setPositiveButton("OK", null).show();
                     } else {
                         Toast.makeText(AddPerson.this, "Some Error Occured in DB", Toast.LENGTH_SHORT).show();
-                    }
-                    fbHelper.addNewPerson(new Names(fname.toUpperCase(), lname.toUpperCase(), blk.toUpperCase(), strt.toUpperCase(), area.toUpperCase(), call.toUpperCase()));
+                    }*/
+                    //endregion
+
+                    fbHelper.addNewPerson(new Names(fname.toUpperCase(), lname.toUpperCase(), blk.toUpperCase(), strt.toUpperCase(), area.toUpperCase(), call.toUpperCase()), new onCompleteTransaction() {
+                        @Override
+                        public void onComplete(boolean committed, Object data) {
+                            if (committed) {
+                                resetAllFields();
+                                new AlertDialog.Builder(activity)
+                                        .setTitle("Serial No :\t" + ((Names) data).getSer_no() + "\nFull Name :\t" + ((Names) data).getFIRST_NAME() + " " + ((Names) data).getLAST_NAME())
+                                        .setPositiveButton("OK", null).show();
+                                Toast.makeText(activity, "Person Added Successfully", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(activity, "Some Error Occurred. Please try again.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -186,6 +204,7 @@ public class AddPerson extends AppCompatActivity {
         ma_ed_blk.setText("");
         ma_ed_call.setText("");
         ma_ed_strt.setText("");
+        enableAll();
     }
 
     @Override
@@ -215,7 +234,8 @@ public class AddPerson extends AppCompatActivity {
                 startActivity(new Intent(AddPerson.this, Search_Name.class));
                 break;
 
-            case R.id.menu_export:
+            //region Extra temporary code (commented)
+            /*case R.id.menu_export:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, getResources().getInteger(R.integer.WritePermissionRequestCode));
                 } else {
@@ -239,7 +259,8 @@ public class AddPerson extends AppCompatActivity {
 //                    readDatabase();
                     writeDatabase();
                 }
-                break;
+                break;*/
+            //endregion
         }
         return super.onOptionsItemSelected(item);
     }
