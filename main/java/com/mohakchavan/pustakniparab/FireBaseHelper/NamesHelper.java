@@ -46,7 +46,12 @@ public class NamesHelper {
                     currentData.child(String.valueOf(nextChildCount)).setValue(newPersonDetails);
                     return Transaction.success(currentData);
                 } else {
-                    Toast.makeText(context, "This userId is already present. Please try again.", Toast.LENGTH_SHORT).show();
+                    context.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(context, "This userId is already present. Please try again.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     return Transaction.abort();
                 }
             }
@@ -58,8 +63,7 @@ public class NamesHelper {
         });
     }
 
-    public void getAllNames(final BaseHelper.onCompleteRetrieval onCompleteRetrieval) {
-        Network_Service.checkInternetToProceed(context);
+    public void setAllNamesListener(final BaseHelper.onCompleteRetrieval onCompleteRetrieval) {
         allNamesListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -74,14 +78,30 @@ public class NamesHelper {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(context, "Some Error Occurred while retrieving data.", Toast.LENGTH_SHORT).show();
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(context, "Some Error Occurred while retrieving data.", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         };
+    }
+
+    public void getAllNamesContinuous(final BaseHelper.onCompleteRetrieval onCompleteRetrieval) {
+        Network_Service.checkInternetToProceed(context);
+        setAllNamesListener(onCompleteRetrieval);
         namesRef.orderByChild("ser_no").addValueEventListener(allNamesListener);
     }
 
     public void removeAllNamesListener() {
         namesRef.removeEventListener(allNamesListener);
+    }
+
+    public void getAllNamesOnce(BaseHelper.onCompleteRetrieval onCompleteRetrieval) {
+        Network_Service.checkInternetToProceed(context);
+        setAllNamesListener(onCompleteRetrieval);
+        namesRef.orderByChild("ser_no").addListenerForSingleValueEvent(allNamesListener);
     }
 }
 

@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.nav_issues:
-                        startActivity(new Intent(MainActivity.this, Issues.class));
+                        startActivity(new Intent(MainActivity.this, AddIssues.class));
                         break;
 
                     case R.id.nav_addPerson:

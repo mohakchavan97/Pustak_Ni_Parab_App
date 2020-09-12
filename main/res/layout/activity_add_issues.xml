@@ -3,13 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Issues">
+    tools:context=".AddIssues">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Book Details"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -20,10 +28,11 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1.5"
+                android:gravity="center_vertical"
                 android:labelFor="@id/is_ed_bookName"
-                android:text="Book Name"
+                android:text="Name"
                 android:textSize="17sp" />
 
             <EditText
@@ -48,8 +57,9 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1.5"
+                android:gravity="center_vertical"
                 android:labelFor="@id/is_ed_bookPrice"
                 android:text="Price"
                 android:textSize="17sp" />
@@ -78,8 +88,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
+                android:gravity="center_vertical"
                 android:labelFor="@id/is_ed_authPub"
-                android:text="Author/Publication"
+                android:text="Author/Publisher"
                 android:textSize="17sp" />
 
             <EditText
@@ -88,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
                 android:layout_weight="0.5"
-                android:hint="Enter Author/Publication"
+                android:hint="Enter Author/Publisher"
                 android:inputType="textCapWords"
                 android:textSize="16sp" />
 
@@ -102,11 +113,20 @@
             android:layout_weight="1"
             android:background="?android:attr/listDivider" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Issuer Details"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:layout_marginBottom="3dp"
+            android:minHeight="50dp"
             android:orientation="horizontal"
             android:weightSum="2">
 
@@ -114,8 +134,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
+                android:gravity="center_vertical"
                 android:labelFor="@id/is_sp_nameId"
-                android:text="Select Name ID"
+                android:text="Select ID"
                 android:textSize="17sp" />
 
             <Spinner
@@ -123,7 +144,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.5"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/is_tv_nameId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
         </LinearLayout>
 
@@ -137,10 +165,11 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1.5"
+                android:gravity="center_vertical"
                 android:labelFor="@id/is_ed_issrName"
-                android:text="Issuer Name"
+                android:text="Name"
                 android:textSize="17sp" />
 
             <EditText
@@ -167,8 +196,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
+                android:gravity="center_vertical"
                 android:labelFor="@id/is_ed_issrAddr"
-                android:text="Issuer Address"
+                android:text="Address"
                 android:textSize="17sp" />
 
             <EditText
@@ -195,8 +225,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
+                android:gravity="center_vertical"
                 android:labelFor="@id/is_ed_issrCont"
-                android:text="Issuer Contact No."
+                android:text="Contact No."
                 android:textSize="17sp" />
 
             <EditText
@@ -205,6 +236,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
                 android:layout_weight="0.5"
+                android:gravity="center_vertical"
                 android:hint="Enter Issuer Contact No."
                 android:inputType="phone"
                 android:maxLength="10"
@@ -228,10 +260,11 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="3dp"
                 android:layout_marginBottom="3dp"
                 android:layout_weight="1.5"
+                android:gravity="center_vertical"
                 android:labelFor="@id/is_tv_issDate"
                 android:text="Issue Date"
                 android:textSize="17sp" />
@@ -245,6 +278,7 @@
                 android:paddingTop="3dp"
                 android:paddingEnd="3dp"
                 android:paddingBottom="3dp"
+                android:gravity="center"
                 android:text="Issue Date"
                 android:textSize="16sp" />
 

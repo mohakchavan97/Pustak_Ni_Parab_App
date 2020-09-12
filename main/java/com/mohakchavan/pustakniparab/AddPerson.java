@@ -105,7 +105,6 @@ public class AddPerson extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 boolean state = true;
-                disableAll();
                 String area = ma_ed_area.getText().toString(),
                         fname = ma_ed_fname.getText().toString(),
                         lname = ma_ed_lname.getText().toString(),
@@ -114,11 +113,11 @@ public class AddPerson extends AppCompatActivity {
                         call = ma_ed_call.getText().toString(),
                         strt = ma_ed_strt.getText().toString();
                 if (area.isEmpty()) {
-                    Toast.makeText(AddPerson.this, "Locality/Area Empty", Toast.LENGTH_SHORT).show();
+                    ma_ed_area.setError("Please Enter Locality/Area");
                     ma_ed_area.requestFocus();
                     state = false;
                 } else if (fname.isEmpty()) {
-                    Toast.makeText(AddPerson.this, "First Name Empty", Toast.LENGTH_SHORT).show();
+                    ma_ed_fname.setError("Please Enter First Name");
                     ma_ed_fname.requestFocus();
                     state = false;
                 } /*else if (ser.isEmpty()) {
@@ -126,7 +125,7 @@ public class AddPerson extends AppCompatActivity {
                         ma_ed_serial.requestFocus();
                         state = false;
                     }*/ else if (strt.isEmpty()) {
-                    Toast.makeText(AddPerson.this, "Street Name Empty", Toast.LENGTH_SHORT).show();
+                    ma_ed_strt.setError("Please Enter Street Name");
                     ma_ed_strt.requestFocus();
                     state = false;
                 }
@@ -140,7 +139,7 @@ public class AddPerson extends AppCompatActivity {
 //                    call = "NULL";
                     call = "";
                 else if (!(call.length() == 10) || !(call.matches("^[6-9][0-9]{9}$"))) {
-                    Toast.makeText(AddPerson.this, "Enter Proper 10 digit Contact No", Toast.LENGTH_SHORT).show();
+                    ma_ed_call.setError("Enter Proper 10 digit Contact No");
                     ma_ed_call.requestFocus();
                     state = false;
                 }
@@ -159,7 +158,7 @@ public class AddPerson extends AppCompatActivity {
                         Toast.makeText(AddPerson.this, "Some Error Occured in DB", Toast.LENGTH_SHORT).show();
                     }*/
                     //endregion
-
+                    disableAll();
                     Toast.makeText(activity, "Inserting Data...", Toast.LENGTH_SHORT).show();
                     namesHelper.addNewPerson(new Names(fname.toUpperCase(), lname.toUpperCase(), blk.toUpperCase(), strt.toUpperCase(), area.toUpperCase(), call.toUpperCase()), new onCompleteTransaction() {
                         @Override
@@ -173,10 +172,10 @@ public class AddPerson extends AppCompatActivity {
                             } else {
                                 Toast.makeText(activity, "Some Error Occurred. Please try again.", Toast.LENGTH_SHORT).show();
                             }
+                            enableAll();
                         }
                     });
                 }
-                enableAll();
             }
         });
 

@@ -48,7 +48,7 @@ public class View_All extends AppCompatActivity {
 //        });
 
 //        namesList = helper.getAllNames();
-        namesHelper.getAllNames(new BaseHelper.onCompleteRetrieval() {
+        namesHelper.getAllNamesContinuous(new BaseHelper.onCompleteRetrieval() {
             @Override
             public void onComplete(Object data) {
                 namesList = (List<Names>) data;
