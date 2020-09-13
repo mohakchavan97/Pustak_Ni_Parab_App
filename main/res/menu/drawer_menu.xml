@@ -1,15 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/nav_issues"
-        android:icon="@drawable/ic_round_issues"
-        android:title="@string/issues" />
-    <item
-        android:id="@+id/nav_addPerson"
-        android:icon="@drawable/ic_round_names"
-        android:title="@string/addPerson" />
-    <item
-        android:id="@+id/nav_return_issue"
-        android:icon="@drawable/ic_outline_returns"
-        android:title="@string/returns" />
+
+    <item android:title="@string/issues">
+        <menu>
+            <item
+                android:id="@+id/nav_issues"
+                android:icon="@drawable/ic_round_issues"
+                android:title="@string/issues" />
+            <item
+                android:id="@+id/nav_return_issue"
+                android:icon="@drawable/ic_outline_returns"
+                android:title="@string/returns" />
+        </menu>
+    </item>
+
+    <item android:title="@string/names">
+        <menu>
+            <item
+                android:id="@+id/nav_addPerson"
+                android:icon="@drawable/ic_round_names"
+                android:title="@string/addPerson" />
+            <item
+                android:id="@+id/nav_allNames"
+                android:title="@string/allNames" />
+            <item
+                android:id="@+id/nav_searchName"
+                android:title="@string/searchName" />
+            <item
+                android:id="@+id/nav_editName"
+                android:title="@string/editName" />
+            <item
+                android:id="@+id/nav_delName"
+                android:title="@string/delName" />
+        </menu>
+    </item>
 </menu>

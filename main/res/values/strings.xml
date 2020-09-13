@@ -8,6 +8,10 @@
     <string name="drawerOpen">Open</string>
     <string name="drawerClose">Close</string>
     <string name="addPerson">Add New Person</string>
+    <string name="allNames">View All Names</string>
+    <string name="searchName">Search Name</string>
+    <string name="editName">Edit Name</string>
+    <string name="delName">Delete Name</string>
     <string name="totalRecords">currentTotalIssuesRecorded</string>
     <string-array name="serials">
         <item>No Item</item>

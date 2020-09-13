@@ -91,13 +91,9 @@ public class AddIssues extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedId = parent.getItemAtPosition(position).toString();
-                if (!selectedId.contentEquals("Other") && !selectedId.contentEquals("Select Name ID")) {
+                if (!selectedId.contentEquals("Select Name ID")) {
                     setNameDetails(selectedId);
                     disableNameFields();
-                } else if (selectedId.contentEquals("Other")) {
-                    is_tv_nameId.setText("Other");
-                    enableNameFields();
-                    clearNameFields();
                 } else if (selectedId.contentEquals("Select Name ID")) {
                     is_tv_nameId.setText("");
                     clearNameFields();
@@ -134,7 +130,7 @@ public class AddIssues extends AppCompatActivity {
                     is_ed_bookName.setError("Please Enter Book Name");
                     is_ed_bookName.requestFocus();
                 } else if (isrId.isEmpty()) {
-                    Toast.makeText(context, "Please select proper Id or select Other.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Please select proper Id", Toast.LENGTH_SHORT).show();
                     is_sp_nameId.requestFocus();
                 } else if (isrName.isEmpty()) {
                     is_ed_issrName.setError("Please Enter Issuer Name");
@@ -194,7 +190,6 @@ public class AddIssues extends AppCompatActivity {
                 for (Names n : namesList) {
                     nameIds.add(String.valueOf(n.getSer_no()));
                 }
-                nameIds.add("Other");
                 nameIds.add(0, "Select Name ID");
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, nameIds);
                 is_sp_nameId.setAdapter(adapter);

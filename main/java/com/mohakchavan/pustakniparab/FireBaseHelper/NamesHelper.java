@@ -40,16 +40,26 @@ public class NamesHelper {
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                long nextChildCount = (currentData.getChildrenCount()) + 1;
-                if (!currentData.hasChild(String.valueOf(nextChildCount))) {
-                    newPersonDetails.setSer_no(nextChildCount);
-                    currentData.child(String.valueOf(nextChildCount)).setValue(newPersonDetails);
-                    return Transaction.success(currentData);
+                if (currentData.getValue() != null) {
+                    long nextChildCount = (currentData.getChildrenCount()) + 1;
+                    if (!currentData.hasChild(String.valueOf(nextChildCount))) {
+                        newPersonDetails.setSer_no(nextChildCount);
+                        currentData.child(String.valueOf(nextChildCount)).setValue(newPersonDetails);
+                        return Transaction.success(currentData);
+                    } else {
+                        context.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(context, "This userId is already present. Please try again.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        return Transaction.abort();
+                    }
                 } else {
                     context.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(context, "This userId is already present. Please try again.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Some Error Occurred. Please try again.", Toast.LENGTH_SHORT).show();
                         }
                     });
                     return Transaction.abort();

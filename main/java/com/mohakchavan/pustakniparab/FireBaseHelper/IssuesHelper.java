@@ -31,19 +31,29 @@ public class IssuesHelper {
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                if (currentData.hasChild(context.getResources().getString(R.string.totalRecords)) && currentData.child(context.getResources().getString(R.string.totalRecords)).getValue() != null) {
-                    long currentTotal = currentData.child(context.getResources().getString(R.string.totalRecords)).getValue(Long.class);
-                    ++currentTotal;
-                    if (!currentData.hasChild(String.valueOf(currentTotal))) {
-                        newIssueDetails.setIssueNo(currentTotal);
-                        currentData.child(String.valueOf(currentTotal)).setValue(newIssueDetails);
-                        currentData.child(context.getResources().getString(R.string.totalRecords)).setValue(currentTotal);
-                        return Transaction.success(currentData);
+                if (currentData.getValue() != null) {
+                    if (currentData.hasChild(context.getResources().getString(R.string.totalRecords)) && currentData.child(context.getResources().getString(R.string.totalRecords)).getValue() != null) {
+                        long currentTotal = currentData.child(context.getResources().getString(R.string.totalRecords)).getValue(Long.class);
+                        ++currentTotal;
+                        if (!currentData.hasChild(String.valueOf(currentTotal))) {
+                            newIssueDetails.setIssueNo(currentTotal);
+                            currentData.child(String.valueOf(currentTotal)).setValue(newIssueDetails);
+                            currentData.child(context.getResources().getString(R.string.totalRecords)).setValue(currentTotal);
+                            return Transaction.success(currentData);
+                        } else {
+                            context.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(context, "The issue ID is already present. Please try again.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            return Transaction.abort();
+                        }
                     } else {
                         context.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(context, "The issue ID is already present. Please try again.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "Some Error Occurred. Please Contact Developer.", Toast.LENGTH_SHORT).show();
                             }
                         });
                         return Transaction.abort();
@@ -52,7 +62,7 @@ public class IssuesHelper {
                     context.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(context, "Some Error Occurred. Please Contact Developer.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Some Error Occurred. Please try again.", Toast.LENGTH_SHORT).show();
                         }
                     });
                     return Transaction.abort();
