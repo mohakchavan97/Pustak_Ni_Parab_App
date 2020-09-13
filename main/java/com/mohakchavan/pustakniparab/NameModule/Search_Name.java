@@ -1,4 +1,4 @@
-package com.mohakchavan.pustakniparab;
+package com.mohakchavan.pustakniparab.NameModule;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,7 +12,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mohakchavan.pustakniparab.DBHelper;
 import com.mohakchavan.pustakniparab.Models.Names;
+import com.mohakchavan.pustakniparab.R;
+import com.mohakchavan.pustakniparab.Adapters.View_All_Adapter;
 
 import java.util.List;
 

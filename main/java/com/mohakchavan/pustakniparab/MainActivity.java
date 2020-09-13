@@ -1,5 +1,6 @@
 package com.mohakchavan.pustakniparab;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -11,12 +12,16 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.mohakchavan.pustakniparab.IssueModule.AddIssues;
+import com.mohakchavan.pustakniparab.NameModule.AddPerson;
+import com.mohakchavan.pustakniparab.NameModule.View_All;
 import com.mohakchavan.pustakniparab.Services.Network_Service;
 
 public class MainActivity extends AppCompatActivity {
 
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerToggle;
+    Activity context;
 
     @Override
     protected void onResume() {
@@ -29,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        context = MainActivity.this;
         drawerLayout = findViewById(R.id.drawer);
         drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, R.string.drawerOpen, R.string.drawerClose);
         drawerLayout.addDrawerListener(drawerToggle);
@@ -43,15 +49,19 @@ public class MainActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.nav_issues:
-                        startActivity(new Intent(MainActivity.this, AddIssues.class));
-                        break;
-
-                    case R.id.nav_addPerson:
-                        Intent intent = new Intent(MainActivity.this, AddPerson.class);
-                        startActivity(intent);
+                        startActivity(new Intent(context, AddIssues.class));
                         break;
 
                     case R.id.nav_return_issue:
+                        break;
+
+                    case R.id.nav_addPerson:
+                        Intent intent = new Intent(context, AddPerson.class);
+                        startActivity(intent);
+                        break;
+
+                    case R.id.nav_allNames:
+                        startActivity(new Intent(context, View_All.class));
                         break;
                 }
 

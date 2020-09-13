@@ -11,7 +11,7 @@ import android.widget.Toast;
 import androidx.core.content.FileProvider;
 
 import com.mohakchavan.pustakniparab.DBHelper;
-import com.mohakchavan.pustakniparab.AddPerson;
+import com.mohakchavan.pustakniparab.NameModule.AddPerson;
 import com.mohakchavan.pustakniparab.Models.Names;
 
 import java.io.File;

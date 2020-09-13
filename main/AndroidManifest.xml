@@ -9,12 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddIssues" />
+        <activity android:name=".IssueModule.AddIssues" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".Search_Name" />
-        <activity android:name=".Delete_Name" />
-        <activity android:name=".View_All" />
-        <activity android:name=".AddPerson" />
+        <activity android:name=".NameModule.Search_Name" />
+        <activity android:name=".NameModule.Delete_Name" />
+        <activity android:name=".NameModule.View_All" />
+        <activity android:name=".NameModule.AddPerson" />
         <activity android:name=".Welcome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

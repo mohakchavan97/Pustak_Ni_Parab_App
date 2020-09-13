@@ -1,4 +1,4 @@
-package com.mohakchavan.pustakniparab;
+package com.mohakchavan.pustakniparab.Adapters;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mohakchavan.pustakniparab.Models.Names;
+import com.mohakchavan.pustakniparab.R;
 
 import java.util.List;
 

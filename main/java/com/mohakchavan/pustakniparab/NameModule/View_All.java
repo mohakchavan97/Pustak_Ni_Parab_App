@@ -1,4 +1,4 @@
-package com.mohakchavan.pustakniparab;
+package com.mohakchavan.pustakniparab.NameModule;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,9 +9,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mohakchavan.pustakniparab.DBHelper;
 import com.mohakchavan.pustakniparab.FireBaseHelper.BaseHelper;
 import com.mohakchavan.pustakniparab.FireBaseHelper.NamesHelper;
 import com.mohakchavan.pustakniparab.Models.Names;
+import com.mohakchavan.pustakniparab.R;
+import com.mohakchavan.pustakniparab.Adapters.View_All_Adapter;
 
 import java.util.List;
 

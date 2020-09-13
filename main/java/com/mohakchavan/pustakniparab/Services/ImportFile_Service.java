@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.mohakchavan.pustakniparab.AddPerson;
+import com.mohakchavan.pustakniparab.NameModule.AddPerson;
 import com.mohakchavan.pustakniparab.R;
 
 public class ImportFile_Service extends Service {
