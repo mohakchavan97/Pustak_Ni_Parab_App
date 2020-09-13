@@ -13,6 +13,7 @@
     <string name="editName">Edit Name</string>
     <string name="delName">Delete Name</string>
     <string name="totalRecords">currentTotalIssuesRecorded</string>
+    <string name="noRecordsFound">No Records Found.</string>
     <string-array name="serials">
         <item>No Item</item>
     </string-array>

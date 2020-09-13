@@ -7,20 +7,21 @@
     tools:context=".NameModule.View_All">
 
     <TextView
-        android:layout_width="match_parent"
-        android:textSize="20sp"
         android:id="@+id/ac_va_tv_state"
-        android:textColor="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
-        android:text="All Names List"
+        android:background="@color/White"
+        android:elevation="8dp"
         android:gravity="center"
-        android:layout_height="wrap_content" />
+        android:text="All Names List"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ac_va_rv_viewall"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp" />
 
 </LinearLayout>

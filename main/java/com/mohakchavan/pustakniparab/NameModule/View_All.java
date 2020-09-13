@@ -1,7 +1,6 @@
 package com.mohakchavan.pustakniparab.NameModule;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -9,12 +8,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mohakchavan.pustakniparab.Adapters.View_All_Adapter;
 import com.mohakchavan.pustakniparab.DBHelper;
 import com.mohakchavan.pustakniparab.FireBaseHelper.BaseHelper;
 import com.mohakchavan.pustakniparab.FireBaseHelper.NamesHelper;
 import com.mohakchavan.pustakniparab.Models.Names;
 import com.mohakchavan.pustakniparab.R;
-import com.mohakchavan.pustakniparab.Adapters.View_All_Adapter;
 
 import java.util.List;
 
@@ -56,15 +55,13 @@ public class View_All extends AppCompatActivity {
             public void onComplete(Object data) {
                 namesList = (List<Names>) data;
                 if (namesList.isEmpty()) {
-                    tv_state.setText("No Records Found.");
+                    tv_state.setText(R.string.noRecordsFound);
                 } else {
                     adapter = new View_All_Adapter(context, namesList);
                     va_viewall.setAdapter(adapter);
                 }
             }
         });
-
-
     }
 
     @Override
@@ -72,11 +69,5 @@ public class View_All extends AppCompatActivity {
         super.onPause();
         namesHelper.removeAllNamesListener();
         finish();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        startActivity(new Intent(View_All.this, AddPerson.class));
     }
 }

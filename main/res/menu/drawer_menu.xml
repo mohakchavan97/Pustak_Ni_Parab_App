@@ -22,15 +22,19 @@
                 android:title="@string/addPerson" />
             <item
                 android:id="@+id/nav_allNames"
+                android:icon="@drawable/ic_round_view_all"
                 android:title="@string/allNames" />
             <item
                 android:id="@+id/nav_searchName"
+                android:icon="@drawable/ic_round_search"
                 android:title="@string/searchName" />
             <item
                 android:id="@+id/nav_editName"
+                android:icon="@drawable/ic_round_edit"
                 android:title="@string/editName" />
             <item
                 android:id="@+id/nav_delName"
+                android:icon="@drawable/ic_round_delete"
                 android:title="@string/delName" />
         </menu>
     </item>
