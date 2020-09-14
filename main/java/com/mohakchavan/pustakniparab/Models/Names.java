@@ -27,6 +27,19 @@ public class Names {
         this.contact = contact;
     }
 
+    public String getFullName() {
+        String text = (!firstName.isEmpty()) ? firstName : "";
+        text += (!lastName.isEmpty()) ? " " + lastName : "";
+        return text;
+    }
+
+    public String getFullAddress() {
+        String text = (!blkOrFltNo.isEmpty()) ? blkOrFltNo.concat(", ") : "";
+        text += (!streetName.isEmpty()) ? streetName.concat(", ") : "";
+        text += (!localityOrArea.isEmpty()) ? localityOrArea : "";
+        return text;
+    }
+
     public void setSer_no(long ser_no) {
         this.ser_no = ser_no;
     }

@@ -1,26 +1,33 @@
 package com.mohakchavan.pustakniparab.Adapters;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mohakchavan.pustakniparab.Models.Names;
 import com.mohakchavan.pustakniparab.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class View_All_Adapter extends RecyclerView.Adapter<View_All_Adapter.View_All_ViewHolder> {
+public class View_All_Adapter extends RecyclerView.Adapter<View_All_Adapter.View_All_ViewHolder> implements Filterable {
 
     private Context context;
-    private List<Names> namesList;
+    private List<Names> filteredNamesList;
+    private List<Names> originalNamesList;
+    private View_All_Filter filter = new View_All_Filter();
 
     public View_All_Adapter(Context context, List<Names> namesList) {
         this.context = context;
-        this.namesList = namesList;
+        this.filteredNamesList = namesList;
+        this.originalNamesList = namesList;
     }
 
     @NonNull
@@ -33,7 +40,7 @@ public class View_All_Adapter extends RecyclerView.Adapter<View_All_Adapter.View
 
     @Override
     public void onBindViewHolder(@NonNull View_All_ViewHolder view_all_viewHolder, int i) {
-        Names names = namesList.get(i);
+        Names names = filteredNamesList.get(i);
         view_all_viewHolder.va_ser.setText(String.valueOf(names.getSer_no()));
         view_all_viewHolder.va_name.setText(new StringBuilder().append(names.getFirstName()).append(" ").append(names.getLastName()).toString());
         view_all_viewHolder.va_blk.setText(names.getBlkOrFltNo());
@@ -44,7 +51,12 @@ public class View_All_Adapter extends RecyclerView.Adapter<View_All_Adapter.View
 
     @Override
     public int getItemCount() {
-        return namesList.size();
+        return filteredNamesList.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return filter;
     }
 
     public class View_All_ViewHolder extends RecyclerView.ViewHolder {
@@ -63,4 +75,33 @@ public class View_All_Adapter extends RecyclerView.Adapter<View_All_Adapter.View
         }
     }
 
+    private class View_All_Filter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults results = new FilterResults();
+            List<Names> filteredOutput = new ArrayList<>(originalNamesList.size());
+
+            if (!constraint.toString().isEmpty()) {
+                String filterString = constraint.toString().trim().toUpperCase();
+                for (Names name : originalNamesList) {
+                    if (String.valueOf(name.getSer_no()).contentEquals(filterString) ||
+                            name.getFirstName().contains(filterString) || name.getLastName().contains(filterString) ||
+                            name.getFullName().contains(filterString)) {
+                        filteredOutput.add(name);
+                    }
+                }
+            } else {
+                filteredOutput = originalNamesList;
+            }
+            results.values = filteredOutput;
+            results.count = filteredOutput.size();
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredNamesList = (List<Names>) results.values;
+            notifyDataSetChanged();
+        }
+    }
 }

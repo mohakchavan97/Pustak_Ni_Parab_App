@@ -14,6 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.mohakchavan.pustakniparab.IssueModule.AddIssues;
 import com.mohakchavan.pustakniparab.NameModule.AddPerson;
+import com.mohakchavan.pustakniparab.NameModule.Search_Name;
 import com.mohakchavan.pustakniparab.NameModule.View_All;
 import com.mohakchavan.pustakniparab.Services.Network_Service;
 
@@ -62,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.nav_allNames:
                         startActivity(new Intent(context, View_All.class));
+                        break;
+
+                    case R.id.nav_searchName:
+                        startActivity(new Intent(context, Search_Name.class));
                         break;
                 }
 

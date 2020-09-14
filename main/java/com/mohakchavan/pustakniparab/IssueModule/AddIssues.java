@@ -259,13 +259,8 @@ public class AddIssues extends AppCompatActivity {
                 break;
             }
         }
-        String text = (!name.getFirstName().isEmpty()) ? name.getFirstName() : "";
-        text += (!name.getLastName().isEmpty()) ? " " + name.getLastName() : "";
-        is_ed_issrName.setText(text);
-        text = (!name.getBlkOrFltNo().isEmpty()) ? name.getBlkOrFltNo().concat(", ") : "";
-        text += (!name.getStreetName().isEmpty()) ? name.getStreetName().concat(", ") : "";
-        text += (!name.getLocalityOrArea().isEmpty()) ? name.getLocalityOrArea() : "";
-        is_ed_issrAddr.setText(text);
+        is_ed_issrName.setText(name.getFullName());
+        is_ed_issrAddr.setText(name.getFullAddress());
         is_ed_issrCont.setText(name.getContact());
     }
 
