@@ -45,16 +45,28 @@ public class NamesHelper {
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
                 if (currentData.getValue() != null) {
-                    long nextChildCount = (currentData.getChildrenCount()) + 1;
-                    if (!currentData.hasChild(String.valueOf(nextChildCount))) {
-                        newPersonDetails.setSer_no(nextChildCount);
-                        currentData.child(String.valueOf(nextChildCount)).setValue(newPersonDetails);
-                        return Transaction.success(currentData);
+                    if (currentData.hasChild(context.getResources().getString(R.string.totalNames)) && currentData.child(context.getResources().getString(R.string.totalNames)).getValue() != null) {
+                        long currentTotalNames = currentData.child(context.getResources().getString(R.string.totalNames)).getValue(Long.class);
+                        ++currentTotalNames;
+                        if (!currentData.hasChild(String.valueOf(currentTotalNames))) {
+                            newPersonDetails.setSer_no(currentTotalNames);
+                            currentData.child(String.valueOf(currentTotalNames)).setValue(newPersonDetails);
+                            currentData.child(context.getResources().getString(R.string.totalNames)).setValue(currentTotalNames);
+                            return Transaction.success(currentData);
+                        } else {
+                            context.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(context, "This userId is already present. Please try again.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            return Transaction.abort();
+                        }
                     } else {
                         context.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(context, "This userId is already present. Please try again.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "Some Error Occurred. Please Contact Developer.", Toast.LENGTH_SHORT).show();
                             }
                         });
                         return Transaction.abort();
@@ -83,8 +95,10 @@ public class NamesHelper {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Names> namesList = new ArrayList<>();
                 for (DataSnapshot snap : snapshot.getChildren()) {
-                    Names name = snap.getValue(Names.class);
-                    namesList.add(name);
+                    if (snap.getKey() != null && !snap.getKey().isEmpty() && !snap.getKey().contentEquals(context.getResources().getString(R.string.totalNames))) {
+                        Names name = snap.getValue(Names.class);
+                        namesList.add(name);
+                    }
                 }
                 onCompleteRetrieval.onComplete(namesList);
             }
