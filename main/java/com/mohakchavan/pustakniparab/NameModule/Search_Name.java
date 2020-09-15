@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +27,7 @@ import com.mohakchavan.pustakniparab.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Search_Name extends AppCompatActivity {
 
@@ -45,6 +48,8 @@ public class Search_Name extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_name);
 
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(R.string.searchName);
         context = Search_Name.this;
         ed_name = findViewById(R.id.ac_sn_ed_name);
         tv_result = findViewById(R.id.ac_sn_tv_search_result);
@@ -56,7 +61,7 @@ public class Search_Name extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.ac_sn_rv_view);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(Search_Name.this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         ed_name.requestFocus();
         getAllNames();
@@ -148,8 +153,16 @@ public class Search_Name extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
         finish();
     }
 }

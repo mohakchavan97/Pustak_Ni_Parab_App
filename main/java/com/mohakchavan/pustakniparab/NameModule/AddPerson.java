@@ -1,6 +1,7 @@
 package com.mohakchavan.pustakniparab.NameModule;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -30,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mohakchavan.pustakniparab.DBHelper;
+import com.mohakchavan.pustakniparab.FireBaseHelper.BaseHelper;
 import com.mohakchavan.pustakniparab.FireBaseHelper.BaseHelper.onCompleteTransaction;
 import com.mohakchavan.pustakniparab.FireBaseHelper.NamesHelper;
 import com.mohakchavan.pustakniparab.Models.Names;
@@ -41,16 +43,19 @@ import com.mohakchavan.pustakniparab.Services.Network_Service;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 public class AddPerson extends AppCompatActivity {
 
-    //    EditText ma_ed_serial;
     EditText ma_ed_fname, ma_ed_lname, ma_ed_blk, ma_ed_strt, ma_ed_area, ma_ed_call;
-    TextView ma_tv_error;
-    Button ma_btn_sub, ma_btn_all, ma_btn_reset;
+    private TextView ma_tv_error, ma_tv_id;
+    Button ma_btn_sub, ma_btn_reset;
     private DBHelper helper;
     private NamesHelper namesHelper;
     public static Activity activity;
     private boolean isExportOrImport;
+    private boolean viewMode;
+    private Menu menu;
     DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference childRef = rootRef.child("number");
 
@@ -66,41 +71,40 @@ public class AddPerson extends AppCompatActivity {
         setContentView(R.layout.activity_add_person);
 
         activity = AddPerson.this;
-        getSupportActionBar().setTitle(R.string.addPerson);
+
         ma_ed_area = findViewById(R.id.ac_main_ed_area);
         ma_ed_blk = findViewById(R.id.ac_main_ed_blk);
         ma_ed_call = findViewById(R.id.ac_main_ed_call);
         ma_ed_fname = findViewById(R.id.ac_main_ed_fname);
         ma_ed_lname = findViewById(R.id.ac_main_ed_lname);
-//        ma_ed_serial = findViewById(R.id.ac_main_ed_serial);
         ma_ed_strt = findViewById(R.id.ac_main_ed_street);
         ma_btn_sub = findViewById(R.id.ac_main_btn_sub);
         ma_btn_reset = findViewById(R.id.ac_main_btn_reset);
-//        ma_btn_all = findViewById(R.id.ac_main_btn_all);
-        ma_tv_error = findViewById(R.id.ac_main_tv_error);
-
+//        ma_tv_error = findViewById(R.id.ac_main_tv_error);
         helper = new DBHelper(activity);
         namesHelper = new NamesHelper(activity);
-        ma_ed_fname.requestFocus();
+        viewMode = getIntent().getBooleanExtra("view", false);
 
-        enableAll();
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        if (!viewMode) {
+            getSupportActionBar().setTitle(R.string.addPerson);
+            ma_ed_fname.requestFocus();
+            enableAll();
+        } else {
+            getSupportActionBar().setTitle(R.string.viewPerson);
+            ma_tv_id = findViewById(R.id.ac_main_tv_id);
+            findViewById(R.id.ac_main_ll_updt).setVisibility(View.VISIBLE);
+            findViewById(R.id.ac_main_tv_header).setVisibility(View.GONE);
+            findViewById(R.id.ac_main_ll_btns).setVisibility(View.GONE);
+            disableAll();
+            setNameFields(getIntent().getStringExtra("nameId"));
+        }
+
 
 //        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath().concat("/Pustak_Ni_Parab/");
 //        File f = new File(rootPath + "names.csv");
 //        ma_tv_error.setVisibility(View.VISIBLE);
 //        ma_tv_error.setText(Environment.getStorageState(f));
-
-        int i = 0;
-//        i = helper.getinsertedser();
-//        if (i != 0) {
-//        ma_ed_serial.setText(String.valueOf(i));
-//            enableall();
-//        ma_ed_serial.setFocusable(false);
-//        } else {
-//            ma_tv_error.setText("Some Error Occured");
-//            ma_tv_error.setVisibility(View.VISIBLE);
-//            disableall();
-//        }
 
 
         ma_btn_sub.setOnClickListener(new View.OnClickListener() {
@@ -123,10 +127,10 @@ public class AddPerson extends AppCompatActivity {
                     ma_ed_fname.requestFocus();
                     state = false;
                 } /*else if (ser.isEmpty()) {
-                        Toast.makeText(MainActivity.this, "Serial No Empty", Toast.LENGTH_SHORT).show();
-                        ma_ed_serial.requestFocus();
-                        state = false;
-                    }*/ else if (strt.isEmpty()) {
+            Toast.makeText(MainActivity.this, "Serial No Empty", Toast.LENGTH_SHORT).show();
+            ma_ed_serial.requestFocus();
+            state = false;
+        }*/ else if (strt.isEmpty()) {
                     ma_ed_strt.setError("Please Enter Street Name");
                     ma_ed_strt.requestFocus();
                     state = false;
@@ -146,37 +150,19 @@ public class AddPerson extends AppCompatActivity {
                     state = false;
                 }
 
-
                 if (state) {
-
-                    //region Code to add data to Local DB (currently commented)
-                    /*if (helper.addName(fname.toUpperCase(), lname.toUpperCase(), blk.toUpperCase(), strt.toUpperCase(), area.toUpperCase(), call.toUpperCase())) {
-                        Toast.makeText(AddPerson.this, "Record Inserted in DB", Toast.LENGTH_SHORT).show();
-                        resetAllFields();
-//                            ma_ed_serial.setText(String.valueOf(helper.getinsertedser()));
-                        new AlertDialog.Builder(AddPerson.this).setTitle("Serial No :\t" + String.valueOf(helper.getinsertedser())
-                                + "\nFull Name :\t" + helper.getinsertedname()).setPositiveButton("OK", null).show();
+                    Names names = new Names(fname.toUpperCase(), lname.toUpperCase(), blk.toUpperCase(), strt.toUpperCase(), area.toUpperCase(), call.toUpperCase());
+                    if (!viewMode) {
+                        submitNewPerson(names);
                     } else {
-                        Toast.makeText(AddPerson.this, "Some Error Occured in DB", Toast.LENGTH_SHORT).show();
-                    }*/
-                    //endregion
-                    disableAll();
-                    Toast.makeText(activity, "Inserting Data...", Toast.LENGTH_SHORT).show();
-                    namesHelper.addNewPerson(new Names(fname.toUpperCase(), lname.toUpperCase(), blk.toUpperCase(), strt.toUpperCase(), area.toUpperCase(), call.toUpperCase()), new onCompleteTransaction() {
-                        @Override
-                        public void onComplete(boolean committed, Object data) {
-                            if (committed) {
-                                resetAllFields();
-                                new AlertDialog.Builder(activity)
-                                        .setTitle("Serial No :\t" + ((Names) data).getSer_no() + "\nFull Name :\t" + ((Names) data).getFirstName() + " " + ((Names) data).getLastName())
-                                        .setPositiveButton("OK", null).show();
-                                Toast.makeText(activity, "Person Added Successfully", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(activity, "Some Error Occurred. Please try again.", Toast.LENGTH_SHORT).show();
-                            }
-                            enableAll();
+                        if (ma_tv_id.getText().toString().trim().isEmpty()) {
+                            Toast.makeText(activity, "Some Error Occurred. Please try again.", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            names.setSer_no(Long.parseLong(ma_tv_id.getText().toString()));
+                            updatePerson(names);
                         }
-                    });
+                    }
                 }
             }
         });
@@ -185,21 +171,94 @@ public class AddPerson extends AppCompatActivity {
         ma_btn_reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                resetAllFields();
+                if (!viewMode)
+                    resetAllFields();
+                else
+                    finish();
             }
         });
 
-
-//        ma_btn_all.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this, View_All.class);
-//                startActivity(intent);
-//            }
-//        });
-
-
     }
+
+    private void editMode() {
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setTitle(R.string.editName);
+        enableAll();
+        menu.findItem(R.id.act_edit).setVisible(false);
+        menu.findItem(R.id.act_del).setVisible(false);
+        findViewById(R.id.ac_main_ll_btns).setVisibility(View.VISIBLE);
+        ma_btn_sub.setText("Update");
+        ma_btn_reset.setText("Cancel");
+    }
+
+    private void updatePerson(Names updatedName) {
+        disableAll();
+        updatedName.setSer_no(Long.parseLong(Objects.requireNonNull(getIntent().getStringExtra("nameId"))));
+        namesHelper.updatePerson(updatedName, new onCompleteTransaction() {
+            @Override
+            public void onComplete(boolean committed, Object data) {
+                if (committed) {
+                    Toast.makeText(activity, "Name details updated successfully.", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(activity, "Some Error Occurred. Please try again.", Toast.LENGTH_SHORT).show();
+                }
+                enableAll();
+            }
+        });
+    }
+
+    private void setNameFields(String nameId) {
+        if (nameId != null && !nameId.trim().isEmpty()) {
+            namesHelper.getNameDetails(nameId, new BaseHelper.onCompleteRetrieval() {
+                @Override
+                public void onComplete(Object data) {
+                    Names names = (Names) data;
+                    ma_tv_id.setText(String.valueOf(names.getSer_no()));
+                    ma_ed_area.setText(names.getLocalityOrArea());
+                    ma_ed_blk.setText(names.getBlkOrFltNo());
+                    ma_ed_call.setText(names.getContact());
+                    ma_ed_fname.setText(names.getFirstName());
+                    ma_ed_lname.setText(names.getLastName());
+                    ma_ed_strt.setText(names.getStreetName());
+                }
+            });
+        }
+    }
+
+
+    private void submitNewPerson(Names newName) {
+        //region Code to add data to Local DB (currently commented)
+        /*if (helper.addName(fname.toUpperCase(), lname.toUpperCase(), blk.toUpperCase(), strt.toUpperCase(), area.toUpperCase(), call.toUpperCase())) {
+            Toast.makeText(AddPerson.this, "Record Inserted in DB", Toast.LENGTH_SHORT).show();
+            resetAllFields();
+//                            ma_ed_serial.setText(String.valueOf(helper.getinsertedser()));
+            new AlertDialog.Builder(AddPerson.this).setTitle("Serial No :\t" + String.valueOf(helper.getinsertedser())
+                    + "\nFull Name :\t" + helper.getinsertedname()).setPositiveButton("OK", null).show();
+        } else {
+            Toast.makeText(AddPerson.this, "Some Error Occured in DB", Toast.LENGTH_SHORT).show();
+        }*/
+        //endregion
+
+        disableAll();
+
+        namesHelper.addNewPerson(newName, new onCompleteTransaction() {
+            @Override
+            public void onComplete(boolean committed, Object data) {
+                if (committed) {
+                    resetAllFields();
+                    new AlertDialog.Builder(activity)
+                            .setTitle("Serial No :\t" + ((Names) data).getSer_no() + "\nFull Name :\t" + ((Names) data).getFirstName() + " " + ((Names) data).getLastName())
+                            .setPositiveButton("OK", null).show();
+                    Toast.makeText(activity, "Person Added Successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(activity, "Some Error Occurred. Please try again.", Toast.LENGTH_SHORT).show();
+                }
+                enableAll();
+            }
+        });
+    }
+
 
     private void resetAllFields() {
         ma_ed_area.setText(getString(R.string.defaultArea));
@@ -216,7 +275,11 @@ public class AddPerson extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu, menu);
+        this.menu = menu;
+        if (!viewMode)
+            getMenuInflater().inflate(R.menu.menu, menu);
+        else
+            getMenuInflater().inflate(R.menu.action_menu, menu);
         return true;
     }
 
@@ -224,6 +287,9 @@ public class AddPerson extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int item_id = item.getItemId();
         switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
 
             case R.id.menu_all:
 //            Toast.makeText(MainActivity.this, "Selected View All", Toast.LENGTH_SHORT).show();
@@ -238,6 +304,30 @@ public class AddPerson extends AppCompatActivity {
             case R.id.menu_search:
 //            Toast.makeText(MainActivity.this, "Selected " + item.getTitle(), Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(AddPerson.this, Search_Name.class));
+                break;
+
+            case R.id.act_edit:
+                editMode();
+                break;
+
+            case R.id.act_del:
+                new AlertDialog.Builder(activity)
+                        .setTitle("Confirm Delete")
+                        .setMessage("Are you sure you want to delete this person's details?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                namesHelper.deleteName(ma_tv_id.getText().toString(), new BaseHelper.onDeletion() {
+                                    @Override
+                                    public void onDelete(boolean deleted) {
+                                        Toast.makeText(activity, "Name details successfully deleted", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
                 break;
 
             //region Extra temporary code (commented)
@@ -363,7 +453,6 @@ public class AddPerson extends AppCompatActivity {
     }
 
     private void enableAll() {
-//        ma_ed_serial.setFocusable(true);
         ma_ed_strt.setEnabled(true);
         ma_ed_lname.setEnabled(true);
         ma_ed_fname.setEnabled(true);
@@ -375,7 +464,6 @@ public class AddPerson extends AppCompatActivity {
     }
 
     private void disableAll() {
-//        ma_ed_serial.setFocusable(false);
         ma_ed_strt.setEnabled(false);
         ma_ed_lname.setEnabled(false);
         ma_ed_fname.setEnabled(false);
@@ -387,9 +475,8 @@ public class AddPerson extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        if (!isExportOrImport)
-            finish();
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

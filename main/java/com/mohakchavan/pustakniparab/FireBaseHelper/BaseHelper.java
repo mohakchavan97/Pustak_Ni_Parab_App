@@ -22,4 +22,8 @@ public class BaseHelper {
     public interface onCompleteRetrieval {
         void onComplete(Object data);
     }
+
+    public interface onDeletion {
+        void onDelete(boolean deleted);
+    }
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,17 +10,16 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:orientation="vertical"
-        android:weightSum="10">
+        android:weightSum="20">
 
-        <TextView
-            android:id="@+id/ac_main_tv_error"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@android:color/holo_red_dark"
-            android:textSize="15sp"
-            android:visibility="gone" />
+<!--        <TextView-->
+<!--            android:id="@+id/ac_main_tv_error"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:gravity="center"-->
+<!--            android:textColor="@android:color/holo_red_dark"-->
+<!--            android:textSize="15sp"-->
+<!--            android:visibility="gone" />-->
 
         <TextView
             android:id="@+id/ac_main_tv_header"
@@ -31,6 +29,37 @@
             android:gravity="center"
             android:text="Enter Person Details"
             android:textSize="18sp" />
+
+        <LinearLayout
+            android:id="@+id/ac_main_ll_updt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="2dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:text="ID:"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/ac_main_tv_id"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:text="id"
+                android:textSize="17sp" />
+
+        </LinearLayout>
 
         <!--<TextView-->
         <!--android:id="@+id/ac_main_tv_serial"-->
@@ -214,6 +243,7 @@
             android:textSize="16sp" />
 
         <LinearLayout
+            android:id="@+id/ac_main_ll_btns"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

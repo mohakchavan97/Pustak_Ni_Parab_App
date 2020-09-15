@@ -27,13 +27,13 @@ public class Names {
         this.contact = contact;
     }
 
-    public String getFullName() {
+    public String returnFullName() {
         String text = (!firstName.isEmpty()) ? firstName : "";
         text += (!lastName.isEmpty()) ? " " + lastName : "";
         return text;
     }
 
-    public String getFullAddress() {
+    public String returnFullAddress() {
         String text = (!blkOrFltNo.isEmpty()) ? blkOrFltNo.concat(", ") : "";
         text += (!streetName.isEmpty()) ? streetName.concat(", ") : "";
         text += (!localityOrArea.isEmpty()) ? localityOrArea : "";

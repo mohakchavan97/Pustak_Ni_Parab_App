@@ -3,6 +3,7 @@ package com.mohakchavan.pustakniparab.IssueModule;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class AddIssues extends AppCompatActivity {
 
@@ -66,7 +69,8 @@ public class AddIssues extends AppCompatActivity {
         is_btn_reset = findViewById(R.id.is_btn_reset);
         namesHelper = new NamesHelper(context);
         issuesHelper = new IssuesHelper(context);
-        getSupportActionBar().setTitle(R.string.issues);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.issues);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final Calendar calendar = Calendar.getInstance();
         final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
@@ -181,6 +185,14 @@ public class AddIssues extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void populateNameIds() {
         namesHelper.getAllNamesOnce(new BaseHelper.onCompleteRetrieval() {
             @Override
@@ -259,14 +271,14 @@ public class AddIssues extends AppCompatActivity {
                 break;
             }
         }
-        is_ed_issrName.setText(name.getFullName());
-        is_ed_issrAddr.setText(name.getFullAddress());
+        is_ed_issrName.setText(name.returnFullName());
+        is_ed_issrAddr.setText(name.returnFullAddress());
         is_ed_issrCont.setText(name.getContact());
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    public void onBackPressed() {
+        super.onBackPressed();
         finish();
     }
 }
