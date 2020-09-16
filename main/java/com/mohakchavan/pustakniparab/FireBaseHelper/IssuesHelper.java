@@ -11,14 +11,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 import com.mohakchavan.pustakniparab.Models.Issues;
 import com.mohakchavan.pustakniparab.R;
 import com.mohakchavan.pustakniparab.Services.Network_Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class IssuesHelper {
 
     private DatabaseReference issuesRef;
     private Activity context;
+    private ValueEventListener allIssuesListener;
 
     public IssuesHelper(Activity context) {
         this.context = context;
@@ -74,5 +79,42 @@ public class IssuesHelper {
                 onCompleteTransaction.onComplete(committed, newIssueDetails);
             }
         });
+    }
+
+    public void getAllIssuesContinuous(final BaseHelper.onCompleteRetrieval onCompleteRetrieval) {
+        Network_Service.checkInternetToProceed(context);
+        setAllIssuesListener(onCompleteRetrieval);
+        issuesRef.orderByChild("issueNo").addValueEventListener(allIssuesListener);
+    }
+
+    private void setAllIssuesListener(final BaseHelper.onCompleteRetrieval onCompleteRetrieval) {
+        allIssuesListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Issues> issues = new ArrayList<>();
+                for (DataSnapshot snap : snapshot.getChildren()) {
+                    if (snap.getKey() != null && !snap.getKey().isEmpty() && !snap.getKey().contentEquals(context.getResources().getString(R.string.totalRecords))) {
+                        Issues issue = snap.getValue(Issues.class);
+                        issues.add(issue);
+                    }
+                }
+                onCompleteRetrieval.onComplete(issues);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(context, "Some Error Occurred while retrieving data.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        };
+    }
+
+    public void removeAllNamesListener() {
+        issuesRef.removeEventListener(allIssuesListener);
+//        isContinuousListenerAttached = false;
     }
 }

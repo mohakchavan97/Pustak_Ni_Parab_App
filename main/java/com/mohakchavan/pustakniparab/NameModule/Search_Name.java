@@ -42,6 +42,7 @@ public class Search_Name extends AppCompatActivity {
     private Activity context;
     private List<Names> namesList;
     private View_All_Adapter view_all_adapter;
+    private RecyclerView.AdapterDataObserver adapterDataObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +135,7 @@ public class Search_Name extends AppCompatActivity {
                 // Populate the Recycler View
                 view_all_adapter = new View_All_Adapter(context, namesList);
                 view_all_adapter.getFilter().filter(filterString);
-                view_all_adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                adapterDataObserver = new RecyclerView.AdapterDataObserver() {
                     @Override
                     public void onChanged() {
                         super.onChanged();
@@ -146,7 +147,8 @@ public class Search_Name extends AppCompatActivity {
                             tv_result.setTextColor(ContextCompat.getColor(context, R.color.Red));
                         }
                     }
-                });
+                };
+                view_all_adapter.registerAdapterDataObserver(adapterDataObserver);
                 recyclerView.setAdapter(view_all_adapter);
             }
         });
@@ -164,5 +166,12 @@ public class Search_Name extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        namesHelper.removeAllNamesListener();
+        view_all_adapter.unregisterAdapterDataObserver(adapterDataObserver);
     }
 }

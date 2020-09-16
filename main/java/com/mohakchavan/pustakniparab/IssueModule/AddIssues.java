@@ -159,7 +159,7 @@ public class AddIssues extends AppCompatActivity {
                         bkAuth = "";
                     }
                     disableAllFields();
-                    issuesHelper.addNewIssue(new Issues(bkName, bkPrice, bkAuth, isrId, isrName, isrAdr, isrCont, isrDate),
+                    issuesHelper.addNewIssue(new Issues(bkName, bkPrice, bkAuth, isrId, isrName, isrAdr, isrCont, isrDate, getString(R.string.notReturned), ""),
                             new BaseHelper.onCompleteTransaction() {
                                 @Override
                                 public void onComplete(boolean committed, Object data) {

@@ -3,12 +3,12 @@ package com.mohakchavan.pustakniparab.Models;
 public class Issues {
 
     private long issueNo;
-    private String bookName, bookPrice, bookAuthPub, issuerId, issuerName, issuerAddr, issuerCont, issueDate;
+    private String bookName, bookPrice, bookAuthPub, issuerId, issuerName, issuerAddr, issuerCont, issueDate, isReturned, retDate;
 
     public Issues() {
     }
 
-    public Issues(long issueNo, String bookName, String bookPrice, String bookAuthPub, String issuerId, String issuerName, String issuerAddr, String issuerCont, String issueDate) {
+    public Issues(long issueNo, String bookName, String bookPrice, String bookAuthPub, String issuerId, String issuerName, String issuerAddr, String issuerCont, String issueDate, String isReturned, String retDate) {
         this.issueNo = issueNo;
         this.bookName = bookName;
         this.bookPrice = bookPrice;
@@ -18,9 +18,11 @@ public class Issues {
         this.issuerAddr = issuerAddr;
         this.issuerCont = issuerCont;
         this.issueDate = issueDate;
+        this.isReturned = isReturned;
+        this.retDate = retDate;
     }
 
-    public Issues(String bookName, String bookPrice, String bookAuthPub, String issuerId, String issuerName, String issuerAddr, String issuerCont, String issueDate) {
+    public Issues(String bookName, String bookPrice, String bookAuthPub, String issuerId, String issuerName, String issuerAddr, String issuerCont, String issueDate, String isReturned, String retDate) {
         this.bookName = bookName;
         this.bookPrice = bookPrice;
         this.bookAuthPub = bookAuthPub;
@@ -29,6 +31,8 @@ public class Issues {
         this.issuerAddr = issuerAddr;
         this.issuerCont = issuerCont;
         this.issueDate = issueDate;
+        this.isReturned = isReturned;
+        this.retDate = retDate;
     }
 
     public long getIssueNo() {
@@ -101,5 +105,21 @@ public class Issues {
 
     public void setIssueDate(String issueDate) {
         this.issueDate = issueDate;
+    }
+
+    public String getRetDate() {
+        return retDate;
+    }
+
+    public void setRetDate(String retDate) {
+        this.retDate = retDate;
+    }
+
+    public String getIsReturned() {
+        return isReturned;
+    }
+
+    public void setIsReturned(String isReturned) {
+        this.isReturned = isReturned;
     }
 }

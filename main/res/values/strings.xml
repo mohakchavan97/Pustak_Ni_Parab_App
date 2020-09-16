@@ -17,6 +17,8 @@
     <string name="totalRecords">currentTotalIssuesRecorded</string>
     <string name="totalNames">currentTotalNamesRecorded</string>
     <string name="noRecordsFound">No Records Found.</string>
+    <string name="notReturned">NO</string>
+    <string name="hasReturned">YES</string>
     <string-array name="serials">
         <item>No Item</item>
     </string-array>

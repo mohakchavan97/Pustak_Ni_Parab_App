@@ -37,7 +37,7 @@ public class View_All_Adapter extends RecyclerView.Adapter<View_All_Adapter.View
     @Override
     public View_All_ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.card_view, null);
+        View view = inflater.inflate(R.layout.card_view_names, null);
         return new View_All_ViewHolder(view);
     }
 

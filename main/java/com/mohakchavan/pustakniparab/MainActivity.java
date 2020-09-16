@@ -13,6 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.mohakchavan.pustakniparab.IssueModule.AddIssues;
+import com.mohakchavan.pustakniparab.IssueModule.Returns;
 import com.mohakchavan.pustakniparab.NameModule.AddPerson;
 import com.mohakchavan.pustakniparab.NameModule.Search_Name;
 import com.mohakchavan.pustakniparab.NameModule.View_All;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.nav_return_issue:
+                        startActivity(new Intent(context, Returns.class));
                         break;
 
                     case R.id.nav_addPerson:
