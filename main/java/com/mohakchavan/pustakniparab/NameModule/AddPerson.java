@@ -111,13 +111,13 @@ public class AddPerson extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 boolean state = true;
-                String area = ma_ed_area.getText().toString(),
-                        fname = ma_ed_fname.getText().toString(),
-                        lname = ma_ed_lname.getText().toString(),
+                String area = ma_ed_area.getText().toString().trim(),
+                        fname = ma_ed_fname.getText().toString().trim(),
+                        lname = ma_ed_lname.getText().toString().trim(),
 //                            ser = ma_ed_serial.getText().toString(),
-                        blk = ma_ed_blk.getText().toString(),
-                        call = ma_ed_call.getText().toString(),
-                        strt = ma_ed_strt.getText().toString();
+                        blk = ma_ed_blk.getText().toString().trim(),
+                        call = ma_ed_call.getText().toString().trim(),
+                        strt = ma_ed_strt.getText().toString().trim();
                 if (area.isEmpty()) {
                     ma_ed_area.setError("Please Enter Locality/Area");
                     ma_ed_area.requestFocus();
@@ -279,7 +279,7 @@ public class AddPerson extends AppCompatActivity {
         if (!viewMode)
             getMenuInflater().inflate(R.menu.menu, menu);
         else
-            getMenuInflater().inflate(R.menu.action_menu, menu);
+            getMenuInflater().inflate(R.menu.name_edit_action_menu, menu);
         return true;
     }
 

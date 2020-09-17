@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -15,6 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mohakchavan.pustakniparab.Models.Issues;
 import com.mohakchavan.pustakniparab.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class All_Issues_Adapter extends RecyclerView.Adapter<All_Issues_Adapter.All_Issues_ViewHolder> implements Filterable {
@@ -40,7 +45,7 @@ public class All_Issues_Adapter extends RecyclerView.Adapter<All_Issues_Adapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull All_Issues_ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull All_Issues_ViewHolder holder, final int position) {
         Issues issues = filteredIssuesList.get(position);
         holder.is_tv_issId.setText(String.valueOf(issues.getIssueNo()));
         holder.is_tv_bkName.setText(issues.getBookName());
@@ -48,6 +53,12 @@ public class All_Issues_Adapter extends RecyclerView.Adapter<All_Issues_Adapter.
         holder.is_tv_fullName.setText(issues.getIssuerName());
         holder.is_tv_issDate.setText(issues.getIssueDate());
         holder.is_cb.setChecked(false);
+        holder.is_cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                filteredIssuesList.get(position).setChecked(isChecked);
+            }
+        });
     }
 
     @Override
@@ -58,6 +69,10 @@ public class All_Issues_Adapter extends RecyclerView.Adapter<All_Issues_Adapter.
     @Override
     public Filter getFilter() {
         return filter;
+    }
+
+    public List<Issues> getFilteredIssuesList() {
+        return filteredIssuesList;
     }
 
     public class All_Issues_ViewHolder extends RecyclerView.ViewHolder {
@@ -80,12 +95,64 @@ public class All_Issues_Adapter extends RecyclerView.Adapter<All_Issues_Adapter.
     public class All_Issues_Filter extends Filter {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            return null;
+            FilterResults results = new FilterResults();
+            List<Issues> filteredOutput = new ArrayList<>(originalIssuesList.size());
+
+            if (!constraint.toString().trim().isEmpty()) {
+                try {
+                    JSONObject object = new JSONObject(constraint.toString().trim());
+
+                    String filterString = object.getString("value");
+//                String filterString = constraint.toString().trim().toUpperCase();
+
+                    switch (object.getString("key")) {
+                        case "nameId":
+                            for (Issues issue : originalIssuesList) {
+                                if (issue.getIssuerId().contentEquals(filterString)) {
+                                    filteredOutput.add(issue);
+                                }
+                            }
+                            break;
+
+                        case "bookId":
+                            for (Issues issue : originalIssuesList) {
+                                if (String.valueOf(issue.getIssueNo()).contentEquals(filterString)) {
+                                    filteredOutput.add(issue);
+                                }
+                            }
+                            break;
+
+                        case "bookName":
+                            for (Issues issue : originalIssuesList) {
+                                if (issue.getBookName().contains(filterString)) {
+                                    filteredOutput.add(issue);
+                                }
+                            }
+                            break;
+
+                        case "issrName":
+                            for (Issues issue : originalIssuesList) {
+                                if (issue.getIssuerName().contains(filterString)) {
+                                    filteredOutput.add(issue);
+                                }
+                            }
+                            break;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                filteredOutput = originalIssuesList;
+            }
+            results.values = filteredOutput;
+            results.count = filteredOutput.size();
+            return results;
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-
+            filteredIssuesList = (List<Issues>) results.values;
+            notifyDataSetChanged();
         }
     }
 }

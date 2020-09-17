@@ -96,10 +96,10 @@ public class AddIssues extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedId = parent.getItemAtPosition(position).toString();
-                if (!selectedId.contentEquals("Select Name ID")) {
+                if (!selectedId.contentEquals(getString(R.string.firstSpinnerItem))) {
                     setNameDetails(selectedId);
                     disableNameFields();
-                } else if (selectedId.contentEquals("Select Name ID")) {
+                } else if (selectedId.contentEquals(getString(R.string.firstSpinnerItem))) {
                     is_tv_nameId.setText("");
                     clearNameFields();
                     disableNameFields();
@@ -123,14 +123,14 @@ public class AddIssues extends AppCompatActivity {
         is_btn_sub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String bkName = is_ed_bookName.getText().toString(),
-                        bkPrice = is_ed_bookPrice.getText().toString(),
-                        bkAuth = is_ed_authPub.getText().toString(),
-                        isrId = is_tv_nameId.getText().toString(),
-                        isrName = is_ed_issrName.getText().toString(),
-                        isrAdr = is_ed_issrAddr.getText().toString(),
-                        isrCont = is_ed_issrCont.getText().toString(),
-                        isrDate = is_tv_issDate.getText().toString();
+                String bkName = is_ed_bookName.getText().toString().trim(),
+                        bkPrice = is_ed_bookPrice.getText().toString().trim(),
+                        bkAuth = is_ed_authPub.getText().toString().trim(),
+                        isrId = is_tv_nameId.getText().toString().trim(),
+                        isrName = is_ed_issrName.getText().toString().trim(),
+                        isrAdr = is_ed_issrAddr.getText().toString().trim(),
+                        isrCont = is_ed_issrCont.getText().toString().trim(),
+                        isrDate = is_tv_issDate.getText().toString().trim();
                 if (bkName.isEmpty()) {
                     is_ed_bookName.setError("Please Enter Book Name");
                     is_ed_bookName.requestFocus();
@@ -159,7 +159,7 @@ public class AddIssues extends AppCompatActivity {
                         bkAuth = "";
                     }
                     disableAllFields();
-                    issuesHelper.addNewIssue(new Issues(bkName, bkPrice, bkAuth, isrId, isrName, isrAdr, isrCont, isrDate, getString(R.string.notReturned), ""),
+                    issuesHelper.addNewIssue(new Issues(bkName.toUpperCase(), bkPrice.toUpperCase(), bkAuth.toUpperCase(), isrId.toUpperCase(), isrName.toUpperCase(), isrAdr.toUpperCase(), isrCont.toUpperCase(), isrDate.toUpperCase(), getString(R.string.notReturned).toUpperCase(), ""),
                             new BaseHelper.onCompleteTransaction() {
                                 @Override
                                 public void onComplete(boolean committed, Object data) {
@@ -203,7 +203,7 @@ public class AddIssues extends AppCompatActivity {
                 for (Names n : namesList) {
                     nameIds.add(String.valueOf(n.getSer_no()));
                 }
-                nameIds.add(0, "Select Name ID");
+                nameIds.add(0, getString(R.string.firstSpinnerItem));
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, nameIds);
                 is_sp_nameId.setAdapter(adapter);
             }
@@ -248,9 +248,6 @@ public class AddIssues extends AppCompatActivity {
         is_ed_authPub.setEnabled(true);
         is_btn_sub.setEnabled(true);
         is_btn_reset.setEnabled(true);
-        if (is_tv_nameId.getText().toString().contentEquals("Other")) {
-            enableNameFields();
-        }
     }
 
     private void disableAllFields() {

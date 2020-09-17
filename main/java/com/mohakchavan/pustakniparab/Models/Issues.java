@@ -4,6 +4,7 @@ public class Issues {
 
     private long issueNo;
     private String bookName, bookPrice, bookAuthPub, issuerId, issuerName, issuerAddr, issuerCont, issueDate, isReturned, retDate;
+    private boolean isChecked;
 
     public Issues() {
     }
@@ -20,6 +21,7 @@ public class Issues {
         this.issueDate = issueDate;
         this.isReturned = isReturned;
         this.retDate = retDate;
+        this.isChecked = false;
     }
 
     public Issues(String bookName, String bookPrice, String bookAuthPub, String issuerId, String issuerName, String issuerAddr, String issuerCont, String issueDate, String isReturned, String retDate) {
@@ -33,6 +35,7 @@ public class Issues {
         this.issueDate = issueDate;
         this.isReturned = isReturned;
         this.retDate = retDate;
+        this.isChecked = false;
     }
 
     public long getIssueNo() {
@@ -121,5 +124,13 @@ public class Issues {
 
     public void setIsReturned(String isReturned) {
         this.isReturned = isReturned;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 }

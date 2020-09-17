@@ -95,7 +95,7 @@ public class View_All_Adapter extends RecyclerView.Adapter<View_All_Adapter.View
             FilterResults results = new FilterResults();
             List<Names> filteredOutput = new ArrayList<>(originalNamesList.size());
 
-            if (!constraint.toString().isEmpty()) {
+            if (!constraint.toString().trim().isEmpty()) {
                 String filterString = constraint.toString().trim().toUpperCase();
                 for (Names name : originalNamesList) {
                     if (String.valueOf(name.getSer_no()).contentEquals(filterString) ||

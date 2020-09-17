@@ -81,6 +81,45 @@ public class IssuesHelper {
         });
     }
 
+    public void addReturnedIssues(final List<Issues> checkedIssues, final BaseHelper.onCompleteTransaction onCompleteTransaction) {
+        Network_Service.checkInternetToProceed(context);
+        issuesRef.runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                if (currentData.getValue() != null) {
+                    for (Issues issue : checkedIssues) {
+                        if (currentData.hasChild(String.valueOf(issue.getIssueNo())) && currentData.child(String.valueOf(issue.getIssueNo())).getValue() != null) {
+                            currentData.child(String.valueOf(issue.getIssueNo())).setValue(issue);
+                        } else {
+                            context.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(context, "Some data missing. Please try again.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            return Transaction.abort();
+                        }
+                    }
+                    return Transaction.success(currentData);
+                } else {
+                    context.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(context, "Some Error Occurred. Please try again.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    return Transaction.abort();
+                }
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                onCompleteTransaction.onComplete(committed, currentData);
+            }
+        });
+    }
+
     public void getAllIssuesContinuous(final BaseHelper.onCompleteRetrieval onCompleteRetrieval) {
         Network_Service.checkInternetToProceed(context);
         setAllIssuesListener(onCompleteRetrieval);

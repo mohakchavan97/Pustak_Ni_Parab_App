@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/act_done"
+        android:icon="@drawable/ic_round_done"
+        android:iconTint="@color/White"
+        android:title="Done"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/act_cancel"
+        android:icon="@drawable/ic_round_close"
+        android:iconTint="@color/White"
+        android:title="Cancel"
+        app:showAsAction="ifRoom" />
+</menu>

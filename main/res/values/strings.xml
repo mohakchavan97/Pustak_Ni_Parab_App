@@ -19,6 +19,7 @@
     <string name="noRecordsFound">No Records Found.</string>
     <string name="notReturned">NO</string>
     <string name="hasReturned">YES</string>
+    <string name="firstSpinnerItem">Select Name ID</string>
     <string-array name="serials">
         <item>No Item</item>
     </string-array>
