@@ -34,7 +34,8 @@ public class All_Issues_Adapter extends RecyclerView.Adapter<All_Issues_Adapter.
     @Override
     public All_Issues_ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.card_view_issues, null);
+        View view = inflater.inflate(R.layout.card_view_issues, null, false);
+        view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
         return new All_Issues_ViewHolder(view);
     }
 

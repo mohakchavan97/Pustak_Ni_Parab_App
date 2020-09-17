@@ -8,7 +8,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/is_cv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="10dp">
 
         <LinearLayout
@@ -25,21 +25,24 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="0.5"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="2">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="5dp"
                     android:layout_weight="0.3"
+                    android:weightSum="2"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/is_tv_issId"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginTop="3dp"
                         android:layout_marginBottom="3dp"
+                        android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:text="Issue ID"
                         android:textSize="18sp"
@@ -48,9 +51,10 @@
                     <TextView
                         android:id="@+id/is_tv_bkName"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginTop="3dp"
                         android:layout_marginBottom="3dp"
+                        android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:text="Book Name"
                         android:textSize="17sp" />
@@ -67,7 +71,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="3dp"
                 android:layout_marginBottom="3dp"
                 android:layout_weight="1.5"
@@ -77,29 +81,31 @@
 
                 <TextView
                     android:id="@+id/is_tv_nameId"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
+                    android:layout_weight="1.2"
                     android:gravity="center_vertical"
+                    android:layout_marginEnd="3dp"
                     android:text="Name ID"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/is_tv_fullName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="3dp"
                     android:layout_marginEnd="3dp"
-                    android:layout_weight="1.5"
+                    android:layout_weight="0.8"
                     android:gravity="center_vertical"
                     android:text="Full Name"
                     android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/is_tv_issDate"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:gravity="center"

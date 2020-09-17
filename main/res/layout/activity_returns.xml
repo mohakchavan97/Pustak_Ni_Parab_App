@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -45,7 +45,7 @@
             android:layout_margin="2dp"
             android:gravity="center"
             android:text="OR"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -81,7 +81,7 @@
             android:layout_margin="2dp"
             android:gravity="center"
             android:text="OR"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -98,7 +98,7 @@
                 android:layout_weight="1.5"
                 android:gravity="center_vertical"
                 android:labelFor="@id/rt_sp_issrId"
-                android:text="Issuer Name"
+                android:text="Select ID"
                 android:textSize="17sp" />
 
             <Spinner
@@ -116,7 +116,7 @@
             android:layout_margin="2dp"
             android:gravity="center"
             android:text="OR"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -158,9 +158,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:padding="2dp"
             android:background="@color/White"
-            android:elevation="5dp"
             android:gravity="center"
             android:text="Results"
             android:textAllCaps="true"
@@ -170,7 +168,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rt_rv_issList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:layout_marginBottom="3dp"
+            android:nestedScrollingEnabled="false" />
 
     </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>
