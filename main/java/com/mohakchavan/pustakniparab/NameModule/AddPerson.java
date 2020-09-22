@@ -276,34 +276,19 @@ public class AddPerson extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         this.menu = menu;
-        if (!viewMode)
-            getMenuInflater().inflate(R.menu.menu, menu);
-        else
+//        if (!viewMode)
+//            getMenuInflater().inflate(R.menu.menu, menu);
+//        else
+        if (viewMode)
             getMenuInflater().inflate(R.menu.name_edit_action_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int item_id = item.getItemId();
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
-                break;
-
-            case R.id.menu_all:
-//            Toast.makeText(MainActivity.this, "Selected View All", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(AddPerson.this, View_All.class));
-                break;
-
-            case R.id.menu_del:
-//            Toast.makeText(MainActivity.this, "Selected Delete", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(AddPerson.this, Delete_Name.class));
-                break;
-
-            case R.id.menu_search:
-//            Toast.makeText(MainActivity.this, "Selected " + item.getTitle(), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(AddPerson.this, Search_Name.class));
                 break;
 
             case R.id.act_edit:
@@ -363,21 +348,6 @@ public class AddPerson extends AppCompatActivity {
 
     private void writeDatabase() {
         childRef.setValue(5555);
-    }
-
-    private void readDatabase() {
-        childRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int val = snapshot.getValue(Integer.class);
-                Toast.makeText(AddPerson.this, "Value: " + val, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(AddPerson.this, "Some Error Occurred", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void testInternet() {

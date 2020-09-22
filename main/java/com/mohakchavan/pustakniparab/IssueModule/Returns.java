@@ -163,7 +163,7 @@ public class Returns extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (rt_ed_bkName.isEnabled()) {
-                    filterString = rt_ed_bkName.getText().toString().trim();
+                    filterString = rt_ed_bkName.getText().toString().trim().toUpperCase();
                     if (filterString.isEmpty()) {
                         rt_sp_issrId.setEnabled(true);
                         rt_ed_bkId.setEnabled(true);
@@ -200,7 +200,7 @@ public class Returns extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (rt_ed_issrName.isEnabled()) {
-                    filterString = rt_ed_issrName.getText().toString().trim();
+                    filterString = rt_ed_issrName.getText().toString().trim().toUpperCase();
                     if (filterString.isEmpty()) {
                         rt_sp_issrId.setEnabled(true);
                         rt_ed_bkId.setEnabled(true);

@@ -6,7 +6,7 @@
             <item
                 android:id="@+id/nav_issues"
                 android:icon="@drawable/ic_round_issues"
-                android:title="@string/issues" />
+                android:title="@string/newIssue" />
             <item
                 android:id="@+id/nav_return_issue"
                 android:icon="@drawable/ic_outline_returns"
@@ -21,21 +21,13 @@
                 android:icon="@drawable/ic_round_names"
                 android:title="@string/addPerson" />
             <item
-                android:id="@+id/nav_allNames"
-                android:icon="@drawable/ic_round_view_all"
-                android:title="@string/allNames" />
-            <item
                 android:id="@+id/nav_searchName"
                 android:icon="@drawable/ic_round_search"
                 android:title="@string/searchName" />
             <item
-                android:id="@+id/nav_editName"
-                android:icon="@drawable/ic_round_edit"
-                android:title="@string/editName" />
-            <item
-                android:id="@+id/nav_delName"
-                android:icon="@drawable/ic_round_delete"
-                android:title="@string/delName" />
+                android:id="@+id/nav_allNames"
+                android:icon="@drawable/ic_round_view_all"
+                android:title="@string/allNames" />
         </menu>
     </item>
 </menu>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -12,6 +13,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.mohakchavan.pustakniparab.FireBaseHelper.BaseAuthenticator;
 import com.mohakchavan.pustakniparab.IssueModule.AddIssues;
 import com.mohakchavan.pustakniparab.IssueModule.Returns;
 import com.mohakchavan.pustakniparab.NameModule.AddPerson;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerToggle;
     Activity context;
+    BaseAuthenticator authenticator;
 
     @Override
     protected void onResume() {
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         context = MainActivity.this;
+        authenticator = new BaseAuthenticator(context);
         drawerLayout = findViewById(R.id.drawer);
         drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, R.string.drawerOpen, R.string.drawerClose);
         drawerLayout.addDrawerListener(drawerToggle);
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.app_name);
 
         NavigationView navigationView = findViewById(R.id.navigationView);
+        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_tv)).setText(authenticator.getCurrentUser().getDisplayName());
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

@@ -4,4 +4,6 @@
     <integer name="ReadPermissionRequestCode">100</integer>
     <integer name="WritePermissionRequestCode">101</integer>
     <integer name="InternetRequestCode">102</integer>
+    <integer name="AccessNetworkCode">103</integer>
+    <integer name="SIGN_IN">104</integer>
 </resources>
