@@ -125,32 +125,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-        headerImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(getString(R.string.defaultAndroidClientId))
-                        .requestEmail().build();
-                GoogleSignInClient client = GoogleSignIn.getClient(context, options);
-                Intent intent = client.getSignInIntent();
-                startActivityForResult(intent, getResources().getInteger(R.integer.SIGN_IN));
-            }
-        });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == getResources().getInteger(R.integer.SIGN_IN)) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-            } catch (ApiException e) {
-                Toast.makeText(context, getString(R.string.someError), Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
     @Override
