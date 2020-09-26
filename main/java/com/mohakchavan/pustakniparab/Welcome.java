@@ -21,8 +21,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.mohakchavan.pustakniparab.FireBaseHelper.BaseAuthenticator;
 import com.mohakchavan.pustakniparab.Services.Network_Service;
 
-import java.util.Objects;
-
 public class Welcome extends Activity {
 
     private Activity context;
@@ -46,6 +44,7 @@ public class Welcome extends Activity {
                 } finally {
                     Intent intent = new Intent(context, MainActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         };
@@ -63,28 +62,12 @@ public class Welcome extends Activity {
     }
 
     private void signInUser() {
-        String userIdToken = Objects.requireNonNull(GoogleSignIn.getLastSignedInAccount(context)).getIdToken();
-        if (userIdToken != null) {
-            authenticator.authenticateUsingGoogle(userIdToken, new BaseAuthenticator.OnCompleteSignIn() {
-                @Override
-                public void onComplete(Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(context, "Hello " + authenticator.getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(context, MainActivity.class));
-                        finish();
-                    } else {
-                        Toast.makeText(context, "Authentication Failed. Please try again.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-
-        } else {
-            GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.defaultAndroidClientId))
-                    .requestEmail().build();
-            GoogleSignInClient client = GoogleSignIn.getClient(context, options);
-            startActivityForResult(client.getSignInIntent(), getResources().getInteger(R.integer.SIGN_IN));
-        }
+        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.defaultAndroidClientId))
+                .requestEmail().build();
+        GoogleSignInClient client = GoogleSignIn.getClient(context, options);
+        Intent intent = client.getSignInIntent();
+        startActivityForResult(intent, getResources().getInteger(R.integer.SIGN_IN));
     }
 
     @Override
@@ -109,7 +92,7 @@ public class Welcome extends Activity {
                 });
 
             } catch (ApiException e) {
-                Toast.makeText(context, "code " + e.getStatusCode(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, getString(R.string.someError), Toast.LENGTH_SHORT).show();
             }
         }
     }

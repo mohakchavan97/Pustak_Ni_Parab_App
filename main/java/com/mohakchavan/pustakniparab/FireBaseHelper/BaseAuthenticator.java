@@ -36,6 +36,10 @@ public class BaseAuthenticator {
         });
     }
 
+    public void signOut() {
+        firebaseAuth.signOut();
+    }
+
     public interface OnCompleteSignIn {
         void onComplete(Task<AuthResult> task);
     }

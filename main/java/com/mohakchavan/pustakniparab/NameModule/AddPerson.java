@@ -19,17 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.mohakchavan.pustakniparab.DBHelper;
 import com.mohakchavan.pustakniparab.FireBaseHelper.BaseHelper;
 import com.mohakchavan.pustakniparab.FireBaseHelper.BaseHelper.onCompleteTransaction;
@@ -39,9 +30,6 @@ import com.mohakchavan.pustakniparab.R;
 import com.mohakchavan.pustakniparab.Services.Export_Service;
 import com.mohakchavan.pustakniparab.Services.ImportFile_Service;
 import com.mohakchavan.pustakniparab.Services.Network_Service;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -350,31 +338,6 @@ public class AddPerson extends AppCompatActivity {
         childRef.setValue(5555);
     }
 
-    private void testInternet() {
-        RequestQueue requestQueue = Volley.newRequestQueue(activity);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                "https://jsonplaceholder.typicode.com/todos/1",
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Toast.makeText(AddPerson.this, "Got Response", Toast.LENGTH_SHORT).show();
-                        try {
-                            Toast.makeText(AddPerson.this, "Response is: " + response.getString("title"), Toast.LENGTH_SHORT).show();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(AddPerson.this, "Some Error Occured.", Toast.LENGTH_SHORT).show();
-                    }
-                });
-        requestQueue.add(jsonObjectRequest);
-    }
-
     private void startExporting() {
         isExportOrImport = true;
         startService(new Intent(getApplicationContext(), Export_Service.class));
@@ -402,7 +365,7 @@ public class AddPerson extends AppCompatActivity {
             }
         } else if (requestCode == getResources().getInteger(R.integer.InternetRequestCode)) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                testInternet();
+//                testInternet();
             } else {
                 Toast.makeText(activity, "Please grant the permission to access the storage.", Toast.LENGTH_SHORT).show();
             }

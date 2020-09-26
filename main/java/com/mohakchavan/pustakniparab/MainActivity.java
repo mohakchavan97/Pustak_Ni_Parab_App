@@ -1,10 +1,15 @@
 package com.mohakchavan.pustakniparab;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -20,6 +25,9 @@ import com.mohakchavan.pustakniparab.NameModule.AddPerson;
 import com.mohakchavan.pustakniparab.NameModule.Search_Name;
 import com.mohakchavan.pustakniparab.NameModule.View_All;
 import com.mohakchavan.pustakniparab.Services.Network_Service;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -29,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     ActionBarDrawerToggle drawerToggle;
     Activity context;
     BaseAuthenticator authenticator;
+    NavigationView navigationView;
 
     @Override
     protected void onResume() {
@@ -50,8 +59,13 @@ public class MainActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.app_name);
 
-        NavigationView navigationView = findViewById(R.id.navigationView);
-        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_tv)).setText(authenticator.getCurrentUser().getDisplayName());
+        navigationView = findViewById(R.id.navigationView);
+        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_name)).setText(authenticator.getCurrentUser().getDisplayName());
+        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_email)).setText(authenticator.getCurrentUser().getEmail());
+        Picasso.get()
+                .load(authenticator.getCurrentUser().getPhotoUrl())
+                .placeholder(R.drawable.ic_round_person)
+                .into(((ImageView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_iv)));
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -77,6 +91,15 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_searchName:
                         startActivity(new Intent(context, Search_Name.class));
                         break;
+
+                    case R.id.nav_add_user:
+                        copyUserDetailsToClipBoard();
+                        break;
+
+                    case R.id.nav_sign_out:
+                        authenticator.signOut();
+                        finish();
+                        break;
                 }
 
                 drawerLayout.closeDrawer(GravityCompat.START, true);
@@ -90,5 +113,20 @@ public class MainActivity extends AppCompatActivity {
         if (drawerToggle.onOptionsItemSelected(item))
             return true;
         return super.onOptionsItemSelected(item);
+    }
+
+    private void copyUserDetailsToClipBoard() {
+        JSONObject jsonObject = new JSONObject();
+        ClipboardManager manager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        try {
+            jsonObject.put("userName", authenticator.getCurrentUser().getDisplayName());
+            jsonObject.put("userEmail", authenticator.getCurrentUser().getEmail());
+            jsonObject.put("userUid", authenticator.getCurrentUser().getUid());
+            jsonObject.put("userPhoto", authenticator.getCurrentUser().getPhotoUrl());
+            manager.setPrimaryClip(ClipData.newPlainText("userDetails", jsonObject.toString()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(context, "User details copied to clipboard.", Toast.LENGTH_SHORT).show();
     }
 }

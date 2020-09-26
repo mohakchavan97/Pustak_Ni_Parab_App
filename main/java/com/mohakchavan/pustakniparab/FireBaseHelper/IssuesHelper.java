@@ -67,7 +67,7 @@ public class IssuesHelper {
                     context.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(context, "Some Error Occurred. Please try again.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, context.getString(R.string.someError), Toast.LENGTH_SHORT).show();
                         }
                     });
                     return Transaction.abort();

@@ -2,11 +2,13 @@
     <string name="app_name">Pustak Ni Parab</string>
     <string name="defaultArea">Isanpur</string>
     <string name="exportFileName">PustakParabExportedNames.csv</string>
-    <string name="defaultAndroidClientId">172709641516-nansppodobu60ess8uvfcuo4rn6ajh4m.apps.googleusercontent.com</string>
+<!--    <string name="defaultAndroidClientId">172709641516-nansppodobu60ess8uvfcuo4rn6ajh4m.apps.googleusercontent.com</string>-->
+    <string name="defaultAndroidClientId">172709641516-rdv19n8cbqpb1u4p3d0tfhp3fqht9dbk.apps.googleusercontent.com</string>
     <string name="newIssue">Add New Issue</string>
     <string name="issues">Issues</string>
     <string name="names">Names</string>
     <string name="returns">Returns</string>
+    <string name="user">User</string>
     <string name="drawerOpen">Open</string>
     <string name="drawerClose">Close</string>
     <string name="addPerson">Add New Person</string>
@@ -22,6 +24,7 @@
     <string name="notReturned">NO</string>
     <string name="hasReturned">YES</string>
     <string name="firstSpinnerItem">Select Name ID</string>
+    <string name="someError">Some Error Occurred. Please try again.</string>
     <string-array name="serials">
         <item>No Item</item>
     </string-array>
