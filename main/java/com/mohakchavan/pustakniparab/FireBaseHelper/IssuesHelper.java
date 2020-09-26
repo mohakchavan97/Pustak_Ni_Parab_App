@@ -23,10 +23,12 @@ public class IssuesHelper {
 
     private DatabaseReference issuesRef;
     private Activity context;
+    private boolean isListenerAttached;
     private ValueEventListener allIssuesListener;
 
     public IssuesHelper(Activity context) {
         this.context = context;
+        isListenerAttached = false;
         issuesRef = new BaseHelper().getRootRef().child(context.getResources().getString(R.string.issues));
     }
 
@@ -137,6 +139,7 @@ public class IssuesHelper {
                         issues.add(issue);
                     }
                 }
+                isListenerAttached = true;
                 onCompleteRetrieval.onComplete(issues);
             }
 
@@ -148,12 +151,14 @@ public class IssuesHelper {
                         Toast.makeText(context, "Some Error Occurred while retrieving data.", Toast.LENGTH_SHORT).show();
                     }
                 });
+                isListenerAttached = false;
             }
         };
     }
 
     public void removeAllNamesListener() {
-        issuesRef.removeEventListener(allIssuesListener);
+        if (isListenerAttached)
+            issuesRef.removeEventListener(allIssuesListener);
 //        isContinuousListenerAttached = false;
     }
 }

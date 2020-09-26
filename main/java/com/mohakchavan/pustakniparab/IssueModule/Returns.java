@@ -50,6 +50,7 @@ public class Returns extends AppCompatActivity {
     private EditText rt_ed_bkId, rt_ed_bkName, rt_ed_issrName;
     private Spinner rt_sp_issrId;
     private String filterString;
+    private boolean isAdapterDataObserverRegistered;
     private RecyclerView.AdapterDataObserver adapterDataObserver;
 
     @Override
@@ -66,6 +67,7 @@ public class Returns extends AppCompatActivity {
         rt_ed_issrName = findViewById(R.id.rt_ed_issrName);
         rt_sp_issrId = findViewById(R.id.rt_sp_issrId);
         filterString = "";
+        isAdapterDataObserverRegistered = false;
 
         rt_rv_issList = findViewById(R.id.rt_rv_issList);
         rt_rv_issList.setHasFixedSize(true);
@@ -261,9 +263,11 @@ public class Returns extends AppCompatActivity {
                         }
                     }
                 }
+                isAdapterDataObserverRegistered = false;
                 all_issues_adapter = new All_Issues_Adapter(context, issuesList);
                 all_issues_adapter.getFilter().filter(filterString);
                 all_issues_adapter.registerAdapterDataObserver(adapterDataObserver);
+                isAdapterDataObserverRegistered = true;
                 rt_rv_issList.setAdapter(all_issues_adapter);
                 getAllNameIds();
             }
@@ -354,7 +358,7 @@ public class Returns extends AppCompatActivity {
         super.onPause();
         issuesHelper.removeAllNamesListener();
         namesHelper.removeAllNamesListener();
-        if (all_issues_adapter != null)
+        if (isAdapterDataObserverRegistered)
             all_issues_adapter.unregisterAdapterDataObserver(adapterDataObserver);
     }
 }

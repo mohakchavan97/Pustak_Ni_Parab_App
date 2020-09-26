@@ -7,16 +7,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.mohakchavan.pustakniparab.FireBaseHelper.BaseAuthenticator;
 import com.mohakchavan.pustakniparab.IssueModule.AddIssues;
@@ -60,12 +69,13 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.app_name);
 
         navigationView = findViewById(R.id.navigationView);
+        ImageView headerImageView = ((ImageView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_iv));
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_name)).setText(authenticator.getCurrentUser().getDisplayName());
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_email)).setText(authenticator.getCurrentUser().getEmail());
         Picasso.get()
                 .load(authenticator.getCurrentUser().getPhotoUrl())
                 .placeholder(R.drawable.ic_round_person)
-                .into(((ImageView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_iv)));
+                .into(headerImageView);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -97,8 +107,17 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.nav_sign_out:
-                        authenticator.signOut();
-                        finish();
+                        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                .requestIdToken(getString(R.string.defaultAndroidClientId))
+                                .requestEmail().build();
+                        GoogleSignInClient client = GoogleSignIn.getClient(context, options);
+                        client.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                authenticator.signOut();
+                                finish();
+                            }
+                        });
                         break;
                 }
 
@@ -106,6 +125,32 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        headerImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.defaultAndroidClientId))
+                        .requestEmail().build();
+                GoogleSignInClient client = GoogleSignIn.getClient(context, options);
+                Intent intent = client.getSignInIntent();
+                startActivityForResult(intent, getResources().getInteger(R.integer.SIGN_IN));
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == getResources().getInteger(R.integer.SIGN_IN)) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+            } catch (ApiException e) {
+                Toast.makeText(context, getString(R.string.someError), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override

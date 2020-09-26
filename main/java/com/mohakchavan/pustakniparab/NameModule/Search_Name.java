@@ -41,6 +41,7 @@ public class Search_Name extends AppCompatActivity {
     private Activity context;
     private List<Names> namesList;
     private View_All_Adapter view_all_adapter;
+    private boolean isAdapterDataObserverRegistered;
     private RecyclerView.AdapterDataObserver adapterDataObserver;
 
     @Override
@@ -63,6 +64,7 @@ public class Search_Name extends AppCompatActivity {
         helper = new DBHelper(Search_Name.this);
         namesHelper = new NamesHelper(context);
         filterString = "";
+        isAdapterDataObserverRegistered = false;
 
         recyclerView = findViewById(R.id.ac_sn_rv_view);
         recyclerView.setHasFixedSize(true);
@@ -148,9 +150,11 @@ public class Search_Name extends AppCompatActivity {
                 sp_id.setAdapter(adapter);
 
                 // Populate the Recycler View
+                isAdapterDataObserverRegistered = false;
                 view_all_adapter = new View_All_Adapter(context, namesList);
                 view_all_adapter.getFilter().filter(filterString);
                 view_all_adapter.registerAdapterDataObserver(adapterDataObserver);
+                isAdapterDataObserverRegistered = true;
                 recyclerView.setAdapter(view_all_adapter);
             }
         });
@@ -174,7 +178,7 @@ public class Search_Name extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         namesHelper.removeAllNamesListener();
-        if (adapterDataObserver != null)
+        if (isAdapterDataObserverRegistered)
             view_all_adapter.unregisterAdapterDataObserver(adapterDataObserver);
     }
 }
