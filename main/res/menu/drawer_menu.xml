@@ -31,14 +31,21 @@
         </menu>
     </item>
 
+    <item
+        android:id="@+id/nav_add_books"
+        android:icon="@drawable/ic_round_add_books"
+        android:title="@string/newBooks" />
+
     <item android:title="@string/user">
-        <item
-            android:id="@+id/nav_add_user"
-            android:icon="@drawable/ic_round_identity"
-            android:title="User Details" />
-        <item
-            android:id="@+id/nav_sign_out"
-            android:icon="@drawable/ic_round_exit"
-            android:title="Sign Out" />
+        <menu>
+            <item
+                android:id="@+id/nav_add_user"
+                android:icon="@drawable/ic_round_identity"
+                android:title="@string/userDetails" />
+            <item
+                android:id="@+id/nav_sign_out"
+                android:icon="@drawable/ic_round_exit"
+                android:title="@string/userSignOut" />
+        </menu>
     </item>
 </menu>

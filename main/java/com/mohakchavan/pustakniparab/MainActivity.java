@@ -7,25 +7,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.mohakchavan.pustakniparab.FireBaseHelper.BaseAuthenticator;
 import com.mohakchavan.pustakniparab.IssueModule.AddIssues;
@@ -100,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.nav_searchName:
                         startActivity(new Intent(context, Search_Name.class));
+                        break;
+
+                    case R.id.nav_add_books:
+                        startActivity(new Intent(context, NewBooks.class));
                         break;
 
                     case R.id.nav_add_user:
