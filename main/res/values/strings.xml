@@ -23,11 +23,20 @@
     <string name="noRecordsFound">No Records Found.</string>
     <string name="notReturned">NO</string>
     <string name="hasReturned">YES</string>
-    <string name="firstSpinnerItem">Select Name ID</string>
+    <string name="firstNameItem">Select Name ID</string>
+    <string name="firstLangItem">Select Language</string>
     <string name="someError">Some Error Occurred. Please try again.</string>
-    <string name="newBooks">Add New Books</string>
+    <string name="addNewBooks">Add New Books</string>
+    <string name="newBooks">NewBooks</string>
+    <string name="totalNewBooks">currentTotalNewBooksRecorded</string>
     <string name="userDetails">User Details</string>
     <string name="userSignOut">Sign Out</string>
+    <string-array name="languages">
+        <item>Gujarati</item>
+        <item>English</item>
+        <item>Hindi</item>
+        <item>Other</item>
+    </string-array>
     <string-array name="serials">
         <item>No Item</item>
     </string-array>

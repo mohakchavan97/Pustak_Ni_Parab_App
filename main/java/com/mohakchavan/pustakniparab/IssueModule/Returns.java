@@ -97,7 +97,7 @@ public class Returns extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (rt_sp_issrId.isEnabled()) {
                     filterString = parent.getItemAtPosition(position).toString().trim();
-                    if (filterString.contentEquals(getString(R.string.firstSpinnerItem))) {
+                    if (filterString.contentEquals(getString(R.string.firstNameItem))) {
                         all_issues_adapter.getFilter().filter("");
                     } else {
                         JSONObject jsonObject;
@@ -244,7 +244,7 @@ public class Returns extends AppCompatActivity {
                         nameIds.add(String.valueOf(n.getSer_no()));
                     }
                 }
-                nameIds.add(0, getString(R.string.firstSpinnerItem));
+                nameIds.add(0, getString(R.string.firstNameItem));
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, nameIds);
                 rt_sp_issrId.setAdapter(adapter);
             }

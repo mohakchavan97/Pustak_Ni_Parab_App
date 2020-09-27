@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.nav_add_books:
-                        startActivity(new Intent(context, NewBooks.class));
+                        startActivity(new Intent(context, AddNewBooks.class));
                         break;
 
                     case R.id.nav_add_user:

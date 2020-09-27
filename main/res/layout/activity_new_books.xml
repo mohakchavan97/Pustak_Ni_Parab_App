@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layout_margin="10dp"
     android:orientation="vertical"
-    tools:context=".NewBooks">
+    tools:context=".AddNewBooks">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -78,7 +78,7 @@
             android:layout_weight="1.5"
             android:gravity="center_vertical"
             android:labelFor="@id/nb_sp_bookLang"
-            android:text="Language"
+            android:text="Select Language"
             android:textSize="17sp" />
 
         <Spinner
@@ -89,12 +89,36 @@
             android:layout_weight="0.5"
             android:gravity="center" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/nb_ll_lang"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:weightSum="2">
+
         <TextView
-            android:id="@+id/nb_tv_bookLang"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:gravity="center_vertical"
+            android:labelFor="@id/nb_ed_bookLang"
+            android:text="Language"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/nb_ed_bookLang"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone" />
-
+            android:layout_marginStart="3dp"
+            android:layout_weight="0.5"
+            android:hint="Enter Language"
+            android:inputType="textCapWords"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <View

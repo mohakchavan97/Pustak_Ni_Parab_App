@@ -96,10 +96,10 @@ public class AddIssues extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedId = parent.getItemAtPosition(position).toString();
-                if (!selectedId.contentEquals(getString(R.string.firstSpinnerItem))) {
+                if (!selectedId.contentEquals(getString(R.string.firstNameItem))) {
                     setNameDetails(selectedId);
                     disableNameFields();
-                } else if (selectedId.contentEquals(getString(R.string.firstSpinnerItem))) {
+                } else if (selectedId.contentEquals(getString(R.string.firstNameItem))) {
                     is_tv_nameId.setText("");
                     clearNameFields();
                     disableNameFields();
@@ -175,7 +175,7 @@ public class AddIssues extends AppCompatActivity {
                                         is_tv_issDate.setText(formatter.format(calendar.getTime()));
                                         Toast.makeText(context, "Issue added successfully.", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(context, "Some Error Occurred. Please try again.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, getString(R.string.someError), Toast.LENGTH_SHORT).show();
                                     }
                                     enableAllFields();
                                 }
@@ -203,7 +203,7 @@ public class AddIssues extends AppCompatActivity {
                 for (Names n : namesList) {
                     nameIds.add(String.valueOf(n.getSer_no()));
                 }
-                nameIds.add(0, getString(R.string.firstSpinnerItem));
+                nameIds.add(0, getString(R.string.firstNameItem));
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, nameIds);
                 is_sp_nameId.setAdapter(adapter);
             }

@@ -93,7 +93,7 @@ public class Search_Name extends AppCompatActivity {
 //                if (!doNotChangeOnce) {
                 if (sp_id.isEnabled()) {
                     filterString = parent.getItemAtPosition(position).toString().trim();
-                    if (filterString.contentEquals(getString(R.string.firstSpinnerItem))) {
+                    if (filterString.contentEquals(getString(R.string.firstNameItem))) {
                         view_all_adapter.getFilter().filter("");
                     } else {
                         view_all_adapter.getFilter().filter(filterString);
@@ -143,7 +143,7 @@ public class Search_Name extends AppCompatActivity {
                 for (Names n : namesList) {
                     nameIds.add(String.valueOf(n.getSer_no()));
                 }
-                nameIds.add(0, getString(R.string.firstSpinnerItem));
+                nameIds.add(0, getString(R.string.firstNameItem));
 
                 // Populate the spinner
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, nameIds);
