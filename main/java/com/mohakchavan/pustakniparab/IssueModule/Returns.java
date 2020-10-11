@@ -1,6 +1,8 @@
 package com.mohakchavan.pustakniparab.IssueModule;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -50,6 +54,7 @@ public class Returns extends AppCompatActivity {
     private EditText rt_ed_bkId, rt_ed_bkName, rt_ed_issrName;
     private Spinner rt_sp_issrId;
     private String filterString;
+    private Menu menu;
     private boolean isAdapterDataObserverRegistered;
     private RecyclerView.AdapterDataObserver adapterDataObserver;
 
@@ -267,6 +272,22 @@ public class Returns extends AppCompatActivity {
                 all_issues_adapter = new All_Issues_Adapter(context, issuesList);
                 all_issues_adapter.getFilter().filter(filterString);
                 all_issues_adapter.registerAdapterDataObserver(adapterDataObserver);
+                all_issues_adapter.setListener(new All_Issues_Adapter.ChangeListener() {
+                    @Override
+                    public void onChange() {
+                        boolean toShow = false;
+                        for (Issues issue : all_issues_adapter.getFilteredIssuesList()) {
+                            if (issue.isChecked()) {
+                                toShow = true;
+                                break;
+                            }
+                        }
+                        menu.findItem(R.id.act_done).setVisible(toShow);
+                        menu.findItem(R.id.act_done).setEnabled(toShow);
+                        menu.findItem(R.id.act_cancel).setVisible(toShow);
+                        menu.findItem(R.id.act_cancel).setEnabled(toShow);
+                    }
+                });
                 isAdapterDataObserverRegistered = true;
                 rt_rv_issList.setAdapter(all_issues_adapter);
                 getAllNameIds();
@@ -278,6 +299,11 @@ public class Returns extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.return_action_menu, menu);
+        this.menu = menu;
+        this.menu.findItem(R.id.act_done).setVisible(false);
+        this.menu.findItem(R.id.act_done).setEnabled(false);
+        this.menu.findItem(R.id.act_cancel).setVisible(false);
+        this.menu.findItem(R.id.act_cancel).setEnabled(false);
         return true;
     }
 
@@ -311,26 +337,62 @@ public class Returns extends AppCompatActivity {
         disableAll();
         final Calendar calendar = Calendar.getInstance();
         final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
-        List<Issues> checkedIssues = new ArrayList<>();
-        for (Issues issue : all_issues_adapter.getFilteredIssuesList()) {
-            if (issue.isChecked()) {
-                issue.setIsReturned(getString(R.string.hasReturned));
-                issue.setRetDate(formatter.format(calendar.getTime()));
-                checkedIssues.add(issue);
-            }
-        }
-        issuesHelper.addReturnedIssues(checkedIssues, new BaseHelper.onCompleteTransaction() {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.custom_date_picker);
+        dialog.setTitle("Select Return Date");
+        final TextView cdp_tv_date = dialog.findViewById(R.id.cdp_tv_date);
+        cdp_tv_date.setText(formatter.format(calendar.getTime()));
+        cdp_tv_date.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(boolean committed, Object data) {
-                if (committed) {
-                    enableAll();
-                    resetReturns();
-                } else {
-                    Toast.makeText(context, "Some Error Occurred. Please try again.", Toast.LENGTH_SHORT).show();
-                    onBackPressed();
-                }
+            public void onClick(View v) {
+                new DatePickerDialog(context,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                Calendar cal = Calendar.getInstance();
+                                cal.set(year, month, dayOfMonth);
+                                cdp_tv_date.setText(formatter.format(cal.getTime()));
+                            }
+                        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+
+        ((Button) dialog.findViewById(R.id.cdp_btn_cancel)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        ((Button) dialog.findViewById(R.id.cdp_btn_sub)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Issues> checkedIssues = new ArrayList<>();
+                for (Issues issue : all_issues_adapter.getFilteredIssuesList()) {
+                    if (issue.isChecked()) {
+                        issue.setIsReturned(getString(R.string.hasReturned));
+                        issue.setRetDate(cdp_tv_date.getText().toString());
+                        checkedIssues.add(issue);
+                    }
+                }
+                issuesHelper.addReturnedIssues(checkedIssues, new BaseHelper.onCompleteTransaction() {
+                    @Override
+                    public void onComplete(boolean committed, Object data) {
+                        if (committed) {
+                            enableAll();
+                            resetReturns();
+                        } else {
+                            Toast.makeText(context, getString(R.string.someError), Toast.LENGTH_SHORT).show();
+                        }
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
     }
 
     private void enableAll() {

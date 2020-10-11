@@ -27,6 +27,7 @@ public class All_Issues_Adapter extends RecyclerView.Adapter<All_Issues_Adapter.
     private Context context;
     private List<Issues> filteredIssuesList;
     private List<Issues> originalIssuesList;
+    private ChangeListener listener;
     private All_Issues_Adapter.All_Issues_Filter filter = new All_Issues_Adapter.All_Issues_Filter();
 
     public All_Issues_Adapter(Context context, List<Issues> originalIssuesList) {
@@ -57,6 +58,8 @@ public class All_Issues_Adapter extends RecyclerView.Adapter<All_Issues_Adapter.
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 filteredIssuesList.get(position).setChecked(isChecked);
+                if (listener != null)
+                    listener.onChange();
             }
         });
     }
@@ -73,6 +76,10 @@ public class All_Issues_Adapter extends RecyclerView.Adapter<All_Issues_Adapter.
 
     public List<Issues> getFilteredIssuesList() {
         return filteredIssuesList;
+    }
+
+    public void setListener(ChangeListener listener) {
+        this.listener = listener;
     }
 
     public class All_Issues_ViewHolder extends RecyclerView.ViewHolder {
@@ -154,5 +161,9 @@ public class All_Issues_Adapter extends RecyclerView.Adapter<All_Issues_Adapter.
             filteredIssuesList = (List<Issues>) results.values;
             notifyDataSetChanged();
         }
+    }
+
+    public interface ChangeListener {
+        public void onChange();
     }
 }
