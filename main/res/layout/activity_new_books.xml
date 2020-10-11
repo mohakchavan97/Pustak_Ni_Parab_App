@@ -142,7 +142,7 @@
             android:layout_weight="1.5"
             android:gravity="center_vertical"
             android:labelFor="@id/nb_tv_newBookDate"
-            android:text="Issue Date"
+            android:text="Select Date"
             android:textSize="17sp" />
 
         <TextView
@@ -155,7 +155,7 @@
             android:paddingEnd="3dp"
             android:paddingBottom="3dp"
             android:gravity="center"
-            android:text="Issue Date"
+            android:text="Select Date"
             android:textSize="16sp" />
 
     </LinearLayout>

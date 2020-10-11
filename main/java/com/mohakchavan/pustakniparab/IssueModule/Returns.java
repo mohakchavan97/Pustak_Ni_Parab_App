@@ -2,16 +2,16 @@ package com.mohakchavan.pustakniparab.IssueModule;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -239,13 +240,10 @@ public class Returns extends AppCompatActivity {
 
     }
 
-    private void getAllNameIds() {
-        final ProgressBarService progressBarService = new ProgressBarService("Retrieving Names...");
-        progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
+    private void getAllNameIds(final ProgressBarService progressBarService) {
         namesHelper.getAllNamesContinuous(new BaseHelper.onCompleteRetrieval() {
             @Override
             public void onComplete(Object data) {
-                progressBarService.dismiss();
                 List<String> nameIds = new ArrayList<>();
                 if (data != null) {
                     List<Names> namesList = (List<Names>) data;
@@ -256,18 +254,18 @@ public class Returns extends AppCompatActivity {
                 nameIds.add(0, getString(R.string.firstNameItem));
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, nameIds);
                 rt_sp_issrId.setAdapter(adapter);
+                progressBarService.dismiss();
             }
         });
     }
 
     private void getAllIssues() {
         issuesList = new ArrayList<>();
-        final ProgressBarService progressBarService = new ProgressBarService("Retrieving Issues...");
+        final ProgressBarService progressBarService = new ProgressBarService("Retrieving Data...");
         progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
         issuesHelper.getAllIssuesContinuous(new BaseHelper.onCompleteRetrieval() {
             @Override
             public void onComplete(Object data) {
-                progressBarService.dismiss();
                 if (data != null) {
                     for (Issues issue : (List<Issues>) data) {
                         if (issue.getIsReturned().contentEquals(getString(R.string.notReturned))) {
@@ -289,15 +287,12 @@ public class Returns extends AppCompatActivity {
                                 break;
                             }
                         }
-                        menu.findItem(R.id.act_done).setVisible(toShow);
-                        menu.findItem(R.id.act_done).setEnabled(toShow);
-                        menu.findItem(R.id.act_cancel).setVisible(toShow);
-                        menu.findItem(R.id.act_cancel).setEnabled(toShow);
+                        hideMenuItems(toShow);
                     }
                 });
                 isAdapterDataObserverRegistered = true;
                 rt_rv_issList.setAdapter(all_issues_adapter);
-                getAllNameIds();
+                getAllNameIds(progressBarService);
             }
         });
     }
@@ -307,11 +302,15 @@ public class Returns extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.return_action_menu, menu);
         this.menu = menu;
-        this.menu.findItem(R.id.act_done).setVisible(false);
-        this.menu.findItem(R.id.act_done).setEnabled(false);
-        this.menu.findItem(R.id.act_cancel).setVisible(false);
-        this.menu.findItem(R.id.act_cancel).setEnabled(false);
+        hideMenuItems(false);
         return true;
+    }
+
+    private void hideMenuItems(boolean isVisible) {
+        menu.findItem(R.id.act_done).setVisible(isVisible);
+        menu.findItem(R.id.act_done).setEnabled(isVisible);
+        menu.findItem(R.id.act_cancel).setVisible(isVisible);
+        menu.findItem(R.id.act_cancel).setEnabled(isVisible);
     }
 
     @Override
@@ -337,6 +336,7 @@ public class Returns extends AppCompatActivity {
         namesHelper.removeAllNamesListener();
         if (all_issues_adapter != null)
             all_issues_adapter.unregisterAdapterDataObserver(adapterDataObserver);
+        hideMenuItems(false);
         getAllIssues();
     }
 
@@ -345,10 +345,9 @@ public class Returns extends AppCompatActivity {
         final Calendar calendar = Calendar.getInstance();
         final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
 
-        final Dialog dialog = new Dialog(context);
-        dialog.setContentView(R.layout.custom_date_picker);
-        dialog.setTitle("Select Return Date");
-        final TextView cdp_tv_date = dialog.findViewById(R.id.cdp_tv_date);
+        LayoutInflater inflater = context.getLayoutInflater();
+        View view = inflater.inflate(R.layout.custom_date_picker, null);
+        final TextView cdp_tv_date = view.findViewById(R.id.cdp_tv_date);
         cdp_tv_date.setText(formatter.format(calendar.getTime()));
         cdp_tv_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -364,43 +363,45 @@ public class Returns extends AppCompatActivity {
                         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-
-        ((Button) dialog.findViewById(R.id.cdp_btn_cancel)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        ((Button) dialog.findViewById(R.id.cdp_btn_sub)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                List<Issues> checkedIssues = new ArrayList<>();
-                for (Issues issue : all_issues_adapter.getFilteredIssuesList()) {
-                    if (issue.isChecked()) {
-                        issue.setIsReturned(getString(R.string.hasReturned));
-                        issue.setRetDate(cdp_tv_date.getText().toString());
-                        checkedIssues.add(issue);
-                    }
-                }
-                final ProgressBarService progressBarService = new ProgressBarService("Returning Issues...");
-                progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
-                issuesHelper.addReturnedIssues(checkedIssues, new BaseHelper.onCompleteTransaction() {
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+                .setView(view)
+                .setTitle("Select Return Date")
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onComplete(boolean committed, Object data) {
-                        progressBarService.dismiss();
-                        if (committed) {
-                            enableAll();
-                            resetReturns();
-                        } else {
-                            Toast.makeText(context, getString(R.string.someError), Toast.LENGTH_SHORT).show();
-                        }
+                    public void onClick(DialogInterface dialog, int which) {
+                        enableAll();
                         dialog.dismiss();
                     }
-                });
-            }
-        });
-
+                })
+                .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int which) {
+                        List<Issues> checkedIssues = new ArrayList<>();
+                        for (Issues issue : all_issues_adapter.getFilteredIssuesList()) {
+                            if (issue.isChecked()) {
+                                issue.setIsReturned(getString(R.string.hasReturned));
+                                issue.setRetDate(cdp_tv_date.getText().toString().trim().toUpperCase());
+                                checkedIssues.add(issue);
+                            }
+                        }
+                        final ProgressBarService progressBarService = new ProgressBarService("Returning Issues...");
+                        progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
+                        issuesHelper.addReturnedIssues(checkedIssues, new BaseHelper.onCompleteTransaction() {
+                            @Override
+                            public void onComplete(boolean committed, Object data) {
+                                progressBarService.dismiss();
+                                if (committed) {
+                                    enableAll();
+                                    resetReturns();
+                                } else {
+                                    Toast.makeText(context, getString(R.string.someError), Toast.LENGTH_SHORT).show();
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                }).setCancelable(false)
+                .create();
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
     }

@@ -8,6 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="15dp"
         android:orientation="horizontal"
         android:weightSum="2">
 
@@ -34,54 +35,6 @@
             android:gravity="center"
             android:text="Select Date"
             android:textSize="16sp" />
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="?android:attr/listDivider" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal"
-        android:weightSum="2">
-
-        <Button
-            android:id="@+id/cdp_btn_sub"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
-            android:minHeight="40dp"
-            android:text="submit"
-            android:textColor="@android:color/white"
-            android:textSize="15sp" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_margin="20dp" />
-
-        <Button
-            android:id="@+id/cdp_btn_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
-            android:minHeight="40dp"
-            android:text="cancel"
-            android:textColor="@android:color/white"
-            android:textSize="15sp" />
 
     </LinearLayout>
 </LinearLayout>
