@@ -25,6 +25,7 @@ import com.mohakchavan.pustakniparab.Models.Issues;
 import com.mohakchavan.pustakniparab.Models.Names;
 import com.mohakchavan.pustakniparab.R;
 import com.mohakchavan.pustakniparab.Services.Network_Service;
+import com.mohakchavan.pustakniparab.Services.ProgressBarService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -159,10 +160,14 @@ public class AddIssues extends AppCompatActivity {
                         bkAuth = "";
                     }
                     disableAllFields();
+
+                    final ProgressBarService progressBarService = new ProgressBarService("Adding Issue...");
+                    progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
                     issuesHelper.addNewIssue(new Issues(bkName.toUpperCase(), bkPrice.toUpperCase(), bkAuth.toUpperCase(), isrId.toUpperCase(), isrName.toUpperCase(), isrAdr.toUpperCase(), isrCont.toUpperCase(), isrDate.toUpperCase(), getString(R.string.notReturned).toUpperCase(), ""),
                             new BaseHelper.onCompleteTransaction() {
                                 @Override
                                 public void onComplete(boolean committed, Object data) {
+                                    progressBarService.dismiss();
                                     if (committed) {
                                         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                                                 .setTitle("Assigned Issue ID:\t" + ((Issues) data).getIssueNo())
@@ -194,9 +199,12 @@ public class AddIssues extends AppCompatActivity {
     }
 
     private void populateNameIds() {
+        final ProgressBarService progressBarService = new ProgressBarService("Retrieving Names...");
+        progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
         namesHelper.getAllNamesOnce(new BaseHelper.onCompleteRetrieval() {
             @Override
             public void onComplete(Object data) {
+                progressBarService.dismiss();
                 List<String> nameIds = new ArrayList<>();
                 if (data != null)
                     namesList = (List<Names>) data;

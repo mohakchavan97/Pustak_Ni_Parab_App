@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.mohakchavan.pustakniparab.FireBaseHelper.BaseHelper;
 import com.mohakchavan.pustakniparab.FireBaseHelper.NewBooksHelper;
 import com.mohakchavan.pustakniparab.Models.NewBooks;
+import com.mohakchavan.pustakniparab.Services.ProgressBarService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -128,10 +129,13 @@ public class AddNewBooks extends AppCompatActivity {
                     Toast.makeText(context, "Please set proper Date.", Toast.LENGTH_SHORT).show();
                 } else {
                     disableAllFields();
+                    final ProgressBarService progressBarService = new ProgressBarService("Adding Books...");
+                    progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
                     newBooksHelper.addNewRecord(new NewBooks(perName.toUpperCase(), totBooks.toUpperCase(), bookLang.toUpperCase(), bookDate.toUpperCase()),
                             new BaseHelper.onCompleteTransaction() {
                                 @Override
                                 public void onComplete(boolean committed, Object data) {
+                                    progressBarService.dismiss();
                                     if (committed) {
                                         resetAllFields();
                                         nb_tv_newBookDate.setText(formatter.format(calendar.getTime()));

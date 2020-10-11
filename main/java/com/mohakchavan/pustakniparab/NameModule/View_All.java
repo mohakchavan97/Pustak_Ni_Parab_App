@@ -17,6 +17,7 @@ import com.mohakchavan.pustakniparab.FireBaseHelper.BaseHelper;
 import com.mohakchavan.pustakniparab.FireBaseHelper.NamesHelper;
 import com.mohakchavan.pustakniparab.Models.Names;
 import com.mohakchavan.pustakniparab.R;
+import com.mohakchavan.pustakniparab.Services.ProgressBarService;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,9 +35,12 @@ public class View_All extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        final ProgressBarService progressBarService = new ProgressBarService("Retrieving Names...");
+        progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
         namesHelper.getAllNamesContinuous(new BaseHelper.onCompleteRetrieval() {
             @Override
             public void onComplete(Object data) {
+                progressBarService.dismiss();
                 populateWithNames((List<Names>)data);
             }
         });
@@ -59,12 +63,18 @@ public class View_All extends AppCompatActivity {
         va_viewall.setLayoutManager(new LinearLayoutManager(context));
 
 //        namesList = helper.getAllNames();
+
+        //region Transferred to onResume
+        /*final ProgressBarService progressBarService = new ProgressBarService("Retrieving Names...");
+        progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
         namesHelper.getAllNamesContinuous(new BaseHelper.onCompleteRetrieval() {
             @Override
             public void onComplete(Object data) {
+                progressBarService.dismiss();
                 populateWithNames((List<Names>) data);
             }
-        });
+        });*/
+        //endregion
     }
 
     private void populateWithNames(List<Names> data) {

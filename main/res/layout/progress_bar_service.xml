@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/pbs_tv_title"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="5dp"-->
+    <!--        android:labelFor="@id/pbs_pb_bar"-->
+    <!--        android:text="Title"-->
+    <!--        android:textSize="18sp" />-->
+
+    <ProgressBar
+        android:id="@+id/pbs_pb_bar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:indeterminate="true" />
+
+</LinearLayout>

@@ -30,6 +30,7 @@ import com.mohakchavan.pustakniparab.R;
 import com.mohakchavan.pustakniparab.Services.Export_Service;
 import com.mohakchavan.pustakniparab.Services.ImportFile_Service;
 import com.mohakchavan.pustakniparab.Services.Network_Service;
+import com.mohakchavan.pustakniparab.Services.ProgressBarService;
 
 import java.util.Objects;
 
@@ -182,9 +183,12 @@ public class AddPerson extends AppCompatActivity {
     private void updatePerson(Names updatedName) {
         disableAll();
         updatedName.setSer_no(Long.parseLong(Objects.requireNonNull(getIntent().getStringExtra("nameId"))));
+        final ProgressBarService progressBarService = new ProgressBarService("Updating Details...");
+        progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
         namesHelper.updatePerson(updatedName, new onCompleteTransaction() {
             @Override
             public void onComplete(boolean committed, Object data) {
+                progressBarService.dismiss();
                 if (committed) {
                     Toast.makeText(activity, "Name details updated successfully.", Toast.LENGTH_SHORT).show();
                     finish();
@@ -198,9 +202,12 @@ public class AddPerson extends AppCompatActivity {
 
     private void setNameFields(String nameId) {
         if (nameId != null && !nameId.trim().isEmpty()) {
+            final ProgressBarService progressBarService = new ProgressBarService("Retrieving Name Details...");
+            progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
             namesHelper.getNameDetails(nameId, new BaseHelper.onCompleteRetrieval() {
                 @Override
                 public void onComplete(Object data) {
+                    progressBarService.dismiss();
                     Names names = (Names) data;
                     ma_tv_id.setText(String.valueOf(names.getSer_no()));
                     ma_ed_area.setText(names.getLocalityOrArea());
@@ -230,9 +237,12 @@ public class AddPerson extends AppCompatActivity {
 
         disableAll();
 
+        final ProgressBarService progressBarService = new ProgressBarService("Adding Name...");
+        progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
         namesHelper.addNewPerson(newName, new onCompleteTransaction() {
             @Override
             public void onComplete(boolean committed, Object data) {
+                progressBarService.dismiss();
                 if (committed) {
                     resetAllFields();
                     new AlertDialog.Builder(activity)
@@ -290,9 +300,12 @@ public class AddPerson extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                final ProgressBarService progressBarService = new ProgressBarService("Deleting Name...");
+                                progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
                                 namesHelper.deleteName(ma_tv_id.getText().toString(), new BaseHelper.onDeletion() {
                                     @Override
                                     public void onDelete(boolean deleted) {
+                                        progressBarService.dismiss();
                                         Toast.makeText(activity, "Name details successfully deleted", Toast.LENGTH_SHORT).show();
                                         finish();
                                     }

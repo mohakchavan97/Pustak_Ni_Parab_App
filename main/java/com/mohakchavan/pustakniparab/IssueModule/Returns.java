@@ -31,6 +31,7 @@ import com.mohakchavan.pustakniparab.FireBaseHelper.NamesHelper;
 import com.mohakchavan.pustakniparab.Models.Issues;
 import com.mohakchavan.pustakniparab.Models.Names;
 import com.mohakchavan.pustakniparab.R;
+import com.mohakchavan.pustakniparab.Services.ProgressBarService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -239,9 +240,12 @@ public class Returns extends AppCompatActivity {
     }
 
     private void getAllNameIds() {
+        final ProgressBarService progressBarService = new ProgressBarService("Retrieving Names...");
+        progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
         namesHelper.getAllNamesContinuous(new BaseHelper.onCompleteRetrieval() {
             @Override
             public void onComplete(Object data) {
+                progressBarService.dismiss();
                 List<String> nameIds = new ArrayList<>();
                 if (data != null) {
                     List<Names> namesList = (List<Names>) data;
@@ -258,9 +262,12 @@ public class Returns extends AppCompatActivity {
 
     private void getAllIssues() {
         issuesList = new ArrayList<>();
+        final ProgressBarService progressBarService = new ProgressBarService("Retrieving Issues...");
+        progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
         issuesHelper.getAllIssuesContinuous(new BaseHelper.onCompleteRetrieval() {
             @Override
             public void onComplete(Object data) {
+                progressBarService.dismiss();
                 if (data != null) {
                     for (Issues issue : (List<Issues>) data) {
                         if (issue.getIsReturned().contentEquals(getString(R.string.notReturned))) {
@@ -376,9 +383,12 @@ public class Returns extends AppCompatActivity {
                         checkedIssues.add(issue);
                     }
                 }
+                final ProgressBarService progressBarService = new ProgressBarService("Returning Issues...");
+                progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
                 issuesHelper.addReturnedIssues(checkedIssues, new BaseHelper.onCompleteTransaction() {
                     @Override
                     public void onComplete(boolean committed, Object data) {
+                        progressBarService.dismiss();
                         if (committed) {
                             enableAll();
                             resetReturns();

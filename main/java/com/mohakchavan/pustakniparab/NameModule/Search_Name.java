@@ -24,6 +24,7 @@ import com.mohakchavan.pustakniparab.FireBaseHelper.BaseHelper;
 import com.mohakchavan.pustakniparab.FireBaseHelper.NamesHelper;
 import com.mohakchavan.pustakniparab.Models.Names;
 import com.mohakchavan.pustakniparab.R;
+import com.mohakchavan.pustakniparab.Services.ProgressBarService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,9 +135,12 @@ public class Search_Name extends AppCompatActivity {
     }
 
     private void getAllNames() {
+        final ProgressBarService progressBarService = new ProgressBarService("Retrieving Names...");
+        progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
         namesHelper.getAllNamesContinuous(new BaseHelper.onCompleteRetrieval() {
             @Override
             public void onComplete(Object data) {
+                progressBarService.dismiss();
                 List<String> nameIds = new ArrayList<>();
                 if (data != null)
                     namesList = (List<Names>) data;

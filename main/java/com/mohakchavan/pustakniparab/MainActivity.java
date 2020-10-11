@@ -20,6 +20,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.mohakchavan.pustakniparab.FireBaseHelper.BaseAuthenticator;
@@ -29,6 +30,7 @@ import com.mohakchavan.pustakniparab.NameModule.AddPerson;
 import com.mohakchavan.pustakniparab.NameModule.Search_Name;
 import com.mohakchavan.pustakniparab.NameModule.View_All;
 import com.mohakchavan.pustakniparab.Services.Network_Service;
+import com.mohakchavan.pustakniparab.Services.ProgressBarService;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
@@ -106,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.nav_sign_out:
+                        final ProgressBarService progressBarService = new ProgressBarService("Signing Out...");
+                        progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
                         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                                 .requestIdToken(getString(R.string.defaultAndroidClientId))
                                 .requestEmail().build();
@@ -113,10 +117,18 @@ public class MainActivity extends AppCompatActivity {
                         client.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
+                                progressBarService.dismiss();
                                 authenticator.signOut();
                                 finish();
                             }
-                        });
+                        })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        progressBarService.dismiss();
+                                        Toast.makeText(context, R.string.someError, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                         break;
                 }
 
