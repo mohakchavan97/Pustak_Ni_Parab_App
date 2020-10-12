@@ -237,7 +237,6 @@ public class Returns extends AppCompatActivity {
 
             }
         });
-
     }
 
     private void getAllNameIds(final ProgressBarService progressBarService) {

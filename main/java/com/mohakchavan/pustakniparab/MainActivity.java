@@ -16,6 +16,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -23,9 +25,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
+import com.mohakchavan.pustakniparab.Adapters.Dashboard_Adapter;
 import com.mohakchavan.pustakniparab.FireBaseHelper.BaseAuthenticator;
 import com.mohakchavan.pustakniparab.IssueModule.AddIssues;
 import com.mohakchavan.pustakniparab.IssueModule.Returns;
+import com.mohakchavan.pustakniparab.Models.DashBoard.DashBoard;
+import com.mohakchavan.pustakniparab.Models.DashBoard.DashBoard_Data;
 import com.mohakchavan.pustakniparab.NameModule.AddPerson;
 import com.mohakchavan.pustakniparab.NameModule.Search_Name;
 import com.mohakchavan.pustakniparab.NameModule.View_All;
@@ -35,15 +40,19 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    DrawerLayout drawerLayout;
-    ActionBarDrawerToggle drawerToggle;
-    Activity context;
-    BaseAuthenticator authenticator;
-    NavigationView navigationView;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
+    private Activity context;
+    private BaseAuthenticator authenticator;
+    private NavigationView navigationView;
+    private RecyclerView main_rv_dash;
+    private Dashboard_Adapter adapter;
 
     @Override
     protected void onResume() {
@@ -64,6 +73,23 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle.syncState();
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.app_name);
+
+        main_rv_dash = findViewById(R.id.main_rv_dash);
+        main_rv_dash.setHasFixedSize(true);
+        main_rv_dash.setLayoutManager(new LinearLayoutManager(context));
+        List<DashBoard> boardList = new ArrayList<>();
+        try {
+
+            DashBoard_Data data1 = new DashBoard_Data(12, "ABC");
+            DashBoard_Data data2 = new DashBoard_Data(13, "DEF");
+            boardList.add(new DashBoard(false, new DashBoard_Data[]{data1, data2}));
+            boardList.add(new DashBoard(true, new DashBoard_Data[]{new DashBoard_Data(14, "GHI")}));
+            boardList.add(new DashBoard(false, new DashBoard_Data[]{data1, data2}));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        adapter = new Dashboard_Adapter(context, boardList);
+        main_rv_dash.setAdapter(adapter);
 
         navigationView = findViewById(R.id.navigationView);
         ImageView headerImageView = ((ImageView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_iv));
