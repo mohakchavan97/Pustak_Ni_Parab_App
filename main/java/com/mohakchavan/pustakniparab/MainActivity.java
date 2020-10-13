@@ -6,6 +6,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,10 +28,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.mohakchavan.pustakniparab.Adapters.Dashboard_Adapter;
 import com.mohakchavan.pustakniparab.FireBaseHelper.BaseAuthenticator;
+import com.mohakchavan.pustakniparab.FireBaseHelper.BaseHelper;
 import com.mohakchavan.pustakniparab.IssueModule.AddIssues;
 import com.mohakchavan.pustakniparab.IssueModule.Returns;
-import com.mohakchavan.pustakniparab.Models.DashBoard.DashBoard;
-import com.mohakchavan.pustakniparab.Models.DashBoard.DashBoard_Data;
+import com.mohakchavan.pustakniparab.Models.BaseData;
 import com.mohakchavan.pustakniparab.NameModule.AddPerson;
 import com.mohakchavan.pustakniparab.NameModule.Search_Name;
 import com.mohakchavan.pustakniparab.NameModule.View_All;
@@ -40,8 +41,6 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -53,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private RecyclerView main_rv_dash;
     private Dashboard_Adapter adapter;
+    private BaseHelper baseHelper;
+
 
     @Override
     protected void onResume() {
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         context = MainActivity.this;
         authenticator = new BaseAuthenticator(context);
+        baseHelper = new BaseHelper(context);
         drawerLayout = findViewById(R.id.drawer);
         drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, R.string.drawerOpen, R.string.drawerClose);
         drawerLayout.addDrawerListener(drawerToggle);
@@ -77,7 +79,20 @@ public class MainActivity extends AppCompatActivity {
         main_rv_dash = findViewById(R.id.main_rv_dash);
         main_rv_dash.setHasFixedSize(true);
         main_rv_dash.setLayoutManager(new LinearLayoutManager(context));
-        List<DashBoard> boardList = new ArrayList<>();
+
+        baseHelper.getAllBaseDataContinuous(new BaseHelper.onCompleteRetrieval() {
+            @Override
+            public void onComplete(Object data) {
+//                Log.d("BaseRetrieval", String.valueOf(((DataSnapshot) data).getChildrenCount()));
+//                Log.d("BaseRetrieval", ((DataSnapshot) data).getValue(BaseData.class).toString());
+                Log.d("BaseRetrieval", String.valueOf(((BaseData) data).getIssuesList().size()));
+                Log.d("BaseRetrieval", String.valueOf(((BaseData) data).getNamesList().size()));
+                Log.d("BaseRetrieval", String.valueOf(((BaseData) data).getNewBooksList().size()));
+            }
+        });
+
+        // Get the dashboard data here
+        /*List<DashBoard> boardList = new ArrayList<>();
         try {
 
             DashBoard_Data data1 = new DashBoard_Data(12, "ABC");
@@ -89,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         adapter = new Dashboard_Adapter(context, boardList);
-        main_rv_dash.setAdapter(adapter);
+        main_rv_dash.setAdapter(adapter);*/
 
         navigationView = findViewById(R.id.navigationView);
         ImageView headerImageView = ((ImageView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_iv));

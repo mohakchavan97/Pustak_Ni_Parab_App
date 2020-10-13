@@ -5,6 +5,9 @@ public class NewBooks {
     private long newBookId;
     private String personName, totalBooks, language, registeredDate;
 
+    public NewBooks() {
+    }
+
     public NewBooks(long newBookId, String personName, String totalBooks, String language, String registeredDate) {
         this.newBookId = newBookId;
         this.personName = personName;
