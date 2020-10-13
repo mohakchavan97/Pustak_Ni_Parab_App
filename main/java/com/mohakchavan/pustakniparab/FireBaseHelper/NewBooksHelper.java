@@ -22,7 +22,7 @@ public class NewBooksHelper {
 
     public NewBooksHelper(Activity context) {
         this.context = context;
-        newBooksRef = new BaseHelper().getRootRef().child(context.getResources().getString(R.string.newBooks));
+        newBooksRef = new BaseHelper(this.context).getRootRef().child(context.getResources().getString(R.string.newBooks));
     }
 
     public void addNewRecord(final NewBooks newBooks, final BaseHelper.onCompleteTransaction onCompleteTransaction) {
