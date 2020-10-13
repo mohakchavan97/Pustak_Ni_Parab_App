@@ -30,7 +30,7 @@ public class NamesHelper {
 
     public NamesHelper(Activity context) {
         this.context = context;
-        namesRef = new BaseHelper(this.context).getRootRef().child(context.getResources().getString(R.string.names));
+        namesRef = new BaseHelper(this.context).getBaseRef().child(context.getResources().getString(R.string.names));
         isContinuousListenerAttached = false;
     }
 

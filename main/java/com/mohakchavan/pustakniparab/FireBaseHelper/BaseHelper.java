@@ -8,16 +8,16 @@ import com.mohakchavan.pustakniparab.R;
 
 public class BaseHelper {
 
-    private DatabaseReference rootRef;
+    private DatabaseReference baseRef;
     private Activity context;
 
-    public DatabaseReference getRootRef() {
-        return rootRef;
+    public DatabaseReference getBaseRef() {
+        return baseRef;
     }
 
     public BaseHelper(Activity context) {
         this.context = context;
-        rootRef = FirebaseDatabase.getInstance().getReference().child(this.context.getResources().getString(R.string.basePoint));
+        baseRef = FirebaseDatabase.getInstance().getReference().child(this.context.getResources().getString(R.string.basePoint));
     }
 
     public interface onCompleteTransaction {
