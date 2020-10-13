@@ -29,7 +29,7 @@ public class IssuesHelper {
     public IssuesHelper(Activity context) {
         this.context = context;
         isListenerAttached = false;
-        issuesRef = new BaseHelper().getRootRef().child(context.getResources().getString(R.string.issues));
+        issuesRef = new BaseHelper(this.context).getRootRef().child(context.getResources().getString(R.string.issues));
     }
 
     public void addNewIssue(final Issues newIssueDetails, final BaseHelper.onCompleteTransaction onCompleteTransaction) {
