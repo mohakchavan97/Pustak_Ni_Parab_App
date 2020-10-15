@@ -56,4 +56,12 @@ public class BaseData {
     public void addBook(NewBooks book) {
         newBooksList.add(book);
     }
+
+    public long getTotalNewBooks() {
+        long newBooks = 0;
+        for (NewBooks books : newBooksList) {
+            newBooks += Double.parseDouble(books.getTotalBooks());
+        }
+        return newBooks;
+    }
 }

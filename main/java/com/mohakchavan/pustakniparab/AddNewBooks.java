@@ -60,7 +60,7 @@ public class AddNewBooks extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final Calendar calendar = Calendar.getInstance();
-        final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
+        final SimpleDateFormat formatter = new SimpleDateFormat(getString(R.string.dateFormat), Locale.ENGLISH);
         nb_tv_newBookDate.setText(formatter.format(calendar.getTime()));
         nb_tv_newBookDate.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -33,7 +33,7 @@ public class BaseHelper {
 
     public void getAllBaseDataContinuous(final onCompleteRetrieval onCompleteRetrieval) {
         Network_Service.checkInternetToProceed(context);
-        baseRef.addValueEventListener(new ValueEventListener() {
+        baseRef.orderByKey().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 BaseData baseData = new BaseData();

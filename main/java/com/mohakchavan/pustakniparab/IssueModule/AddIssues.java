@@ -74,7 +74,7 @@ public class AddIssues extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final Calendar calendar = Calendar.getInstance();
-        final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
+        final SimpleDateFormat formatter = new SimpleDateFormat(getString(R.string.dateFormat), Locale.ENGLISH);
         is_tv_issDate.setText(formatter.format(calendar.getTime()));
         is_tv_issDate.setOnClickListener(new View.OnClickListener() {
             @Override

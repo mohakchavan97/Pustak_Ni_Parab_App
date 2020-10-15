@@ -11,8 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
+import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 import com.mohakchavan.pustakniparab.Models.DashBoard.DashBoard;
 import com.mohakchavan.pustakniparab.R;
 
@@ -49,23 +50,35 @@ public class Dashboard_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         final DashBoard record = dashboardList.get(position);
         switch (holder.getItemViewType()) {
             case 1:
-                ((Dashboard_Simple_ViewHolder) holder).dv_ll_tv_simpleTop.setText(String.valueOf(record.getData()[0].getTopData()));
-                ((Dashboard_Simple_ViewHolder) holder).dv_ll_tv_simpleBottom.setText(record.getData()[0].getBottomData());
-                LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
-                        new DataPoint(0, 1),
-                        new DataPoint(1, 3),
-                        new DataPoint(2, 5),
-                        new DataPoint(3, 3)
-                });
-                series.setColor(Color.WHITE);
-                ((Dashboard_Simple_ViewHolder) holder).dv_ll_gv_simpleTop.addSeries(series);
+//                ((Dashboard_Simple_ViewHolder) holder).dv_ll_tv_simpleTop.setText(String.valueOf(record.getData()[0].getTopData()));
+                String[] labels = record.getData()[0].getBottomData().split(",");
+                ((Dashboard_Simple_ViewHolder) holder).dv_ll_tv_simpleBottom.setText(labels[labels.length - 1]);
+                String newString = "";
+                for (int i = 0; i < labels.length - 1; i++) {
+                    if (i != 0)
+                        newString += ",";
+                    newString += labels[i];
+                }
+                record.getData()[0].setBottomData((newString + ", "));
+                record.getData()[0].getGraphData().setColor(Color.WHITE);
+                ((BarGraphSeries<DataPoint>) record.getData()[0].getGraphData()).setSpacing(80);
+                ((Dashboard_Simple_ViewHolder) holder).dv_ll_gv_simpleTop.addSeries(record.getData()[0].getGraphData());
                 ((Dashboard_Simple_ViewHolder) holder).dv_ll_gv_simpleTop.getViewport().setMinX(0);
-                ((Dashboard_Simple_ViewHolder) holder).dv_ll_gv_simpleTop.getViewport().setMaxX(5);
+                ((Dashboard_Simple_ViewHolder) holder).dv_ll_gv_simpleTop.getViewport().setMaxX(record.getData()[0].getBottomData().split(",").length - 1);
                 ((Dashboard_Simple_ViewHolder) holder).dv_ll_gv_simpleTop.getViewport().setMinY(0);
-                ((Dashboard_Simple_ViewHolder) holder).dv_ll_gv_simpleTop.getViewport().setMaxY(7);
+                ((Dashboard_Simple_ViewHolder) holder).dv_ll_gv_simpleTop.getViewport().setMaxY(80);
                 ((Dashboard_Simple_ViewHolder) holder).dv_ll_gv_simpleTop.getViewport().setXAxisBoundsManual(true);
                 ((Dashboard_Simple_ViewHolder) holder).dv_ll_gv_simpleTop.getViewport().setYAxisBoundsManual(true);
-//                ((Dashboard_Simple_ViewHolder) holder).dv_ll_gv_simpleTop.
+                StaticLabelsFormatter formatter = new StaticLabelsFormatter(((Dashboard_Simple_ViewHolder) holder).dv_ll_gv_simpleTop);
+                String[] verLabels = new String[5];
+                int y = 0;
+                for (int i = 0; i < 5; i++) {
+                    verLabels[i] = String.valueOf(y);
+                    y += 20;
+                }
+                formatter.setHorizontalLabels(record.getData()[0].getBottomData().split(","));
+                formatter.setVerticalLabels(verLabels);
+                ((Dashboard_Simple_ViewHolder) holder).dv_ll_gv_simpleTop.getGridLabelRenderer().setLabelFormatter(formatter);
                 break;
             case 2:
                 ((Dashboard_TwoSided_ViewHolder) holder).dv_ll_tv_leftTop.setText(String.valueOf(record.getData()[0].getTopData()));

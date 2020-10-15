@@ -44,8 +44,8 @@
                     android:gravity="center"
                     android:text="30"
                     android:textColor="@color/White"
-                    android:visibility="gone"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/dv_ll_tv_simpleBottom"
@@ -55,6 +55,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_weight="0.5"
                     android:gravity="center"
+                    android:minHeight="35dp"
                     android:text="15"
                     android:textColor="@color/White"
                     android:textSize="15sp" />

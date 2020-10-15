@@ -13,19 +13,10 @@
         android:layout_margin="10dp"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Dashboard"
-            android:textColor="@color/DimGray"
-            android:textSize="20sp" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/main_rv_dash"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp" />
+            android:layout_height="match_parent" />
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView

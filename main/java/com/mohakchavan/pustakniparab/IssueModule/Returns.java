@@ -342,7 +342,7 @@ public class Returns extends AppCompatActivity {
     private void submitSelectedReturns() {
         disableAll();
         final Calendar calendar = Calendar.getInstance();
-        final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
+        final SimpleDateFormat formatter = new SimpleDateFormat(getString(R.string.dateFormat), Locale.ENGLISH);
 
         LayoutInflater inflater = context.getLayoutInflater();
         View view = inflater.inflate(R.layout.custom_date_picker, null);

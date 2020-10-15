@@ -32,6 +32,8 @@
     <string name="totalNewBooks">currentTotalNewBooksRecorded</string>
     <string name="userDetails">User Details</string>
     <string name="userSignOut">Sign Out</string>
+    <string name="indianStandardTime">IST</string>
+    <string name="dateFormat">dd MMM yyyy</string>
     <string-array name="languages">
         <item>Gujarati</item>
         <item>English</item>
