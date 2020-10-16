@@ -21,6 +21,7 @@ public class BaseHelper {
 
     private DatabaseReference baseRef;
     private Activity context;
+    private ValueEventListener baseDataListener;
 
     public DatabaseReference getBaseRef() {
         return baseRef;
@@ -33,7 +34,12 @@ public class BaseHelper {
 
     public void getAllBaseDataContinuous(final onCompleteRetrieval onCompleteRetrieval) {
         Network_Service.checkInternetToProceed(context);
-        baseRef.orderByKey().addValueEventListener(new ValueEventListener() {
+        setBaseDataListener(onCompleteRetrieval);
+        baseRef.orderByKey().addValueEventListener(baseDataListener);
+    }
+
+    public void setBaseDataListener(final BaseHelper.onCompleteRetrieval onCompleteRetrieval) {
+        baseDataListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 BaseData baseData = new BaseData();
@@ -77,7 +83,11 @@ public class BaseHelper {
                     }
                 });
             }
-        });
+        };
+    }
+
+    public void removeBaseDataListener() {
+        baseRef.removeEventListener(baseDataListener);
     }
 
     public interface onCompleteTransaction {

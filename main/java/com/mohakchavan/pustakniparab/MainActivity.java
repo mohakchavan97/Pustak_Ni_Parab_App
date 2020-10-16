@@ -77,6 +77,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Network_Service.checkInternetToProceed(MainActivity.this);
+        final ProgressBarService progressBarService = new ProgressBarService("Retrieving Data...");
+        progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
+        baseHelper.getAllBaseDataContinuous(new BaseHelper.onCompleteRetrieval() {
+            @Override
+            public void onComplete(Object data) {
+                baseData = (BaseData) data;
+                boardList = new ArrayList<>();
+                try {
+                    calculateAndPopulateDashboard();
+                } catch (ParseException ex) {
+                    ex.printStackTrace();
+                    Toast.makeText(context, getString(R.string.someError), Toast.LENGTH_SHORT).show();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                progressBarService.dismiss();
+            }
+        });
     }
 
     @Override
@@ -97,27 +115,6 @@ public class MainActivity extends AppCompatActivity {
         main_rv_dash = findViewById(R.id.main_rv_dash);
         main_rv_dash.setHasFixedSize(true);
         main_rv_dash.setLayoutManager(new LinearLayoutManager(context));
-
-        final ProgressBarService progressBarService = new ProgressBarService("Retrieving Data...");
-        progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
-        baseHelper.getAllBaseDataContinuous(new BaseHelper.onCompleteRetrieval() {
-            @Override
-            public void onComplete(Object data) {
-//                Log.d("BaseRetrieval", String.valueOf(((DataSnapshot) data).getChildrenCount()));
-//                Log.d("BaseRetrieval", ((DataSnapshot) data).getValue(BaseData.class).toString());
-                baseData = (BaseData) data;
-                boardList = new ArrayList<>();
-                try {
-                    calculateAndPopulateDashboard();
-                } catch (ParseException ex) {
-                    ex.printStackTrace();
-                    Toast.makeText(context, getString(R.string.someError), Toast.LENGTH_SHORT).show();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                progressBarService.dismiss();
-            }
-        });
 
         navigationView = findViewById(R.id.navigationView);
         ImageView headerImageView = ((ImageView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_iv));
@@ -269,14 +266,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
         List<DataPoint> dataPoints = new ArrayList<>();
         String bottomData = "";
-        for (int i = 0; i < keys.size(); i++) {
-            dataPoints.add(new DataPoint(i + 1, hashMap.get(keys.get(i))));
-            bottomData += "," + keys.get(i);
+        for (int i = keys.size() - 1, j = keys.size() <= 5 ? keys.size() : 5; i >= keys.size() - 5 && i >= 0 && j > 0; i--, j--) {
+            dataPoints.add(new DataPoint(j, hashMap.get(keys.get(i))));
+            bottomData = "," + keys.get(i).replace(" ", "\n") + bottomData;
         }
         bottomData += "," + bottomLabel;
+        Collections.reverse(dataPoints);
         return new DashBoard_Data(bottomData, new BarGraphSeries<DataPoint>(dataPoints.toArray(new DataPoint[0])));
 //        return new DashBoard_Data(bottomData, new LineGraphSeries<DataPoint>(dataPoints.toArray(new DataPoint[0])));
     }
@@ -301,5 +298,11 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         Toast.makeText(context, "User details copied to clipboard.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        baseHelper.removeBaseDataListener();
     }
 }
