@@ -37,9 +37,12 @@ import com.mohakchavan.pustakniparab.Services.ProgressBarService;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -320,7 +323,14 @@ public class Returns extends AppCompatActivity {
                 break;
 
             case R.id.act_done:
-                submitSelectedReturns();
+                try {
+                    submitSelectedReturns();
+                } catch (IllegalArgumentException ex) {
+                    ex.printStackTrace();
+                    Toast.makeText(context, getString(R.string.someError), Toast.LENGTH_SHORT).show();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
                 break;
 
             case R.id.act_cancel:
@@ -339,27 +349,55 @@ public class Returns extends AppCompatActivity {
         getAllIssues();
     }
 
-    private void submitSelectedReturns() {
+    private void submitSelectedReturns() throws Exception {
         disableAll();
         final Calendar calendar = Calendar.getInstance();
         final SimpleDateFormat formatter = new SimpleDateFormat(getString(R.string.dateFormat), Locale.ENGLISH);
-
         LayoutInflater inflater = context.getLayoutInflater();
         View view = inflater.inflate(R.layout.custom_date_picker, null);
         final TextView cdp_tv_date = view.findViewById(R.id.cdp_tv_date);
-        cdp_tv_date.setText(formatter.format(calendar.getTime()));
+
+        final List<String> dates = new ArrayList<>();
+        for (Issues issue : all_issues_adapter.getFilteredIssuesList()) {
+            if (issue.isChecked() && !dates.contains(issue.getIssueDate())) {
+                dates.add(issue.getIssueDate());
+            }
+        }
+        Collections.sort(dates, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                try {
+                    return formatter.parse(o1).compareTo(formatter.parse(o2));
+                } catch (ParseException ex) {
+                    throw new IllegalArgumentException(ex);
+                }
+            }
+        });
+
+        cdp_tv_date.setText(dates.get(0));
+        try {
+            calendar.setTimeInMillis(formatter.parse(dates.get(0)).getTime() + 1000);
+        } catch (ParseException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        final DatePickerDialog dateDialog = new DatePickerDialog(context,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(year, month, dayOfMonth);
+                        cdp_tv_date.setText(formatter.format(cal.getTime()));
+                    }
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         cdp_tv_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(context,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                Calendar cal = Calendar.getInstance();
-                                cal.set(year, month, dayOfMonth);
-                                cdp_tv_date.setText(formatter.format(cal.getTime()));
-                            }
-                        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+                try {
+                    dateDialog.getDatePicker().setMinDate(formatter.parse(dates.get(0)).getTime() + 1000);
+                } catch (ParseException ex) {
+                    throw new IllegalArgumentException(ex);
+                }
+                dateDialog.show();
             }
         });
         final AlertDialog dialog = new AlertDialog.Builder(context)

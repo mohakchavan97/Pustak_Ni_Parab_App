@@ -75,19 +75,22 @@ public class AddIssues extends AppCompatActivity {
 
         final Calendar calendar = Calendar.getInstance();
         final SimpleDateFormat formatter = new SimpleDateFormat(getString(R.string.dateFormat), Locale.ENGLISH);
+        final DatePickerDialog dateDialog = new DatePickerDialog(context,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(year, month, dayOfMonth);
+                        is_tv_issDate.setText(formatter.format(cal.getTime()));
+                    }
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         is_tv_issDate.setText(formatter.format(calendar.getTime()));
         is_tv_issDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(context,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                Calendar cal = Calendar.getInstance();
-                                cal.set(year, month, dayOfMonth);
-                                is_tv_issDate.setText(formatter.format(cal.getTime()));
-                            }
-                        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+//                dateDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
+                dateDialog.getDatePicker().setMaxDate(System.currentTimeMillis() - 1000);
+                dateDialog.show();
             }
         });
 
