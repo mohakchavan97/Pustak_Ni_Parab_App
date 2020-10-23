@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private BaseAuthenticator authenticator;
     private NavigationView navigationView;
     private RecyclerView main_rv_dash;
+    private TextView main_tv_appName;
     private Dashboard_Adapter adapter;
     private BaseHelper baseHelper;
     private BaseData baseData;
@@ -105,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFail(Object data) {
                 progressBarService.dismiss();
+                main_rv_dash.setVisibility(View.GONE);
+                main_tv_appName.setVisibility(View.VISIBLE);
                 if (((DatabaseError) data).getCode() == DatabaseError.PERMISSION_DENIED) {
                     final Snackbar snackbar = Snackbar.make(viewForSnackbar, "User is not permitted.", BaseTransientBottomBar.LENGTH_INDEFINITE);
                     SnackBarHelper.configureSnackbar(context, snackbar);
@@ -138,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.app_name);
 
+        main_tv_appName = findViewById(R.id.main_tv_appName);
         main_rv_dash = findViewById(R.id.main_rv_dash);
         main_rv_dash.setHasFixedSize(true);
         main_rv_dash.setLayoutManager(new LinearLayoutManager(context));

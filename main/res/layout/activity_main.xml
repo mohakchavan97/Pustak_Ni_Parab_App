@@ -18,6 +18,16 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/main_tv_appName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textColor="@color/colorAccent"
+                android:textSize="25sp"
+                android:visibility="gone" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/main_rv_dash"
                 android:layout_width="match_parent"
