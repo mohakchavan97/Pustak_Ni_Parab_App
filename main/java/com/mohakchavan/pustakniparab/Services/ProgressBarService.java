@@ -2,7 +2,9 @@ package com.mohakchavan.pustakniparab.Services;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -32,6 +34,13 @@ public class ProgressBarService extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.progress_bar_service, null);
         pbs_pb_bar = view.findViewById(R.id.pbs_pb_bar);
         builder.setView(view).setTitle(progressBarTitle).setCancelable(false);
+
+        builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                return keyCode == KeyEvent.KEYCODE_BACK;
+            }
+        });
 
 //        listener.onBuilderCreated(builder);
         AlertDialog dialog = builder.create();
