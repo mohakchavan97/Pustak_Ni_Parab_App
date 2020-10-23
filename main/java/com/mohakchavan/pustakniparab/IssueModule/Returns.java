@@ -26,9 +26,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mohakchavan.pustakniparab.Adapters.All_Issues_Adapter;
-import com.mohakchavan.pustakniparab.FireBaseHelper.BaseHelper;
-import com.mohakchavan.pustakniparab.FireBaseHelper.IssuesHelper;
-import com.mohakchavan.pustakniparab.FireBaseHelper.NamesHelper;
+import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.BaseHelper;
+import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.IssuesHelper;
+import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.NamesHelper;
 import com.mohakchavan.pustakniparab.Models.Issues;
 import com.mohakchavan.pustakniparab.Models.Names;
 import com.mohakchavan.pustakniparab.R;

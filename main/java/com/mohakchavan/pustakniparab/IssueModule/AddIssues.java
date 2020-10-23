@@ -18,9 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.mohakchavan.pustakniparab.FireBaseHelper.BaseHelper;
-import com.mohakchavan.pustakniparab.FireBaseHelper.IssuesHelper;
-import com.mohakchavan.pustakniparab.FireBaseHelper.NamesHelper;
+import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.BaseHelper;
+import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.IssuesHelper;
+import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.NamesHelper;
 import com.mohakchavan.pustakniparab.Models.Issues;
 import com.mohakchavan.pustakniparab.Models.Names;
 import com.mohakchavan.pustakniparab.R;

@@ -1,4 +1,4 @@
-package com.mohakchavan.pustakniparab.FireBaseHelper;
+package com.mohakchavan.pustakniparab.Helpers.FireBaseHelper;
 
 import android.app.Activity;
 import android.widget.Toast;
@@ -32,13 +32,13 @@ public class BaseHelper {
         baseRef = FirebaseDatabase.getInstance().getReference().child(this.context.getResources().getString(R.string.basePoint));
     }
 
-    public void getAllBaseDataContinuous(final onCompleteRetrieval onCompleteRetrieval) {
+    public void getAllBaseDataContinuous(final BaseHelper.onCompleteRetrieval onCompleteRetrieval, final BaseHelper.onFailure onFailure) {
         Network_Service.checkInternetToProceed(context);
-        setBaseDataListener(onCompleteRetrieval);
+        setBaseDataListener(onCompleteRetrieval, onFailure);
         baseRef.orderByKey().addValueEventListener(baseDataListener);
     }
 
-    public void setBaseDataListener(final BaseHelper.onCompleteRetrieval onCompleteRetrieval) {
+    public void setBaseDataListener(final BaseHelper.onCompleteRetrieval onCompleteRetrieval, final BaseHelper.onFailure onFailure) {
         baseDataListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -76,12 +76,7 @@ public class BaseHelper {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                context.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(context, "Some Error Occurred while retrieving data.", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                onFailure.onFail(error);
             }
         };
     }
@@ -96,6 +91,10 @@ public class BaseHelper {
 
     public interface onCompleteRetrieval {
         void onComplete(Object data);
+    }
+
+    public interface onFailure {
+        void onFail(Object data);
     }
 
     public interface onDeletion {

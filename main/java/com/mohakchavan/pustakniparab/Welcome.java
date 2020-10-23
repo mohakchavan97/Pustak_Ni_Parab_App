@@ -18,7 +18,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
-import com.mohakchavan.pustakniparab.FireBaseHelper.BaseAuthenticator;
+import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.BaseAuthenticator;
 import com.mohakchavan.pustakniparab.Services.Network_Service;
 
 public class Welcome extends Activity {
@@ -50,11 +50,11 @@ public class Welcome extends Activity {
         };
 
         getPermissions();
-        Network_Service.checkInternetToProceed(context);
         authenticator = new BaseAuthenticator(context);
 
         FirebaseUser currentUser = authenticator.getCurrentUser();
         if (currentUser == null) {
+            Network_Service.checkInternetToProceed(context);
             signInUser();
         } else {
             thread.start();

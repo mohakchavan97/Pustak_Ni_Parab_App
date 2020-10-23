@@ -20,8 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mohakchavan.pustakniparab.Adapters.View_All_Adapter;
 import com.mohakchavan.pustakniparab.DBHelper;
-import com.mohakchavan.pustakniparab.FireBaseHelper.BaseHelper;
-import com.mohakchavan.pustakniparab.FireBaseHelper.NamesHelper;
+import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.BaseHelper;
+import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.NamesHelper;
 import com.mohakchavan.pustakniparab.Models.Names;
 import com.mohakchavan.pustakniparab.R;
 import com.mohakchavan.pustakniparab.Services.ProgressBarService;

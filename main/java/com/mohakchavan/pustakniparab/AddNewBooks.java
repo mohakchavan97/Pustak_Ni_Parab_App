@@ -18,8 +18,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.mohakchavan.pustakniparab.FireBaseHelper.BaseHelper;
-import com.mohakchavan.pustakniparab.FireBaseHelper.NewBooksHelper;
+import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.BaseHelper;
+import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.NewBooksHelper;
 import com.mohakchavan.pustakniparab.Models.NewBooks;
 import com.mohakchavan.pustakniparab.Services.ProgressBarService;
 

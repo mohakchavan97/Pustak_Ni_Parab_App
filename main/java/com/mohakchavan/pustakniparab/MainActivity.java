@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,11 +28,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DatabaseError;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.mohakchavan.pustakniparab.Adapters.Dashboard_Adapter;
-import com.mohakchavan.pustakniparab.FireBaseHelper.BaseAuthenticator;
-import com.mohakchavan.pustakniparab.FireBaseHelper.BaseHelper;
+import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.BaseAuthenticator;
+import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.BaseHelper;
+import com.mohakchavan.pustakniparab.Helpers.SnackBarHelper;
 import com.mohakchavan.pustakniparab.IssueModule.AddIssues;
 import com.mohakchavan.pustakniparab.IssueModule.Returns;
 import com.mohakchavan.pustakniparab.Models.BaseData;
@@ -72,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private BaseHelper baseHelper;
     private BaseData baseData;
     private List<DashBoard> boardList;
+    private CoordinatorLayout viewForSnackbar;
 
     @Override
     protected void onResume() {
@@ -94,6 +101,24 @@ public class MainActivity extends AppCompatActivity {
                 }
                 progressBarService.dismiss();
             }
+        }, new BaseHelper.onFailure() {
+            @Override
+            public void onFail(Object data) {
+                progressBarService.dismiss();
+                if (((DatabaseError) data).getCode() == DatabaseError.PERMISSION_DENIED) {
+                    final Snackbar snackbar = Snackbar.make(viewForSnackbar, "User is not permitted.", BaseTransientBottomBar.LENGTH_INDEFINITE);
+                    SnackBarHelper.configureSnackbar(context, snackbar);
+                    snackbar.setAction("REQUEST", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            snackbar.dismiss();
+                            copyUserDetailsToClipBoard();
+                        }
+                    }).show();
+                } else {
+                    Toast.makeText(context, getString(R.string.someError), Toast.LENGTH_SHORT).show();
+                }
+            }
         });
     }
 
@@ -106,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
         authenticator = new BaseAuthenticator(context);
         baseHelper = new BaseHelper(context);
         drawerLayout = findViewById(R.id.drawer);
+        viewForSnackbar = findViewById(R.id.viewForSnackbar);
         drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, R.string.drawerOpen, R.string.drawerClose);
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
@@ -297,7 +323,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Toast.makeText(context, "User details copied to clipboard.", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "User details copied to clipboard.", Toast.LENGTH_SHORT).show();
+        Snackbar snackbar = Snackbar.make(viewForSnackbar, "User details copied to clipboard.", BaseTransientBottomBar.LENGTH_SHORT)
+                .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
+        SnackBarHelper.configureSnackbar(context, snackbar);
+        snackbar.show();
     }
 
     @Override
