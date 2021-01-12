@@ -54,8 +54,9 @@ public class Welcome extends Activity {
 
         FirebaseUser currentUser = authenticator.getCurrentUser();
         if (currentUser == null) {
-            Network_Service.checkInternetToProceed(context);
-            signInUser();
+            if (Network_Service.checkInternetToProceed(context)) {
+                signInUser();
+            }
         } else {
             thread.start();
         }

@@ -26,25 +26,34 @@ public class NewBooksHelper {
     }
 
     public void addNewRecord(final NewBooks newBooks, final BaseHelper.onCompleteTransaction onCompleteTransaction) {
-        Network_Service.checkInternetToProceed(context);
-        newBooksRef.runTransaction(new Transaction.Handler() {
-            @NonNull
-            @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                if (currentData.getValue() != null) {
-                    if (currentData.hasChild(context.getResources().getString(R.string.totalNewBooks)) && currentData.child(context.getResources().getString(R.string.totalNewBooks)).getValue() != null) {
-                        long currentTotal = currentData.child(context.getResources().getString(R.string.totalNewBooks)).getValue(Long.class);
-                        ++currentTotal;
-                        if (!currentData.hasChild(String.valueOf(currentTotal))) {
-                            newBooks.setNewBookId(currentTotal);
-                            currentData.child(String.valueOf(currentTotal)).setValue(newBooks);
-                            currentData.child(context.getResources().getString(R.string.totalNewBooks)).setValue(currentTotal);
-                            return Transaction.success(currentData);
+        if (Network_Service.checkInternetToProceed(context)) {
+            newBooksRef.runTransaction(new Transaction.Handler() {
+                @NonNull
+                @Override
+                public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                    if (currentData.getValue() != null) {
+                        if (currentData.hasChild(context.getResources().getString(R.string.totalNewBooks)) && currentData.child(context.getResources().getString(R.string.totalNewBooks)).getValue() != null) {
+                            long currentTotal = currentData.child(context.getResources().getString(R.string.totalNewBooks)).getValue(Long.class);
+                            ++currentTotal;
+                            if (!currentData.hasChild(String.valueOf(currentTotal))) {
+                                newBooks.setNewBookId(currentTotal);
+                                currentData.child(String.valueOf(currentTotal)).setValue(newBooks);
+                                currentData.child(context.getResources().getString(R.string.totalNewBooks)).setValue(currentTotal);
+                                return Transaction.success(currentData);
+                            } else {
+                                context.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(context, "The record is already present. Please try again.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                return Transaction.abort();
+                            }
                         } else {
                             context.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(context, "The record is already present. Please try again.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "Some Error Occurred. Please Contact Developer.", Toast.LENGTH_SHORT).show();
                                 }
                             });
                             return Transaction.abort();
@@ -53,26 +62,19 @@ public class NewBooksHelper {
                         context.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(context, "Some Error Occurred. Please Contact Developer.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, context.getString(R.string.someError), Toast.LENGTH_SHORT).show();
                             }
                         });
                         return Transaction.abort();
                     }
-                } else {
-                    context.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(context, context.getString(R.string.someError), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    return Transaction.abort();
                 }
-            }
 
-            @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                onCompleteTransaction.onComplete(committed, newBooks);
-            }
-        });
+                @Override
+                public void onComplete(@Nullable DatabaseError error, boolean committed,
+                                       @Nullable DataSnapshot currentData) {
+                    onCompleteTransaction.onComplete(committed, newBooks);
+                }
+            });
+        }
     }
 }

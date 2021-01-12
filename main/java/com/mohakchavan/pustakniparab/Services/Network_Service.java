@@ -26,7 +26,7 @@ public class Network_Service {
         return false;
     }
 
-    public static void checkInternetToProceed(final Activity context) {
+    public static boolean checkInternetToProceed(final Activity context) {
         if (!isNetworkAvailable(context)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context).setTitle("No Internet Connection. Exit?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -44,6 +44,9 @@ public class Network_Service {
             AlertDialog dialog = builder.create();
             dialog.setCanceledOnTouchOutside(false);
             dialog.show();
+            return false;
+        } else {
+            return true;
         }
     }
 

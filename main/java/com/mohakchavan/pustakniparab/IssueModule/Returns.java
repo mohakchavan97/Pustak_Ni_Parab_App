@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseError;
 import com.mohakchavan.pustakniparab.Adapters.All_Issues_Adapter;
 import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.BaseHelper;
 import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.IssuesHelper;
@@ -32,6 +33,7 @@ import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.NamesHelper;
 import com.mohakchavan.pustakniparab.Models.Issues;
 import com.mohakchavan.pustakniparab.Models.Names;
 import com.mohakchavan.pustakniparab.R;
+import com.mohakchavan.pustakniparab.Services.Network_Service;
 import com.mohakchavan.pustakniparab.Services.ProgressBarService;
 
 import org.json.JSONException;
@@ -263,40 +265,53 @@ public class Returns extends AppCompatActivity {
 
     private void getAllIssues() {
         issuesList = new ArrayList<>();
-        final ProgressBarService progressBarService = new ProgressBarService("Retrieving Data...");
-        progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
-        issuesHelper.getAllIssuesContinuous(new BaseHelper.onCompleteRetrieval() {
-            @Override
-            public void onComplete(Object data) {
-                if (data != null) {
-                    for (Issues issue : (List<Issues>) data) {
-                        if (issue.getIsReturned().contentEquals(getString(R.string.notReturned))) {
-                            issuesList.add(issue);
+        if (Network_Service.checkInternetToProceed(context)) {
+            final ProgressBarService progressBarService = new ProgressBarService("Retrieving Data...");
+            progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
+            issuesHelper.getAllIssuesContinuous(
+                    new BaseHelper.onCompleteRetrieval() {
+                        @Override
+                        public void onComplete(Object data) {
+                            if (data != null) {
+                                for (Issues issue : (List<Issues>) data) {
+                                    if (issue.getIsReturned().contentEquals(getString(R.string.notReturned))) {
+                                        issuesList.add(issue);
+                                    }
+                                }
+                            }
+                            isAdapterDataObserverRegistered = false;
+                            all_issues_adapter = new All_Issues_Adapter(context, issuesList);
+                            all_issues_adapter.getFilter().filter(filterString);
+                            all_issues_adapter.registerAdapterDataObserver(adapterDataObserver);
+                            all_issues_adapter.setListener(new All_Issues_Adapter.ChangeListener() {
+                                @Override
+                                public void onChange() {
+                                    boolean toShow = false;
+                                    for (Issues issue : all_issues_adapter.getFilteredIssuesList()) {
+                                        if (issue.isChecked()) {
+                                            toShow = true;
+                                            break;
+                                        }
+                                    }
+                                    hideMenuItems(toShow);
+                                }
+                            });
+                            isAdapterDataObserverRegistered = true;
+                            rt_rv_issList.setAdapter(all_issues_adapter);
+                            getAllNameIds(progressBarService);
                         }
-                    }
-                }
-                isAdapterDataObserverRegistered = false;
-                all_issues_adapter = new All_Issues_Adapter(context, issuesList);
-                all_issues_adapter.getFilter().filter(filterString);
-                all_issues_adapter.registerAdapterDataObserver(adapterDataObserver);
-                all_issues_adapter.setListener(new All_Issues_Adapter.ChangeListener() {
-                    @Override
-                    public void onChange() {
-                        boolean toShow = false;
-                        for (Issues issue : all_issues_adapter.getFilteredIssuesList()) {
-                            if (issue.isChecked()) {
-                                toShow = true;
-                                break;
+                    }, new BaseHelper.onFailure() {
+                        @Override
+                        public void onFail(Object data) {
+                            progressBarService.dismiss();
+                            if (!((DatabaseError) data).getMessage().isEmpty()) {
+                                Toast.makeText(context, ((DatabaseError) data).getMessage(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context, getString(R.string.someError), Toast.LENGTH_SHORT).show();
                             }
                         }
-                        hideMenuItems(toShow);
-                    }
-                });
-                isAdapterDataObserverRegistered = true;
-                rt_rv_issList.setAdapter(all_issues_adapter);
-                getAllNameIds(progressBarService);
-            }
-        });
+                    });
+        }
     }
 
     @Override

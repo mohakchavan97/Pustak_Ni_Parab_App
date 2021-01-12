@@ -1,7 +1,6 @@
 package com.mohakchavan.pustakniparab.Helpers.FireBaseHelper;
 
 import android.app.Activity;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -21,6 +20,7 @@ public class BaseHelper {
 
     private DatabaseReference baseRef;
     private Activity context;
+    private boolean isListenerAttached;
     private ValueEventListener baseDataListener;
 
     public DatabaseReference getBaseRef() {
@@ -29,13 +29,15 @@ public class BaseHelper {
 
     public BaseHelper(Activity context) {
         this.context = context;
+        isListenerAttached = false;
         baseRef = FirebaseDatabase.getInstance().getReference().child(this.context.getResources().getString(R.string.basePoint));
     }
 
     public void getAllBaseDataContinuous(final BaseHelper.onCompleteRetrieval onCompleteRetrieval, final BaseHelper.onFailure onFailure) {
-        Network_Service.checkInternetToProceed(context);
-        setBaseDataListener(onCompleteRetrieval, onFailure);
-        baseRef.orderByKey().addValueEventListener(baseDataListener);
+        if (Network_Service.checkInternetToProceed(context)) {
+            setBaseDataListener(onCompleteRetrieval, onFailure);
+            baseRef.orderByKey().addValueEventListener(baseDataListener);
+        }
     }
 
     public void setBaseDataListener(final BaseHelper.onCompleteRetrieval onCompleteRetrieval, final BaseHelper.onFailure onFailure) {
@@ -71,18 +73,24 @@ public class BaseHelper {
                             break;
                     }
                 }
+                isListenerAttached = true;
                 onCompleteRetrieval.onComplete(baseData);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+
+                isListenerAttached = false;
                 onFailure.onFail(error);
             }
         };
     }
 
     public void removeBaseDataListener() {
-        baseRef.removeEventListener(baseDataListener);
+        if (isListenerAttached) {
+            baseRef.removeEventListener(baseDataListener);
+            isListenerAttached = false;
+        }
     }
 
     public interface onCompleteTransaction {
