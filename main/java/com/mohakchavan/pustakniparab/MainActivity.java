@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DatabaseError;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
@@ -321,7 +322,14 @@ public class MainActivity extends AppCompatActivity {
         try {
             jsonObject.put("userName", authenticator.getCurrentUser().getDisplayName());
             jsonObject.put("userEmail", authenticator.getCurrentUser().getEmail());
-            jsonObject.put("userUid", authenticator.getCurrentUser().getUid());
+//            jsonObject.put("userUid", authenticator.getCurrentUser().getUid());
+            for (int i = 0; i < authenticator.getCurrentUser().getProviderData().size(); i++) {
+                UserInfo info = (UserInfo) authenticator.getCurrentUser().getProviderData().get(i);
+                if (info.getProviderId().contentEquals("google.com") || info.getProviderId().contentEquals("google")) {
+                    jsonObject.put("userUid", info.getUid());
+                    break;
+                }
+            }
             jsonObject.put("userPhoto", authenticator.getCurrentUser().getPhotoUrl());
             manager.setPrimaryClip(ClipData.newPlainText("userDetails", jsonObject.toString()));
         } catch (Exception e) {
