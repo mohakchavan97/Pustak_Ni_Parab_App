@@ -85,45 +85,46 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Network_Service.checkInternetToProceed(MainActivity.this);
-        final ProgressBarService progressBarService = new ProgressBarService("Retrieving Data...");
-        progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
-        baseHelper.getAllBaseDataContinuous(new BaseHelper.onCompleteRetrieval() {
-            @Override
-            public void onComplete(Object data) {
-                baseData = (BaseData) data;
-                boardList = new ArrayList<>();
-                try {
-                    calculateAndPopulateDashboard();
-                } catch (ParseException ex) {
-                    ex.printStackTrace();
-                    Toast.makeText(context, getString(R.string.someError), Toast.LENGTH_SHORT).show();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+        if (Network_Service.checkInternetToProceed(MainActivity.this)) {
+            final ProgressBarService progressBarService = new ProgressBarService("Retrieving Data...");
+            progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
+            baseHelper.getAllBaseDataContinuous(new BaseHelper.onCompleteRetrieval() {
+                @Override
+                public void onComplete(Object data) {
+                    baseData = (BaseData) data;
+                    boardList = new ArrayList<>();
+                    try {
+                        calculateAndPopulateDashboard();
+                    } catch (ParseException ex) {
+                        ex.printStackTrace();
+                        Toast.makeText(context, getString(R.string.someError), Toast.LENGTH_SHORT).show();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    progressBarService.dismiss();
                 }
-                progressBarService.dismiss();
-            }
-        }, new BaseHelper.onFailure() {
-            @Override
-            public void onFail(Object data) {
-                progressBarService.dismiss();
-                main_rv_dash.setVisibility(View.GONE);
-                main_tv_appName.setVisibility(View.VISIBLE);
-                if (((DatabaseError) data).getCode() == DatabaseError.PERMISSION_DENIED) {
-                    final Snackbar snackbar = Snackbar.make(viewForSnackbar, "User is not permitted.", BaseTransientBottomBar.LENGTH_INDEFINITE);
-                    SnackBarHelper.configureSnackbar(context, snackbar);
-                    snackbar.setAction("REQUEST", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            snackbar.dismiss();
-                            copyUserDetailsToClipBoard();
-                        }
-                    }).show();
-                } else {
-                    Toast.makeText(context, getString(R.string.someError), Toast.LENGTH_SHORT).show();
+            }, new BaseHelper.onFailure() {
+                @Override
+                public void onFail(Object data) {
+                    progressBarService.dismiss();
+                    main_rv_dash.setVisibility(View.GONE);
+                    main_tv_appName.setVisibility(View.VISIBLE);
+                    if (((DatabaseError) data).getCode() == DatabaseError.PERMISSION_DENIED) {
+                        final Snackbar snackbar = Snackbar.make(viewForSnackbar, "User is not permitted.", BaseTransientBottomBar.LENGTH_INDEFINITE);
+                        SnackBarHelper.configureSnackbar(context, snackbar);
+                        snackbar.setAction("REQUEST", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                snackbar.dismiss();
+                                copyUserDetailsToClipBoard();
+                            }
+                        }).show();
+                    } else {
+                        Toast.makeText(context, getString(R.string.someError), Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override

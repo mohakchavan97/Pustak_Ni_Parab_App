@@ -33,25 +33,34 @@ public class IssuesHelper {
     }
 
     public void addNewIssue(final Issues newIssueDetails, final BaseHelper.onCompleteTransaction onCompleteTransaction) {
-        Network_Service.checkInternetToProceed(context);
-        issuesRef.runTransaction(new Transaction.Handler() {
-            @NonNull
-            @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                if (currentData.getValue() != null) {
-                    if (currentData.hasChild(context.getResources().getString(R.string.totalRecords)) && currentData.child(context.getResources().getString(R.string.totalRecords)).getValue() != null) {
-                        long currentTotal = currentData.child(context.getResources().getString(R.string.totalRecords)).getValue(Long.class);
-                        ++currentTotal;
-                        if (!currentData.hasChild(String.valueOf(currentTotal))) {
-                            newIssueDetails.setIssueNo(currentTotal);
-                            currentData.child(String.valueOf(currentTotal)).setValue(newIssueDetails);
-                            currentData.child(context.getResources().getString(R.string.totalRecords)).setValue(currentTotal);
-                            return Transaction.success(currentData);
+        if (Network_Service.checkInternetToProceed(context)) {
+            issuesRef.runTransaction(new Transaction.Handler() {
+                @NonNull
+                @Override
+                public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                    if (currentData.getValue() != null) {
+                        if (currentData.hasChild(context.getResources().getString(R.string.totalRecords)) && currentData.child(context.getResources().getString(R.string.totalRecords)).getValue() != null) {
+                            long currentTotal = currentData.child(context.getResources().getString(R.string.totalRecords)).getValue(Long.class);
+                            ++currentTotal;
+                            if (!currentData.hasChild(String.valueOf(currentTotal))) {
+                                newIssueDetails.setIssueNo(currentTotal);
+                                currentData.child(String.valueOf(currentTotal)).setValue(newIssueDetails);
+                                currentData.child(context.getResources().getString(R.string.totalRecords)).setValue(currentTotal);
+                                return Transaction.success(currentData);
+                            } else {
+                                context.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(context, "The issue ID is already present. Please try again.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                return Transaction.abort();
+                            }
                         } else {
                             context.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(context, "The issue ID is already present. Please try again.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "Some Error Occurred. Please Contact Developer.", Toast.LENGTH_SHORT).show();
                                 }
                             });
                             return Transaction.abort();
@@ -60,75 +69,70 @@ public class IssuesHelper {
                         context.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(context, "Some Error Occurred. Please Contact Developer.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, context.getString(R.string.someError), Toast.LENGTH_SHORT).show();
                             }
                         });
                         return Transaction.abort();
                     }
-                } else {
-                    context.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(context, context.getString(R.string.someError), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    return Transaction.abort();
                 }
-            }
 
-            @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                onCompleteTransaction.onComplete(committed, newIssueDetails);
-            }
-        });
+                @Override
+                public void onComplete(@Nullable DatabaseError error, boolean committed,
+                                       @Nullable DataSnapshot currentData) {
+                    onCompleteTransaction.onComplete(committed, newIssueDetails);
+                }
+            });
+        }
     }
 
     public void addReturnedIssues(final List<Issues> checkedIssues, final BaseHelper.onCompleteTransaction onCompleteTransaction) {
-        Network_Service.checkInternetToProceed(context);
-        issuesRef.runTransaction(new Transaction.Handler() {
-            @NonNull
-            @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                if (currentData.getValue() != null) {
-                    for (Issues issue : checkedIssues) {
-                        if (currentData.hasChild(String.valueOf(issue.getIssueNo())) && currentData.child(String.valueOf(issue.getIssueNo())).getValue() != null) {
-                            currentData.child(String.valueOf(issue.getIssueNo())).setValue(issue);
-                        } else {
-                            context.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(context, "Some data missing. Please try again.", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                            return Transaction.abort();
+        if (Network_Service.checkInternetToProceed(context)) {
+            issuesRef.runTransaction(new Transaction.Handler() {
+                @NonNull
+                @Override
+                public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                    if (currentData.getValue() != null) {
+                        for (Issues issue : checkedIssues) {
+                            if (currentData.hasChild(String.valueOf(issue.getIssueNo())) && currentData.child(String.valueOf(issue.getIssueNo())).getValue() != null) {
+                                currentData.child(String.valueOf(issue.getIssueNo())).setValue(issue);
+                            } else {
+                                context.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(context, "Some data missing. Please try again.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                return Transaction.abort();
+                            }
                         }
+                        return Transaction.success(currentData);
+                    } else {
+                        context.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(context, "Some Error Occurred. Please try again.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        return Transaction.abort();
                     }
-                    return Transaction.success(currentData);
-                } else {
-                    context.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(context, "Some Error Occurred. Please try again.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    return Transaction.abort();
                 }
-            }
 
-            @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                onCompleteTransaction.onComplete(committed, currentData);
-            }
-        });
+                @Override
+                public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                    onCompleteTransaction.onComplete(committed, currentData);
+                }
+            });
+        }
     }
 
-    public void getAllIssuesContinuous(final BaseHelper.onCompleteRetrieval onCompleteRetrieval) {
-        Network_Service.checkInternetToProceed(context);
-        setAllIssuesListener(onCompleteRetrieval);
-        issuesRef.orderByChild("issueNo").addValueEventListener(allIssuesListener);
+    public void getAllIssuesContinuous(final BaseHelper.onCompleteRetrieval onCompleteRetrieval, final BaseHelper.onFailure onFailure) {
+        if (Network_Service.checkInternetToProceed(context)) {
+            setAllIssuesListener(onCompleteRetrieval, onFailure);
+            issuesRef.orderByChild("issueNo").addValueEventListener(allIssuesListener);
+        }
     }
 
-    private void setAllIssuesListener(final BaseHelper.onCompleteRetrieval onCompleteRetrieval) {
+    private void setAllIssuesListener(final BaseHelper.onCompleteRetrieval onCompleteRetrieval, final BaseHelper.onFailure onFailure) {
         allIssuesListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -152,6 +156,7 @@ public class IssuesHelper {
                     }
                 });
                 isListenerAttached = false;
+                onFailure.onFail(error);
             }
         };
     }
