@@ -29,7 +29,8 @@ public class BaseHelper {
 
     public BaseHelper(Activity context) {
         this.context = context;
-        baseRef = FirebaseDatabase.getInstance().getReference().child(this.context.getResources().getString(R.string.basePoint));
+//        baseRef = FirebaseDatabase.getInstance().getReference().child(this.context.getResources().getString(R.string.basePoint));
+        baseRef = FirebaseDatabase.getInstance().getReference().child(this.context.getResources().getString(R.string.testData));
     }
 
     public void getAllBaseDataContinuous(final onCompleteRetrieval onCompleteRetrieval) {
