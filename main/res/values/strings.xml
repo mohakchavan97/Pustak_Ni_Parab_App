@@ -5,6 +5,7 @@
     <!--    <string name="defaultAndroidClientId">172709641516-nansppodobu60ess8uvfcuo4rn6ajh4m.apps.googleusercontent.com</string>-->
     <string name="defaultAndroidClientId">172709641516-rdv19n8cbqpb1u4p3d0tfhp3fqht9dbk.apps.googleusercontent.com</string>
     <string name="basePoint">BasePoint</string>
+    <string name="testData">TestData</string>
     <string name="newIssue">Add New Issue</string>
     <string name="issues">Issues</string>
     <string name="names">Names</string>
