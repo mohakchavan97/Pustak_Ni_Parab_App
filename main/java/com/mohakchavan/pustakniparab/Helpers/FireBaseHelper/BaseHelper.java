@@ -30,7 +30,8 @@ public class BaseHelper {
     public BaseHelper(Activity context) {
         this.context = context;
         isListenerAttached = false;
-        baseRef = FirebaseDatabase.getInstance().getReference().child(this.context.getResources().getString(R.string.basePoint));
+//        baseRef = FirebaseDatabase.getInstance().getReference().child(this.context.getResources().getString(R.string.basePoint));
+        baseRef = FirebaseDatabase.getInstance().getReference().child(this.context.getResources().getString(R.string.testData));
     }
 
     public void getAllBaseDataContinuous(final BaseHelper.onCompleteRetrieval onCompleteRetrieval, final BaseHelper.onFailure onFailure) {
