@@ -382,7 +382,7 @@ public class Returns extends AppCompatActivity {
             @Override
             public int compare(String o1, String o2) {
                 try {
-                    return formatter.parse(o1).compareTo(formatter.parse(o2));
+                    return formatter.parse(o2).compareTo(formatter.parse(o1));
                 } catch (ParseException ex) {
                     throw new IllegalArgumentException(ex);
                 }
