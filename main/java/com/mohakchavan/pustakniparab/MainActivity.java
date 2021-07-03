@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.database.DatabaseError;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
@@ -155,6 +157,16 @@ public class MainActivity extends AppCompatActivity {
                 .load(authenticator.getCurrentUser().getPhotoUrl())
                 .placeholder(R.drawable.ic_round_person)
                 .into(headerImageView);
+
+        SwitchMaterial devSwitch = (SwitchMaterial) navigationView.getMenu().findItem(R.id.nav_dev_mode)
+                .getActionView().findViewById(R.id.developer_switch);
+        devSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Toast.makeText(context, isChecked ? "Switch on." : "Switch off.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -212,6 +224,11 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
                         break;
+
+                    case R.id.nav_dev_mode:
+                        devSwitch.toggle();
+                        return false;
+//                    break;
                 }
 
                 drawerLayout.closeDrawer(GravityCompat.START, true);
@@ -339,5 +356,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         baseHelper.removeBaseDataListener();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isOpen()) {
+            drawerLayout.closeDrawer(GravityCompat.START, true);
+        } else {
+            super.onBackPressed();
+        }
     }
 }
