@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
         }
         for (NewBooks book : baseData.getNewBooksList()) {
             Date bookDate = formatter.parse(book.getRegisteredDate());
-            if (DateFormat.format("MMM", bookDate).toString().contentEquals(DateFormat.format("MMM", localDate))) {
+            if (DateFormat.format("MMM yyyy", bookDate).toString().contentEquals(DateFormat.format("MMM yyyy", localDate))) {
                 currMonthBooks += Integer.parseInt(book.getTotalBooks());
             }
             String currMonYear = new StringBuilder(DateFormat.format("MMM", bookDate).toString()).append(" ").append(DateFormat.format("yyyy", bookDate).toString()).toString();
