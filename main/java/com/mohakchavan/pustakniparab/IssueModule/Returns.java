@@ -121,6 +121,7 @@ public class Returns extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         all_issues_adapter.getFilter().filter(filterString);
+                        hideMenuItems(false);
                     }
                 }
             }
@@ -160,6 +161,7 @@ public class Returns extends AppCompatActivity {
                         }
                     }
                     all_issues_adapter.getFilter().filter(filterString);
+                    hideMenuItems(false);
                 }
             }
 
@@ -197,6 +199,7 @@ public class Returns extends AppCompatActivity {
                         }
                     }
                     all_issues_adapter.getFilter().filter(filterString);
+                    hideMenuItems(false);
                 }
             }
 
@@ -234,6 +237,7 @@ public class Returns extends AppCompatActivity {
                         }
                     }
                     all_issues_adapter.getFilter().filter(filterString);
+                    hideMenuItems(false);
                 }
             }
 

@@ -53,6 +53,7 @@ public class All_Issues_Adapter extends RecyclerView.Adapter<All_Issues_Adapter.
         holder.is_tv_nameId.setText(issues.getIssuerId());
         holder.is_tv_fullName.setText(issues.getIssuerName());
         holder.is_tv_issDate.setText(issues.getIssueDate());
+        issues.setChecked(false);
         holder.is_cb.setChecked(false);
         holder.is_cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
