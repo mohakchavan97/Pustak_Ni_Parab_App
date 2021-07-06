@@ -23,6 +23,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
@@ -148,10 +151,10 @@ public class MainActivity extends AppCompatActivity {
 
         navigationView = findViewById(R.id.navigationView);
         ImageView headerImageView = ((ImageView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_iv));
-        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_name)).setText(authenticator.getUserDisplayName());
-        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_email)).setText(authenticator.getUserEmail());
+        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_name)).setText(authenticator.getCurrentUser().getDisplayName());
+        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_email)).setText(authenticator.getCurrentUser().getEmail());
         Picasso.get()
-                .load(authenticator.getUserPhotoUrl())
+                .load(authenticator.getCurrentUser().getPhotoUrl())
                 .placeholder(R.drawable.ic_round_person)
                 .into(headerImageView);
 
@@ -201,11 +204,15 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_sign_out:
                         final ProgressBarService progressBarService = new ProgressBarService("Signing Out...");
                         progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
-                        authenticator.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                .requestIdToken(getString(R.string.defaultAndroidClientId))
+                                .requestEmail().build();
+                        GoogleSignInClient client = GoogleSignIn.getClient(context, options);
+                        client.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 progressBarService.dismiss();
-                                Toast.makeText(context, "Signed Out Successfully", Toast.LENGTH_SHORT).show();
+                                authenticator.signOut();
                                 finish();
                             }
                         })
@@ -330,10 +337,10 @@ public class MainActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject();
         ClipboardManager manager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         try {
-            jsonObject.put("userName", authenticator.getUserDisplayName());
-            jsonObject.put("userEmail", authenticator.getUserEmail());
-            jsonObject.put("userUid", authenticator.getUserUid());
-            jsonObject.put("userPhoto", authenticator.getUserPhotoUrl());
+            jsonObject.put("userName", authenticator.getCurrentUser().getDisplayName());
+            jsonObject.put("userEmail", authenticator.getCurrentUser().getEmail());
+            jsonObject.put("userUid", authenticator.getCurrentUser().getUid());
+            jsonObject.put("userPhoto", authenticator.getCurrentUser().getPhotoUrl());
             manager.setPrimaryClip(ClipData.newPlainText("userDetails", jsonObject.toString()));
         } catch (Exception e) {
             e.printStackTrace();
