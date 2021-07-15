@@ -36,6 +36,8 @@
     <string name="indianStandardTime">IST</string>
     <string name="dateFormat">dd MMM yyyy</string>
     <string name="developerMode">Developer Mode</string>
+    <string name="sharedPreferencesName">SharedPustakNiParabPreferences</string>
+    <string name="sharedDeveloperMode">Current_Developer_Mode</string>
     <string-array name="languages">
         <item>Gujarati</item>
         <item>English</item>

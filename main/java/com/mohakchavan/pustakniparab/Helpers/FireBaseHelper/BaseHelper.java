@@ -1,6 +1,8 @@
 package com.mohakchavan.pustakniparab.Helpers.FireBaseHelper;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 
@@ -31,7 +33,14 @@ public class BaseHelper {
         this.context = context;
         isListenerAttached = false;
 //        baseRef = FirebaseDatabase.getInstance().getReference().child(this.context.getResources().getString(R.string.basePoint));
-        baseRef = FirebaseDatabase.getInstance().getReference().child(this.context.getResources().getString(R.string.testData));
+        SharedPreferences preferences = this.context.getSharedPreferences(
+                this.context.getResources().getString(R.string.sharedPreferencesName), Context.MODE_PRIVATE);
+        if (preferences.contains(this.context.getResources().getString(R.string.sharedDeveloperMode)) &&
+                preferences.getBoolean(this.context.getResources().getString(R.string.sharedDeveloperMode), false)) {
+            baseRef = FirebaseDatabase.getInstance().getReference().child(this.context.getResources().getString(R.string.testData));
+        } else {
+            baseRef = FirebaseDatabase.getInstance().getReference().child(this.context.getResources().getString(R.string.basePoint));
+        }
     }
 
     public void getAllBaseDataContinuous(final BaseHelper.onCompleteRetrieval onCompleteRetrieval, final BaseHelper.onFailure onFailure) {

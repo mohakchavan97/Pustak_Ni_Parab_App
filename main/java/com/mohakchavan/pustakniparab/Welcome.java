@@ -3,6 +3,7 @@ package com.mohakchavan.pustakniparab;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,6 +43,13 @@ public class Welcome extends Activity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
+                    SharedPreferences preferences = getSharedPreferences(
+                            context.getResources().getString(R.string.sharedPreferencesName), MODE_PRIVATE);
+                    if (preferences.contains(context.getResources().getString(R.string.sharedDeveloperMode))) {
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.remove(context.getResources().getString(R.string.sharedDeveloperMode));
+                        editor.commit();
+                    }
                     Intent intent = new Intent(context, MainActivity.class);
                     startActivity(intent);
                     finish();

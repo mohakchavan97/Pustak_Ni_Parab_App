@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         if (Network_Service.checkInternetToProceed(MainActivity.this)) {
             final ProgressBarService progressBarService = new ProgressBarService("Retrieving Data...");
             progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
+            baseHelper = new BaseHelper(context);
             baseHelper.getAllBaseDataContinuous(new BaseHelper.onCompleteRetrieval() {
                 @Override
                 public void onComplete(Object data) {
@@ -135,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
 
         context = MainActivity.this;
         authenticator = new BaseAuthenticator(context);
-        baseHelper = new BaseHelper(context);
         drawerLayout = findViewById(R.id.drawer);
         viewForSnackbar = findViewById(R.id.viewForSnackbar);
         drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, R.string.drawerOpen, R.string.drawerClose);
@@ -163,7 +164,29 @@ public class MainActivity extends AppCompatActivity {
         devSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast.makeText(context, isChecked ? "Switch on." : "Switch off.", Toast.LENGTH_SHORT).show();
+                SharedPreferences.Editor editor = getSharedPreferences(
+                        context.getResources().getString(R.string.sharedPreferencesName), MODE_PRIVATE).edit();
+                editor.putBoolean(context.getResources().getString(R.string.sharedDeveloperMode), isChecked);
+                editor.apply();
+                new Thread() {
+                    @Override
+                    public void run() {
+                        super.run();
+                        try {
+                            sleep(350);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        } finally {
+                            context.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onResume();
+                                }
+                            });
+                        }
+                    }
+                }.start();
+                drawerLayout.closeDrawer(GravityCompat.START, true);
             }
         });
 
