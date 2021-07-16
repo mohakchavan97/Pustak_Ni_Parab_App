@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         if (Network_Service.checkInternetToProceed(MainActivity.this)) {
             final ProgressBarService progressBarService = new ProgressBarService("Retrieving Data...");
             progressBarService.show(getSupportFragmentManager(), "Progress Bar Dialog");
-            baseHelper = new BaseHelper(context);
+            baseHelper.setBaseReference();
             baseHelper.getAllBaseDataContinuous(new BaseHelper.onCompleteRetrieval() {
                 @Override
                 public void onComplete(Object data) {
@@ -138,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
         context = MainActivity.this;
         authenticator = new BaseAuthenticator(context);
+        baseHelper = new BaseHelper(context);
         drawerLayout = findViewById(R.id.drawer);
         viewForSnackbar = findViewById(R.id.viewForSnackbar);
         drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, R.string.drawerOpen, R.string.drawerClose);
@@ -160,36 +161,52 @@ public class MainActivity extends AppCompatActivity {
                 .placeholder(R.drawable.ic_round_person)
                 .into(headerImageView);
 
-        SwitchMaterial devSwitch = (SwitchMaterial) navigationView.getMenu().findItem(R.id.nav_dev_mode)
-                .getActionView().findViewById(R.id.developer_switch);
-        devSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = getSharedPreferences(
-                        context.getResources().getString(R.string.sharedPreferencesName), MODE_PRIVATE).edit();
-                editor.putBoolean(context.getResources().getString(R.string.sharedDeveloperMode), isChecked);
-                editor.apply();
-                new Thread() {
+        MenuItem devSwitchItem = navigationView.getMenu().findItem(R.id.nav_dev_mode);
+        SwitchMaterial devSwitch = (SwitchMaterial) devSwitchItem.getActionView()
+                .findViewById(R.id.developer_switch);
+        baseHelper.isCurrentUserDeveloper(authenticator.getCurrentUser().getUid(),
+                new BaseHelper.onCompleteRetrieval() {
                     @Override
-                    public void run() {
-                        super.run();
-                        try {
-                            sleep(350);
-                        } catch (InterruptedException ex) {
-                            ex.printStackTrace();
-                        } finally {
-                            context.runOnUiThread(new Runnable() {
+                    public void onComplete(Object data) {
+                        Boolean isDeveloper = (Boolean) data;
+                        devSwitchItem.setVisible(isDeveloper);
+                        if (isDeveloper) {
+                            devSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                                 @Override
-                                public void run() {
-                                    onResume();
+                                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                    SharedPreferences.Editor editor = getSharedPreferences(
+                                            context.getResources().getString(R.string.sharedPreferencesName), MODE_PRIVATE).edit();
+                                    editor.putBoolean(context.getResources().getString(R.string.sharedDeveloperMode), isChecked);
+                                    editor.apply();
+                                    new Thread() {
+                                        @Override
+                                        public void run() {
+                                            super.run();
+                                            try {
+                                                sleep(350);
+                                            } catch (InterruptedException ex) {
+                                                ex.printStackTrace();
+                                            } finally {
+                                                context.runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        onResume();
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    }.start();
+                                    drawerLayout.closeDrawer(GravityCompat.START, true);
                                 }
                             });
                         }
                     }
-                }.start();
-                drawerLayout.closeDrawer(GravityCompat.START, true);
-            }
-        });
+                }, new BaseHelper.onFailure() {
+                    @Override
+                    public void onFail(Object data) {
+                        devSwitchItem.setVisible(false);
+                    }
+                });
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -363,11 +380,11 @@ public class MainActivity extends AppCompatActivity {
         try {
             jsonObject.put("userName", authenticator.getCurrentUser().getDisplayName());
             jsonObject.put("userEmail", authenticator.getCurrentUser().getEmail());
-//            jsonObject.put("userUid", authenticator.getCurrentUser().getUid());
+            jsonObject.put("userUid", authenticator.getCurrentUser().getUid());
             for (int i = 0; i < authenticator.getCurrentUser().getProviderData().size(); i++) {
                 UserInfo info = (UserInfo) authenticator.getCurrentUser().getProviderData().get(i);
                 if (info.getProviderId().contentEquals("google.com") || info.getProviderId().contentEquals("google")) {
-                    jsonObject.put("userUid", info.getUid());
+                    jsonObject.put("providerUserUid", info.getUid());
                     break;
                 }
             }

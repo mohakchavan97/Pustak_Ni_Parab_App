@@ -33,14 +33,38 @@ public class BaseHelper {
         this.context = context;
         isListenerAttached = false;
 //        baseRef = FirebaseDatabase.getInstance().getReference().child(this.context.getResources().getString(R.string.basePoint));
-        SharedPreferences preferences = this.context.getSharedPreferences(
-                this.context.getResources().getString(R.string.sharedPreferencesName), Context.MODE_PRIVATE);
-        if (preferences.contains(this.context.getResources().getString(R.string.sharedDeveloperMode)) &&
-                preferences.getBoolean(this.context.getResources().getString(R.string.sharedDeveloperMode), false)) {
-            baseRef = FirebaseDatabase.getInstance().getReference().child(this.context.getResources().getString(R.string.testData));
+        setBaseReference();
+    }
+
+    public void setBaseReference() {
+        SharedPreferences preferences = context.getSharedPreferences(
+                context.getResources().getString(R.string.sharedPreferencesName), Context.MODE_PRIVATE);
+        if (preferences.contains(context.getResources().getString(R.string.sharedDeveloperMode)) &&
+                preferences.getBoolean(context.getResources().getString(R.string.sharedDeveloperMode), false)) {
+            baseRef = FirebaseDatabase.getInstance().getReference().child(context.getResources().getString(R.string.testData));
         } else {
-            baseRef = FirebaseDatabase.getInstance().getReference().child(this.context.getResources().getString(R.string.basePoint));
+            baseRef = FirebaseDatabase.getInstance().getReference().child(context.getResources().getString(R.string.basePoint));
         }
+    }
+
+    public void isCurrentUserDeveloper(String userId, final BaseHelper.onCompleteRetrieval onCompleteRetrieval, final BaseHelper.onFailure onFailure) {
+        baseRef.getRoot().child(context.getResources().getString(R.string.verifiedUsers))
+                .child(userId).child(context.getResources().getString(R.string.isDeveloperKey))
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean isDeveloper = false;
+                if (snapshot.exists()) {
+                    isDeveloper = ((String) snapshot.getValue(String.class)).equalsIgnoreCase(Boolean.TRUE.toString());
+                }
+                onCompleteRetrieval.onComplete(isDeveloper);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                onFailure.onFail(error);
+            }
+        });
     }
 
     public void getAllBaseDataContinuous(final BaseHelper.onCompleteRetrieval onCompleteRetrieval, final BaseHelper.onFailure onFailure) {

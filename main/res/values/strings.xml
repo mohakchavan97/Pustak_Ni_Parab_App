@@ -6,6 +6,7 @@
     <string name="defaultAndroidClientId">172709641516-rdv19n8cbqpb1u4p3d0tfhp3fqht9dbk.apps.googleusercontent.com</string>
     <string name="basePoint">BasePoint</string>
     <string name="testData">TestData</string>
+    <string name="verifiedUsers">VerifiedUsers</string>
     <string name="newIssue">Add New Issue</string>
     <string name="issues">Issues</string>
     <string name="names">Names</string>
@@ -38,6 +39,7 @@
     <string name="developerMode">Developer Mode</string>
     <string name="sharedPreferencesName">SharedPustakNiParabPreferences</string>
     <string name="sharedDeveloperMode">Current_Developer_Mode</string>
+    <string name="isDeveloperKey">isDeveloper</string>
     <string-array name="languages">
         <item>Gujarati</item>
         <item>English</item>
