@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DatabaseError;
 import com.mohakchavan.pustakniparab.Adapters.All_Issues_Adapter;
+import com.mohakchavan.pustakniparab.CustomDatePicker;
 import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.BaseHelper;
 import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.IssuesHelper;
 import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.NamesHelper;
@@ -399,7 +400,9 @@ public class Returns extends AppCompatActivity {
         } catch (ParseException ex) {
             throw new IllegalArgumentException(ex);
         }
-        final DatePickerDialog dateDialog = new DatePickerDialog(context,
+//        final DatePickerDialog dateDialog = new DatePickerDialog(
+        final CustomDatePicker dateDialog = new CustomDatePicker(
+                context,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -408,6 +411,7 @@ public class Returns extends AppCompatActivity {
                         cdp_tv_date.setText(formatter.format(cal.getTime()));
                     }
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        dateDialog.setNeutralButton("Today");
         cdp_tv_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
