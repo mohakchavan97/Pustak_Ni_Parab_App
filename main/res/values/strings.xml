@@ -40,6 +40,7 @@
     <string name="sharedPreferencesName">SharedPustakNiParabPreferences</string>
     <string name="sharedDeveloperMode">Current_Developer_Mode</string>
     <string name="isDeveloperKey">isDeveloper</string>
+    <string name="fcmIdKey">fcmId</string>
     <string-array name="languages">
         <item>Gujarati</item>
         <item>English</item>

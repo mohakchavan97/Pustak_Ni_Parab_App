@@ -40,6 +40,7 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.mohakchavan.pustakniparab.Adapters.Dashboard_Adapter;
 import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.BaseAuthenticator;
 import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.BaseHelper;
+import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.BaseMessaging;
 import com.mohakchavan.pustakniparab.Helpers.SnackBarHelper;
 import com.mohakchavan.pustakniparab.IssueModule.AddIssues;
 import com.mohakchavan.pustakniparab.IssueModule.Returns;
@@ -151,6 +152,9 @@ public class MainActivity extends AppCompatActivity {
         main_rv_dash = findViewById(R.id.main_rv_dash);
         main_rv_dash.setHasFixedSize(true);
         main_rv_dash.setLayoutManager(new LinearLayoutManager(context));
+
+        BaseMessaging baseMessaging = new BaseMessaging(context);
+        baseMessaging.getAndRegisterToken();
 
         navigationView = findViewById(R.id.navigationView);
         ImageView headerImageView = ((ImageView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_iv));

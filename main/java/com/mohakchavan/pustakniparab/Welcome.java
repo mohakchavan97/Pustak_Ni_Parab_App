@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.BaseAuthenticator;
+import com.mohakchavan.pustakniparab.Services.CloudMessagingService;
 import com.mohakchavan.pustakniparab.Services.Network_Service;
 
 public class Welcome extends Activity {
@@ -59,6 +60,7 @@ public class Welcome extends Activity {
 
         getPermissions();
         authenticator = new BaseAuthenticator(context);
+        CloudMessagingService.setContext(context.getParent());
 
         FirebaseUser currentUser = authenticator.getCurrentUser();
         if (currentUser == null) {

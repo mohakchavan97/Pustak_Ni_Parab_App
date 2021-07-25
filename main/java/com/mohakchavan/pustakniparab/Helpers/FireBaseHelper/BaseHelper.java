@@ -51,20 +51,20 @@ public class BaseHelper {
         baseRef.getRoot().child(context.getResources().getString(R.string.verifiedUsers))
                 .child(userId).child(context.getResources().getString(R.string.isDeveloperKey))
                 .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean isDeveloper = false;
-                if (snapshot.exists()) {
-                    isDeveloper = ((String) snapshot.getValue(String.class)).equalsIgnoreCase(Boolean.TRUE.toString());
-                }
-                onCompleteRetrieval.onComplete(isDeveloper);
-            }
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        boolean isDeveloper = false;
+                        if (snapshot.exists()) {
+                            isDeveloper = ((String) snapshot.getValue(String.class)).equalsIgnoreCase(Boolean.TRUE.toString());
+                        }
+                        onCompleteRetrieval.onComplete(isDeveloper);
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                onFailure.onFail(error);
-            }
-        });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        onFailure.onFail(error);
+                    }
+                });
     }
 
     public void getAllBaseDataContinuous(final BaseHelper.onCompleteRetrieval onCompleteRetrieval, final BaseHelper.onFailure onFailure) {
@@ -118,6 +118,12 @@ public class BaseHelper {
                 onFailure.onFail(error);
             }
         };
+    }
+
+    public void addFcmId(String userId, String newToken) {
+        baseRef.getRoot().child(context.getResources().getString(R.string.verifiedUsers))
+                .child(userId).child(context.getResources().getString(R.string.fcmIdKey))
+                .setValue(newToken);
     }
 
     public void removeBaseDataListener() {
