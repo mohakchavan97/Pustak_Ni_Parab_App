@@ -18,6 +18,8 @@ import com.mohakchavan.pustakniparab.Models.NewBooks;
 import com.mohakchavan.pustakniparab.R;
 import com.mohakchavan.pustakniparab.Services.Network_Service;
 
+import java.util.Date;
+
 public class BaseHelper {
 
     private DatabaseReference baseRef;
@@ -51,20 +53,20 @@ public class BaseHelper {
         baseRef.getRoot().child(context.getResources().getString(R.string.verifiedUsers))
                 .child(userId).child(context.getResources().getString(R.string.isDeveloperKey))
                 .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean isDeveloper = false;
-                if (snapshot.exists()) {
-                    isDeveloper = ((String) snapshot.getValue(String.class)).equalsIgnoreCase(Boolean.TRUE.toString());
-                }
-                onCompleteRetrieval.onComplete(isDeveloper);
-            }
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        boolean isDeveloper = false;
+                        if (snapshot.exists()) {
+                            isDeveloper = ((String) snapshot.getValue(String.class)).equalsIgnoreCase(Boolean.TRUE.toString());
+                        }
+                        onCompleteRetrieval.onComplete(isDeveloper);
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                onFailure.onFail(error);
-            }
-        });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        onFailure.onFail(error);
+                    }
+                });
     }
 
     public void getAllBaseDataContinuous(final BaseHelper.onCompleteRetrieval onCompleteRetrieval, final BaseHelper.onFailure onFailure) {
@@ -125,6 +127,12 @@ public class BaseHelper {
             baseRef.removeEventListener(baseDataListener);
             isListenerAttached = false;
         }
+    }
+
+    public void updateDataChangedTimeStamp() {
+        baseRef.child(context.getResources().getString(R.string.timeStamps))
+                .child(context.getResources().getString(R.string.dataChangedTimeStamp))
+                .setValue(new Date().getTime());
     }
 
     public interface onCompleteTransaction {

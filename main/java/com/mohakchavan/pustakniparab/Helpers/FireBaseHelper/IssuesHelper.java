@@ -25,11 +25,13 @@ public class IssuesHelper {
     private Activity context;
     private boolean isListenerAttached;
     private ValueEventListener allIssuesListener;
+    private BaseHelper baseHelper;
 
     public IssuesHelper(Activity context) {
         this.context = context;
         isListenerAttached = false;
-        issuesRef = new BaseHelper(this.context).getBaseRef().child(context.getResources().getString(R.string.issues));
+        baseHelper = new BaseHelper(this.context);
+        issuesRef = baseHelper.getBaseRef().child(context.getResources().getString(R.string.issues));
     }
 
     public void addNewIssue(final Issues newIssueDetails, final BaseHelper.onCompleteTransaction onCompleteTransaction) {
@@ -46,6 +48,7 @@ public class IssuesHelper {
                                 newIssueDetails.setIssueNo(currentTotal);
                                 currentData.child(String.valueOf(currentTotal)).setValue(newIssueDetails);
                                 currentData.child(context.getResources().getString(R.string.totalRecords)).setValue(currentTotal);
+                                baseHelper.updateDataChangedTimeStamp();
                                 return Transaction.success(currentData);
                             } else {
                                 context.runOnUiThread(new Runnable() {
@@ -105,6 +108,7 @@ public class IssuesHelper {
                                 return Transaction.abort();
                             }
                         }
+                        baseHelper.updateDataChangedTimeStamp();
                         return Transaction.success(currentData);
                     } else {
                         context.runOnUiThread(new Runnable() {

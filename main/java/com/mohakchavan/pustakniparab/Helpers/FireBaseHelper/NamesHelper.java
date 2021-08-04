@@ -27,10 +27,12 @@ public class NamesHelper {
     private Activity context;
     private ValueEventListener allNamesListener;
     private boolean isContinuousListenerAttached;
+    private BaseHelper baseHelper;
 
     public NamesHelper(Activity context) {
         this.context = context;
-        namesRef = new BaseHelper(this.context).getBaseRef().child(context.getResources().getString(R.string.names));
+        baseHelper = new BaseHelper(this.context);
+        namesRef = baseHelper.getBaseRef().child(context.getResources().getString(R.string.names));
         isContinuousListenerAttached = false;
     }
 
@@ -52,6 +54,7 @@ public class NamesHelper {
                                 newPersonDetails.setSer_no(currentTotalNames);
                                 currentData.child(String.valueOf(currentTotalNames)).setValue(newPersonDetails);
                                 currentData.child(context.getResources().getString(R.string.totalNames)).setValue(currentTotalNames);
+                                baseHelper.updateDataChangedTimeStamp();
                                 return Transaction.success(currentData);
                             } else {
                                 context.runOnUiThread(new Runnable() {
@@ -179,6 +182,7 @@ public class NamesHelper {
                         if (currentData.child("ser_no").getValue(Long.class) != null &&
                                 currentData.child("ser_no").getValue(Long.class) == updatedName.getSer_no()) {
                             currentData.setValue(updatedName);
+                            baseHelper.updateDataChangedTimeStamp();
                             return Transaction.success(currentData);
                         } else {
                             context.runOnUiThread(new Runnable() {
@@ -214,6 +218,7 @@ public class NamesHelper {
             namesRef.child(removalId).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
+                    baseHelper.updateDataChangedTimeStamp();
                     onDeletion.onDelete(true);
                 }
             }).addOnFailureListener(new OnFailureListener() {

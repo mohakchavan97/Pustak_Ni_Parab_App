@@ -19,10 +19,12 @@ public class NewBooksHelper {
 
     private DatabaseReference newBooksRef;
     private Activity context;
+    private BaseHelper baseHelper;
 
     public NewBooksHelper(Activity context) {
         this.context = context;
-        newBooksRef = new BaseHelper(this.context).getBaseRef().child(context.getResources().getString(R.string.newBooks));
+        baseHelper = new BaseHelper(this.context);
+        newBooksRef = baseHelper.getBaseRef().child(context.getResources().getString(R.string.newBooks));
     }
 
     public void addNewRecord(final NewBooks newBooks, final BaseHelper.onCompleteTransaction onCompleteTransaction) {
@@ -39,6 +41,7 @@ public class NewBooksHelper {
                                 newBooks.setNewBookId(currentTotal);
                                 currentData.child(String.valueOf(currentTotal)).setValue(newBooks);
                                 currentData.child(context.getResources().getString(R.string.totalNewBooks)).setValue(currentTotal);
+                                baseHelper.updateDataChangedTimeStamp();
                                 return Transaction.success(currentData);
                             } else {
                                 context.runOnUiThread(new Runnable() {
