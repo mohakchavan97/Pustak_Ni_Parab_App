@@ -366,6 +366,7 @@ public class Returns extends AppCompatActivity {
         if (all_issues_adapter != null)
             all_issues_adapter.unregisterAdapterDataObserver(adapterDataObserver);
         hideMenuItems(false);
+        clearFields();
         getAllIssues();
     }
 
@@ -451,8 +452,8 @@ public class Returns extends AppCompatActivity {
                             public void onComplete(boolean committed, Object data) {
                                 progressBarService.dismiss();
                                 if (committed) {
-                                    enableAll();
                                     resetReturns();
+                                    enableAll();
                                 } else {
                                     Toast.makeText(context, getString(R.string.someError), Toast.LENGTH_SHORT).show();
                                 }
@@ -478,6 +479,12 @@ public class Returns extends AppCompatActivity {
         rt_ed_issrName.setEnabled(false);
         rt_ed_bkId.setEnabled(false);
         rt_ed_bkName.setEnabled(false);
+    }
+
+    private void clearFields() {
+        rt_ed_issrName.getText().clear();
+        rt_ed_bkId.getText().clear();
+        rt_ed_bkName.getText().clear();
     }
 
     @Override
