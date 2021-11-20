@@ -29,11 +29,13 @@ public class All_Issues_Adapter extends RecyclerView.Adapter<All_Issues_Adapter.
     private List<Issues> originalIssuesList;
     private ChangeListener listener;
     private All_Issues_Adapter.All_Issues_Filter filter = new All_Issues_Adapter.All_Issues_Filter();
+    private boolean isForJustDisplay;
 
     public All_Issues_Adapter(Context context, List<Issues> originalIssuesList) {
         this.context = context;
         this.filteredIssuesList = originalIssuesList;
         this.originalIssuesList = originalIssuesList;
+        this.isForJustDisplay = false;
     }
 
     @NonNull
@@ -54,16 +56,22 @@ public class All_Issues_Adapter extends RecyclerView.Adapter<All_Issues_Adapter.
         holder.is_tv_fullName.setText(issues.getIssuerName());
         holder.is_tv_issDate.setText(issues.getIssueDate());
         holder.is_cb.setOnCheckedChangeListener(null);
-        issues.setChecked(false);
-        holder.is_cb.setChecked(false);
-        holder.is_cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                filteredIssuesList.get(position).setChecked(isChecked);
-                if (listener != null)
-                    listener.onChange();
-            }
-        });
+        if (isForJustDisplay) {
+            holder.is_cb.setChecked(issues.getIsReturned()
+                    .equalsIgnoreCase(context.getString(R.string.hasReturned)));
+            holder.is_cb.setClickable(false);
+        } else {
+            issues.setChecked(false);
+            holder.is_cb.setChecked(false);
+            holder.is_cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    filteredIssuesList.get(position).setChecked(isChecked);
+                    if (listener != null)
+                        listener.onChange();
+                }
+            });
+        }
     }
 
     @Override
@@ -82,6 +90,14 @@ public class All_Issues_Adapter extends RecyclerView.Adapter<All_Issues_Adapter.
 
     public void setListener(ChangeListener listener) {
         this.listener = listener;
+    }
+
+    public void setForJustDisplay(boolean isForJustDisplay) {
+        this.isForJustDisplay = isForJustDisplay;
+    }
+
+    public interface ChangeListener {
+        public void onChange();
     }
 
     public class All_Issues_ViewHolder extends RecyclerView.ViewHolder {
@@ -163,9 +179,5 @@ public class All_Issues_Adapter extends RecyclerView.Adapter<All_Issues_Adapter.
             filteredIssuesList = (List<Issues>) results.values;
             notifyDataSetChanged();
         }
-    }
-
-    public interface ChangeListener {
-        public void onChange();
     }
 }

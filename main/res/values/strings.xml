@@ -8,6 +8,7 @@
     <string name="testData">TestData</string>
     <string name="verifiedUsers">VerifiedUsers</string>
     <string name="newIssue">Add New Issue</string>
+    <string name="allIssues">View All Issues</string>
     <string name="issues">Issues</string>
     <string name="names">Names</string>
     <string name="returns">Returns</string>

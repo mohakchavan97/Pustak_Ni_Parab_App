@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,7 +23,7 @@ import com.mohakchavan.pustakniparab.Services.ProgressBarService;
 import java.util.List;
 import java.util.Objects;
 
-public class View_All extends AppCompatActivity {
+public class View_All_Names extends AppCompatActivity {
 
     RecyclerView va_viewall;
     View_All_Adapter adapter;
@@ -53,7 +54,7 @@ public class View_All extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.allNames);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        context = View_All.this;
+        context = View_All_Names.this;
         helper = new DBHelper(context);
         namesHelper = new NamesHelper(context);
         tv_state = findViewById(R.id.ac_va_tv_state);
@@ -82,6 +83,7 @@ public class View_All extends AppCompatActivity {
         if (namesList.isEmpty()) {
             tv_state.setVisibility(View.VISIBLE);
             tv_state.setText(R.string.noRecordsFound);
+            tv_state.setTextColor(ContextCompat.getColor(context, R.color.Red));
         } else {
             tv_state.setVisibility(View.GONE);
             adapter = new View_All_Adapter(context, namesList);

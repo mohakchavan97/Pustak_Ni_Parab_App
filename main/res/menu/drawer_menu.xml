@@ -5,13 +5,17 @@
     <item android:title="@string/issues">
         <menu>
             <item
-                android:id="@+id/nav_issues"
-                android:icon="@drawable/ic_round_issues"
+                android:id="@+id/nav_add_issue"
+                android:icon="@drawable/ic_round_add_issue"
                 android:title="@string/newIssue" />
             <item
                 android:id="@+id/nav_return_issue"
                 android:icon="@drawable/ic_outline_returns"
                 android:title="@string/returns" />
+            <item
+                android:id="@+id/nav_all_issues"
+                android:icon="@drawable/ic_round_issues"
+                android:title="@string/allIssues" />
         </menu>
     </item>
 
