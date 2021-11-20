@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class AddIssues extends AppCompatActivity {
+public class AddIssue extends AppCompatActivity {
 
     EditText is_ed_bookName, is_ed_bookPrice, is_ed_authPub, is_ed_issrName, is_ed_issrAddr, is_ed_issrCont;
     Spinner is_sp_nameId;
@@ -48,7 +48,7 @@ public class AddIssues extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Network_Service.checkInternetToProceed(AddIssues.this);
+        Network_Service.checkInternetToProceed(AddIssue.this);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class AddIssues extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_issues);
 
-        context = AddIssues.this;
+        context = AddIssue.this;
         is_ed_bookName = findViewById(R.id.is_ed_bookName);
         is_ed_bookPrice = findViewById(R.id.is_ed_bookPrice);
         is_ed_authPub = findViewById(R.id.is_ed_authPub);

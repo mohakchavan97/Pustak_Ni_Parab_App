@@ -41,8 +41,9 @@ import com.mohakchavan.pustakniparab.Adapters.Dashboard_Adapter;
 import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.BaseAuthenticator;
 import com.mohakchavan.pustakniparab.Helpers.FireBaseHelper.BaseHelper;
 import com.mohakchavan.pustakniparab.Helpers.SnackBarHelper;
-import com.mohakchavan.pustakniparab.IssueModule.AddIssues;
+import com.mohakchavan.pustakniparab.IssueModule.AddIssue;
 import com.mohakchavan.pustakniparab.IssueModule.Returns;
+import com.mohakchavan.pustakniparab.IssueModule.View_All_Issues;
 import com.mohakchavan.pustakniparab.Models.BaseData;
 import com.mohakchavan.pustakniparab.Models.DashBoard.DashBoard;
 import com.mohakchavan.pustakniparab.Models.DashBoard.DashBoard_Data;
@@ -50,7 +51,7 @@ import com.mohakchavan.pustakniparab.Models.Issues;
 import com.mohakchavan.pustakniparab.Models.NewBooks;
 import com.mohakchavan.pustakniparab.NameModule.AddPerson;
 import com.mohakchavan.pustakniparab.NameModule.Search_Name;
-import com.mohakchavan.pustakniparab.NameModule.View_All;
+import com.mohakchavan.pustakniparab.NameModule.View_All_Names;
 import com.mohakchavan.pustakniparab.Services.Network_Service;
 import com.mohakchavan.pustakniparab.Services.ProgressBarService;
 import com.squareup.picasso.Picasso;
@@ -213,12 +214,16 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 switch (id) {
-                    case R.id.nav_issues:
-                        startActivity(new Intent(context, AddIssues.class));
+                    case R.id.nav_add_issue:
+                        startActivity(new Intent(context, AddIssue.class));
                         break;
 
                     case R.id.nav_return_issue:
                         startActivity(new Intent(context, Returns.class));
+                        break;
+
+                    case R.id.nav_all_issues:
+                        startActivity(new Intent(context, View_All_Issues.class));
                         break;
 
                     case R.id.nav_addPerson:
@@ -227,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.nav_allNames:
-                        startActivity(new Intent(context, View_All.class));
+                        startActivity(new Intent(context, View_All_Names.class));
                         break;
 
                     case R.id.nav_searchName:

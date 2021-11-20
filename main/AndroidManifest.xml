@@ -11,13 +11,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".IssueModule.View_All_Issues"
+            android:exported="false" />
         <activity android:name=".AddNewBooks" />
         <activity android:name=".IssueModule.Returns" />
-        <activity android:name=".IssueModule.AddIssues" />
+        <activity android:name=".IssueModule.AddIssue" />
         <activity android:name=".MainActivity" />
         <activity android:name=".NameModule.Search_Name" />
         <activity android:name=".NameModule.Delete_Name" />
-        <activity android:name=".NameModule.View_All" />
+        <activity android:name=".NameModule.View_All_Names" />
         <activity android:name=".NameModule.AddPerson" />
         <activity android:name=".Welcome">
             <intent-filter>
@@ -42,9 +45,8 @@
         <service android:name=".Services.ImportFile_Service" />
         <service android:name=".Services.Export_Service" />
     </application>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>
