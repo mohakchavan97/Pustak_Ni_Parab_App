@@ -284,6 +284,12 @@ public class Returns extends AppCompatActivity {
                                     }
                                 }
                             }
+                            Collections.sort(issuesList, new Comparator<Issues>() {
+                                @Override
+                                public int compare(Issues t1, Issues t2) {
+                                    return (int) (t2.getIssueNo() - t1.getIssueNo());
+                                }
+                            });
                             isAdapterDataObserverRegistered = false;
                             all_issues_adapter = new All_Issues_Adapter(context, issuesList);
                             all_issues_adapter.getFilter().filter(filterString);
