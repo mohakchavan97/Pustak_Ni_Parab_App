@@ -22,7 +22,8 @@
         <activity android:name=".NameModule.Delete_Name" />
         <activity android:name=".NameModule.View_All_Names" />
         <activity android:name=".NameModule.AddPerson" />
-        <activity android:name=".Welcome">
+        <activity android:name=".Welcome"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
